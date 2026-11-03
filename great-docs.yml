@@ -1,0 +1,128 @@
+# Great Docs Configuration
+# See https://posit-dev.github.io/great-docs/user-guide/configuration.html
+
+parser: numpy
+dynamic: true
+
+display_name: perfinpy
+repo: https://github.com/mjfrigaard/perfinpy
+site_url: https://mjfrigaard.github.io/perfinpy/
+pypi: false
+
+authors:
+  - name: Martin Frigaard
+    role: Author
+    email: mjfrigaard@pm.me
+
+# no generated agent skill files in the site
+skill:
+  enabled: false
+
+changelog:
+  enabled: false
+
+# User guide pages are discovered from user_guide/ (numbered files, grouped
+# by the `guide-section` key in each page's front matter).
+
+# API reference: one section per book chapter, in book order
+reference:
+  - title: Income
+    desc: Foundations. Functions from the Income chapter.
+    contents:
+      - wealth_formula
+      - fixed_cost_ratio
+      - raise_invested_value
+  - title: Tracking Spending
+    desc: Foundations. Functions from the Tracking Spending chapter.
+    contents:
+      - apply_rules
+      - subscription_opportunity_cost
+  - title: Budgeting
+    desc: Foundations. Functions from the Budgeting chapter.
+    contents:
+      - percent_of_income
+      - to_annual
+      - to_monthly
+      - opportunity_cost
+      - months_to_break_even
+  - title: Managing Debt
+    desc: Foundations. Functions from the Managing Debt chapter.
+    contents:
+      - apr_to_apy
+      - months_to_payoff
+      - total_interest
+      - loan_income_ratio
+      - monthly_standard_payment
+      - idr_monthly_payment
+      - dti_ratio
+      - payoff_vs_invest
+      - order_avalanche
+      - order_snowball
+      - credit_utilization
+  - title: Emergency Fund
+    desc: Foundations. Functions from the Emergency Fund chapter.
+    contents:
+      - emergency_fund_target
+      - months_to_ef_goal
+      - monthly_contribution_needed
+      - ef_growth
+  - title: Savings Strategies
+    desc: Savings. Functions from the Savings Strategies chapter.
+    contents:
+      - savings_rate
+  - title: High-Yield Savings Accounts
+    desc: Savings. Functions from the High-Yield Savings Accounts chapter.
+    contents:
+      - hysa_balance
+  - title: Automating Savings
+    desc: Savings. Functions from the Automating Savings chapter.
+    contents:
+      - monthly_savings
+  - title: Investing Basics
+    desc: Investing. Functions from the Investing Basics chapter.
+    contents:
+      - future_value
+      - rule_of_72
+      - future_value_series
+      - real_return
+  - title: Retirement Accounts
+    desc: Investing. Functions from the Retirement Accounts chapter.
+    contents:
+      - employer_match
+      - after_tax_value
+  - title: Index Funds
+    desc: Investing. Functions from the Index Funds chapter.
+    contents:
+      - yearly_fee
+      - future_value_after_fees
+  - title: Asset Allocation
+    desc: Investing. Functions from the Asset Allocation chapter.
+    contents:
+      - portfolio_return
+      - rebalance_amount
+  - title: Taxes
+    desc: Taxes and insurance. Functions from the Taxes chapter.
+    contents:
+      - income_tax
+      - raise_kept
+  - title: Insurance
+    desc: Taxes and insurance. Functions from the Insurance chapter.
+    contents:
+      - break_even_years
+      - plan_cost
+  - title: Financial Goals
+    desc: Planning. Functions from the Financial Goals chapter.
+    contents:
+      - monthly_for_goal
+      - months_to_fund
+  - title: Major Purchases
+    desc: Planning. Functions from the Major Purchases chapter.
+    contents:
+      - rent_buy_threshold
+      - mortgage_payment
+      - first_payment_split
+  - title: Estate Planning
+    desc: Planning. Functions from the Estate Planning chapter.
+    contents:
+      - net_worth
+      - beneficiary_share

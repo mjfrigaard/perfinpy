@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "perfinpy"
+version = "0.1.0"
+description = "Python functions from Personal Finance: a field manual"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Martin Frigaard", email = "mjfrigaard@pm.me" }]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "polars>=1.0",
+]
+
+[project.urls]
+Homepage = "https://mjfrigaard.github.io/perfinpy/"
+Repository = "https://github.com/mjfrigaard/perfinpy"
+Book = "https://mjfrigaard.github.io/fm-finance/"
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "ruff", "mypy", "rich", "jupyter", "great-docs; python_version >= '3.11'"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/perfinpy"]
+
+[tool.ruff]
+src = ["src"]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "src"]
+addopts = "--doctest-modules --cov=perfinpy --cov-report=term-missing"
+doctest_optionflags = ["NORMALIZE_WHITESPACE", "NUMBER"]

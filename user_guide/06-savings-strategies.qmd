@@ -1,0 +1,138 @@
+---
+title: "Savings Strategies"
+guide-section: "Savings"
+jupyter: python3
+---
+
+```{python}
+#| label: setup
+#| include: false
+import polars as pl
+from perfinpy import *
+```
+
+How much of your paycheck do you actually keep? The [Savings Strategies](https://mjfrigaard.github.io/fm-finance/savings_strategies.html) chapter of the book argues that your savings rate is the one number worth tracking above all others, because it sets how fast wealth builds. In this page I'll answer that question with `savings_rate()`, using the chapter's numbers so you can check every result against the book. Then we'll borrow a few functions from other chapters to follow one paycheck from savings rate to emergency fund to long term investing.
+
+## The savings strategies function
+
+`savings_rate()` follows the conventions on the [Get started](00-get-started.qmd) page. Like the other ratio functions, it returns a percent, not a decimal.
+
+| Function | Returns | Units |
+|---|---|---|
+| `savings_rate()` | the share of income not spent | percent (`15` is 15%); negative when spending exceeds income |
+
+## What is your savings rate?
+
+The chapter's first job takes home \$3,200 a month and spends \$2,720 of it. Every dollar of the paycheck goes to either spending or savings, so the question is how big the savings slice is.
+
+Think of the take home pay as one bar. Spending fills most of it, and savings is the slice left at the end:
+
+![\$3,200 take home pay: spending and savings](assets/savings-strategies-savings-rate-bar-model.png){fig-alt="Bar model: one horizontal bar for $3,200 of monthly take home pay, split into a large bluish green slice labeled Spending $2,720 (85%) and a small blue slice at the right end labeled Savings $480 (15%)."}
+
+`savings_rate()` subtracts spending from income, divides by income, and multiplies by 100:
+
+```{python}
+#| label: first-job-rate
+first_job_rate = savings_rate(income=3200, spending=2720)
+first_job_rate
+```
+
+The first job saves `{python} f"{first_job_rate:.0f}"`% of take home pay, which lands in the chapter's average tier (10% to 20%). The result is a percent, so `15.0` means 15%. Income and spending need to cover the same period; a monthly spending total against a yearly salary gives a rate that is badly wrong.
+
+## What do the benchmark tiers look like in dollars?
+
+The chapter gives four benchmarks: under 10% is the danger zone, 10% to 20% is average, 20% to 30% is strong, and 30% or more is the path to financial independence. Percentages are easy to compare but hard to picture, so the chapter converts one example from each tier into dollars on a \$45,000 income:
+
+![Annual dollars saved at four savings rate tiers on a \$45,000 income](assets/savings-strategies-savings-rate-bar-model-intro.png){fig-alt="Horizontal bar chart of annual savings on a $45,000 income at four tiers: 8% (danger zone) saves $3,600 in vermillion, 15% (average) saves $6,750 in bluish green, 25% (strong) saves $11,250 in blue, and 35% (FI path) saves $15,750 in pale green. Each bar is longer than the one above it."}
+
+Each bar is income minus spending. Because `savings_rate()` accepts arrays, one call can work backward from the dollars in each bar to the tier it belongs to:
+
+```{python}
+#| label: tiers
+saved = [3600, 6750, 11250, 15750]
+pl.DataFrame({
+    "tier": ["danger zone", "average", "strong", "FI path"],
+    "saved": saved,
+    "rate": savings_rate(income=45000, spending=[45000 - s for s in saved]),
+})
+```
+
+The rates come back as 8, 15, 25, and 35, one for each bar. Moving from the danger zone to the strong tier on the same salary means saving an extra \$7,650 a year.
+
+## Variations
+
+The chapter's central claim is that savings rate matters more than income. It compares someone earning \$45,000 and spending \$36,000 with someone earning \$75,000 and spending \$67,500. Passing both people to `savings_rate()` at once gives their rates:
+
+```{python}
+#| label: two-earners
+earners = pl.DataFrame({
+    "income": [45000, 75000],
+    "spending": [36000, 67500],
+})
+earners = earners.with_columns(
+    saved=pl.col("income") - pl.col("spending"),
+    rate=savings_rate(income=earners["income"], spending=earners["spending"]),
+)
+earners
+```
+
+The lower earner saves 20% and the higher earner saves 10%. To see where each one ends up, we can borrow `future_value_series()` from [Investing Basics](09-investing-basics.qmd). It grows a yearly contribution at 7% (`rate` is a decimal per period, and here the period is a year):
+
+```{python}
+#| label: two-earners-growth
+years = [23, 24, 25, 26]
+pl.DataFrame({
+    "years": years,
+    "saves_20_pct": future_value_series(contribution=9000, rate=0.07, periods=years),
+    "saves_10_pct": future_value_series(contribution=7500, rate=0.07, periods=years),
+})
+```
+
+The \$45,000 earner crosses \$500,000 in year 24, and the \$75,000 earner crosses it in year 26. That matches the chapter's chart. The higher saver also lives on \$36,000 a year, so they need a smaller pile to stop working.
+
+::: {.callout-warning title="Limits"}
+`savings_rate()` does one subtraction and one division, so it leaves a few things to you:
+
+* It doesn't know which income you mean. The chapter uses take home pay here, while [Automating Savings](08-automating-savings.qmd) measures the rate on gross pay because 401(k) contributions come out before taxes. The same paycheck gives a different rate on each base.
+* It doesn't check that `income` and `spending` cover the same period.
+* It returns a negative rate when spending exceeds income instead of raising an error.
+* It raises an error when `income` is zero or negative:
+
+```{python}
+#| label: zero-income
+#| error: true
+savings_rate(income=0, spending=500)
+```
+:::
+
+## Putting it together
+
+Back to the first job saving \$480 a month. The chapter says savings should be protected before they grow, so the first stop is an emergency fund. The [Emergency Fund](05-emergency-fund.qmd) chapter uses \$2,400 a month in essential expenses and a four month target. `emergency_fund_target()` sets the goal, and `months_to_ef_goal()` counts the months to reach it at \$480 a month:
+
+```{python}
+#| label: first-job-ef
+monthly_saved = 3200 - 2720
+ef_target = emergency_fund_target(monthly_expenses=2400, months=4)
+ef_months = months_to_ef_goal(
+    target=ef_target, current_balance=0, monthly_contribution=monthly_saved
+)
+ef_target, ef_months
+```
+
+At a `{python} f"{first_job_rate:.0f}"`% savings rate, the \$`{python} f"{ef_target:,.0f}"` fund is full in `{python} f"{ef_months}"` months. After that, the same \$480 can go to investing instead. `future_value_series()` takes a monthly rate here, so the 7% yearly return is divided by 12:
+
+```{python}
+#| label: first-job-invested
+invested = future_value_series(contribution=monthly_saved, rate=0.07 / 12, periods=30 * 12)
+invested
+```
+
+Thirty years of \$480 a month could grow to about \$`{python} f"{invested:,.0f}"`. Nothing about the salary changed; the savings rate did all the work.
+
+## Recap
+
+Your savings rate is the lever you fully control, and `savings_rate()` measures it as a percent of income. One call can check a single paycheck, place several savings amounts on the chapter's benchmark tiers, or compare people with different salaries. Paired with the emergency fund and investing functions, it shows how a modest rate turns into a protected cushion and then long term wealth.
+
+* [Savings Strategies](https://mjfrigaard.github.io/fm-finance/savings_strategies.html) in Personal Finance: a field manual
+* Reference: `savings_rate()`
+* Next: [High-Yield Savings Accounts](07-high-yield-accounts.qmd)
