@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Tracking Spending – perfinpy | perfinpy</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../user-guide/budgeting.html" rel="next">
+<link href="../user-guide/income.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-da3a441c3c7246fda6cc7ef6fe580490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script src="../theme-init.js"></script>
+
+
+  <link rel="alternate" type="text/markdown" href="tracking-spending.md">
+  <link rel="canonical" href="https://mjfrigaard.github.io/perfinpy/user-guide/tracking-spending.html">
+  <meta name="description" content="A bank export tells you every dollar that left your account, but it doesn’t tell you where your money went. To answer that, each transaction needs a...">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tracking Spending – perfinpy | perfinpy">
+  <meta property="og:description" content="A bank export tells you every dollar that left your account, but it doesn’t tell you where your money went. To answer that, each transaction needs a...">
+  <meta property="og:url" content="https://mjfrigaard.github.io/perfinpy/user-guide/tracking-spending.html">
+  <meta property="og:site_name" content="perfinpy">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Tracking Spending – perfinpy | perfinpy">
+  <meta name="twitter:description" content="A bank export tells you every dollar that left your account, but it doesn’t tell you where your money went. To answer that, each transaction needs a...">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">perfinpy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class=""></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../user-guide/get-started.html" aria-current="page"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reference/index.html"> 
+<span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <span class="nav-link">
+<div id="github-widget" data-owner="mjfrigaard" data-repo="perfinpy" data-stars="0" data-forks="0"></div>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Tracking Spending</h1>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Get started</span></a>
+</div>
+      <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get started</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Foundations</span></a>
+</div>
+      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/income.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Income</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/tracking-spending.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Tracking Spending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/budgeting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Budgeting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/managing-debt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Managing Debt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/emergency-fund.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Emergency Fund</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Savings</span></a>
+</div>
+      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/savings-strategies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Savings Strategies</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/high-yield-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">High-Yield Savings Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/automating-savings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automating Savings</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Investing</span></a>
+</div>
+      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/investing-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Investing Basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/retirement-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Retirement Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/index-funds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index Funds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asset Allocation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Taxes and insurance</span></a>
+</div>
+      <ul id="quarto-sidebar-section-5" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/taxes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Taxes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/insurance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Insurance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Planning</span></a>
+</div>
+      <ul id="quarto-sidebar-section-6" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/financial-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Financial Goals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/major-purchases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Major Purchases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/estate-planning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estate Planning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#where-did-the-money-go" id="toc-where-did-the-money-go" class="nav-link active" data-scroll-target="#where-did-the-money-go">Where did the money go?</a>
+  <ul class="collapse">
+  <li><a href="#when-a-transaction-doesnt-match" id="toc-when-a-transaction-doesnt-match" class="nav-link" data-scroll-target="#when-a-transaction-doesnt-match">When a transaction doesn’t match</a></li>
+  </ul></li>
+  <li><a href="#what-does-a-subscription-really-cost" id="toc-what-does-a-subscription-really-cost" class="nav-link" data-scroll-target="#what-does-a-subscription-really-cost">What does a subscription really cost?</a></li>
+  <li><a href="#comparing-horizons" id="toc-comparing-horizons" class="nav-link" data-scroll-target="#comparing-horizons">Comparing horizons</a></li>
+  <li><a href="#putting-it-together" id="toc-putting-it-together" class="nav-link" data-scroll-target="#putting-it-together">Putting it together</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Tracking Spending</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>A bank export tells you every dollar that left your account, but it doesn’t tell you where your money went. To answer that, each transaction needs a category, and the small recurring charges need a second look. The <a href="https://mjfrigaard.github.io/fm-finance/tracking_spending.html">Tracking Spending</a> chapter of the book covers both questions. In this page I’ll answer them with two perfinpy functions. <a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a> sorts transactions into buckets. <a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a> shows what a subscription would have grown to if you had invested the money instead.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a></td>
+<td>the transactions with a <code>Category</code> column added</td>
+<td>text categories; <code>"Other"</code> when nothing matches</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a></td>
+<td>what the yearly cost grows to if invested</td>
+<td>dollars; <code>rate</code> is a decimal (<code>0.07</code> is 7%)</td>
+</tr>
+</tbody>
+</table>
+<section id="where-did-the-money-go" class="level1">
+<h1>Where did the money go?</h1>
+<p>The book starts with a January 2026 bank export. It has the three columns most banks include: <code>Date</code>, <code>Description</code>, and <code>Amount</code> (negative for money going out, positive for money coming in). The code below builds the same statement as a <code>polars</code> DataFrame:</p>
+<div id="bank-statement" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>bank_statement <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Date"</span>: [</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2026-01-02"</span>, <span class="st">"2026-01-02"</span>, <span class="st">"2026-01-03"</span>, <span class="st">"2026-01-03"</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2026-01-04"</span>, <span class="st">"2026-01-04"</span>, <span class="st">"2026-01-05"</span>, <span class="st">"2026-01-06"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2026-01-07"</span>, <span class="st">"2026-01-08"</span>, <span class="st">"2026-01-09"</span>, <span class="st">"2026-01-10"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2026-01-11"</span>, <span class="st">"2026-01-12"</span>, <span class="st">"2026-01-13"</span>, <span class="st">"2026-01-14"</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>        <span class="st">"2026-01-15"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Description"</span>: [</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Employer Payroll"</span>,     <span class="st">"Rent"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Comcast Internet"</span>,     <span class="st">"Trader Joe's"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Shell Gas"</span>,            <span class="st">"Netflix"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Starbucks"</span>,            <span class="st">"PG&amp;E Electric"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="st">"AT&amp;T Wireless"</span>,        <span class="st">"Spotify"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Whole Foods"</span>,          <span class="st">"Chipotle"</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Geico Auto Insurance"</span>, <span class="st">"NYTimes Digital"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        <span class="st">"Shell Gas"</span>,            <span class="st">"Costco"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        <span class="st">"24 Hour Fitness"</span>,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Amount"</span>: [</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>         <span class="fl">2400.00</span>, <span class="op">-</span><span class="fl">1500.00</span>,</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span><span class="fl">75.00</span>,   <span class="op">-</span><span class="fl">82.45</span>,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span><span class="fl">45.20</span>,   <span class="op">-</span><span class="fl">15.99</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>           <span class="op">-</span><span class="fl">6.75</span>,  <span class="op">-</span><span class="fl">142.30</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span><span class="fl">85.00</span>,   <span class="op">-</span><span class="fl">10.99</span>,</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span><span class="fl">64.12</span>,   <span class="op">-</span><span class="fl">14.50</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>         <span class="op">-</span><span class="fl">125.00</span>,   <span class="op">-</span><span class="fl">17.00</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span><span class="fl">42.80</span>,  <span class="op">-</span><span class="fl">156.78</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>          <span class="op">-</span><span class="fl">39.99</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>}).with_columns(pl.col(<span class="st">"Date"</span>).<span class="bu">str</span>.to_date())</span></code></pre></div>
+</div>
+<p>The statement has 17 transactions and no <code>Category</code> column. To add one, we map each description to a bucket with a lookup table of keyword patterns. Each <code>Pattern</code> is a regular expression (a text search pattern), so <code>|</code> means “or” and one rule can cover several merchants:</p>
+<div id="rules" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rules <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Pattern"</span>: [<span class="st">"Payroll"</span>, <span class="st">"Rent"</span>, <span class="st">"Comcast|PG&amp;E|AT&amp;T"</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Trader Joe|Whole Foods|Costco"</span>, <span class="st">"Shell"</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Starbucks|Chipotle"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">"Netflix|Spotify|NYTimes|24 Hour Fitness"</span>, <span class="st">"Geico"</span>],</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Category"</span>: [<span class="st">"Income"</span>, <span class="st">"Housing"</span>, <span class="st">"Utilities"</span>, <span class="st">"Groceries"</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                 <span class="st">"Transportation"</span>, <span class="st">"Dining"</span>, <span class="st">"Subscriptions"</span>, <span class="st">"Insurance"</span>],</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+</div>
+<p><a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a> checks the 8 rules in order against each description and keeps the first match. The table below shows each transaction next to the bucket it landed in:</p>
+<div id="cell-categorize" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>categorized <span class="op">=</span> apply_rules(df<span class="op">=</span>bank_statement, rules<span class="op">=</span>rules)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>categorized.select(<span class="st">"Description"</span>, <span class="st">"Amount"</span>, <span class="st">"Category"</span>)</span></code></pre></div>
+<div id="categorize" class="cell-output cell-output-display" data-execution_count="4">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (17, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>Description</th><th>Amount</th><th>Category</th></tr><tr><td>str</td><td>f64</td><td>str</td></tr></thead><tbody><tr><td>"Employer Payroll"</td><td>2400.0</td><td>"Income"</td></tr><tr><td>"Rent"</td><td>-1500.0</td><td>"Housing"</td></tr><tr><td>"Comcast Internet"</td><td>-75.0</td><td>"Utilities"</td></tr><tr><td>"Trader Joe's"</td><td>-82.45</td><td>"Groceries"</td></tr><tr><td>"Shell Gas"</td><td>-45.2</td><td>"Transportation"</td></tr><tr><td>…</td><td>…</td><td>…</td></tr><tr><td>"Geico Auto Insurance"</td><td>-125.0</td><td>"Insurance"</td></tr><tr><td>"NYTimes Digital"</td><td>-17.0</td><td>"Subscriptions"</td></tr><tr><td>"Shell Gas"</td><td>-42.8</td><td>"Transportation"</td></tr><tr><td>"Costco"</td><td>-156.78</td><td>"Groceries"</td></tr><tr><td>"24 Hour Fitness"</td><td>-39.99</td><td>"Subscriptions"</td></tr></tbody></table></div>
+</div>
+</div>
+<p>Every transaction found a bucket, so nothing fell through to <code>"Other"</code>. With a <code>Category</code> column in place, the tracking questions from the book become one line of <code>polars</code>. The code below totals each category:</p>
+<div id="cell-category-totals" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>totals <span class="op">=</span> categorized.group_by(<span class="st">"Category"</span>).agg(pl.col(<span class="st">"Amount"</span>).<span class="bu">sum</span>()).sort(<span class="st">"Category"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>totals</span></code></pre></div>
+<div id="category-totals" class="cell-output cell-output-display" data-execution_count="5">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (8, 2)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>Category</th><th>Amount</th></tr><tr><td>str</td><td>f64</td></tr></thead><tbody><tr><td>"Dining"</td><td>-21.25</td></tr><tr><td>"Groceries"</td><td>-303.35</td></tr><tr><td>"Housing"</td><td>-1500.0</td></tr><tr><td>"Income"</td><td>2400.0</td></tr><tr><td>"Insurance"</td><td>-125.0</td></tr><tr><td>"Subscriptions"</td><td>-83.97</td></tr><tr><td>"Transportation"</td><td>-88.0</td></tr><tr><td>"Utilities"</td><td>-302.3</td></tr></tbody></table></div>
+</div>
+</div>
+<p>Subscriptions took $83.97 in the first half of January. That total is small next to rent, but it repeats every month, which is why the next section looks at it more closely.</p>
+<section id="when-a-transaction-doesnt-match" class="level2">
+<h2 class="anchored" data-anchor-id="when-a-transaction-doesnt-match">When a transaction doesn’t match</h2>
+<p>New merchants show up every month. The book’s rule is “when in doubt, Other.” A transaction that matches no pattern lands in <code>"Other"</code> until you’ve seen it often enough to deserve its own rule. The code below runs two new transactions through the same rules:</p>
+<div id="cell-unmatched" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>new_transactions <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Description"</span>: [<span class="st">"Venmo Payment"</span>, <span class="st">"SPOTIFY FAMILY PLAN"</span>],</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>apply_rules(df<span class="op">=</span>new_transactions, rules<span class="op">=</span>rules)</span></code></pre></div>
+<div id="unmatched" class="cell-output cell-output-display" data-execution_count="7">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (2, 2)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>Description</th><th>Category</th></tr><tr><td>str</td><td>str</td></tr></thead><tbody><tr><td>"Venmo Payment"</td><td>"Other"</td></tr><tr><td>"SPOTIFY FAMILY PLAN"</td><td>"Subscriptions"</td></tr></tbody></table></div>
+</div>
+</div>
+<p>The Venmo payment falls through to <code>"Other"</code>. The Spotify charge still lands in <code>"Subscriptions"</code> because <a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a> ignores case, so <code>"Spotify"</code> matches <code>"SPOTIFY"</code>.</p>
+</section>
+</section>
+<section id="what-does-a-subscription-really-cost" class="level1">
+<h1>What does a subscription really cost?</h1>
+<p>A subscription’s real cost is its opportunity cost: the money you give up by spending instead of investing. The book’s example is a monthly subscription you don’t really use, with the money invested instead at a real return (the return after inflation). The code below stores the book’s inputs:</p>
+<div id="subscription-inputs" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>monthly_cost <span class="op">=</span> <span class="dv">20</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>rate <span class="op">=</span> <span class="fl">0.07</span></span></code></pre></div>
+</div>
+<p>Canceling the $20 a month subscription frees up $240 a year to invest at 7% for 30 years. The chart below shows what that money grows into at each checkpoint, split into the money you put in and the growth it earned.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/tracking-spending-subscription-bar-model.png" class="img-fluid figure-img" alt="Stacked bar chart of $240 a year invested at 7%, with bars at years 1, 5, 10, 20, and 30. Each bar splits into money put in (bluish green, bottom) and growth (vermillion, top). The totals are $240, $1,380, $3,316, $9,839, and $22,671. Growth is a thin sliver at year 5, about equal to the money put in at year 20, and roughly twice the money put in at year 30."></p>
+<figcaption>$240 a year invested at 7% instead of a $20/month subscription</figcaption>
+</figure>
+</div>
+<p>Each bar adds another year’s deposit to everything saved so far, and the whole pile grows by 7%. <a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a> adds up every year’s deposit and its growth in one step:</p>
+<div id="cell-subscription-cost" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sub_cost <span class="op">=</span> subscription_opportunity_cost(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    monthly_cost<span class="op">=</span>monthly_cost,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    years<span class="op">=</span>years,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    rate<span class="op">=</span>rate,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>sub_cost</span></code></pre></div>
+<div id="subscription-cost" class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>22670.58871769843</code></pre>
+</div>
+</div>
+<p>Over 30 years you put in $7,200, and growth adds $15,471 on top of it. That “small” $20 a month is a $22,671 decision.</p>
+</section>
+<section id="comparing-horizons" class="level1">
+<h1>Comparing horizons</h1>
+<p><a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a> accepts arrays, so one call can fill in every bar of the chart above. The code below puts the five checkpoints in a <code>pl.DataFrame</code> with the money put in and the growth:</p>
+<div id="cell-subscription-years" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>checkpoints <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>]</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"years"</span>: checkpoints,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"put_in"</span>: [monthly_cost <span class="op">*</span> <span class="dv">12</span> <span class="op">*</span> y <span class="cf">for</span> y <span class="kw">in</span> checkpoints],</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"value"</span>: subscription_opportunity_cost(monthly_cost, checkpoints, rate).<span class="bu">round</span>(<span class="dv">2</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>}).with_columns(growth<span class="op">=</span>pl.col(<span class="st">"value"</span>) <span class="op">-</span> pl.col(<span class="st">"put_in"</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>horizons</span></code></pre></div>
+<div id="subscription-years" class="cell-output cell-output-display" data-execution_count="10">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 4)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>years</th><th>put_in</th><th>value</th><th>growth</th></tr><tr><td>i64</td><td>i64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>1</td><td>240</td><td>240.0</td><td>0.0</td></tr><tr><td>5</td><td>1200</td><td>1380.18</td><td>180.18</td></tr><tr><td>10</td><td>2400</td><td>3315.95</td><td>915.95</td></tr><tr><td>20</td><td>4800</td><td>9838.92</td><td>5038.92</td></tr><tr><td>30</td><td>7200</td><td>22670.59</td><td>15470.59</td></tr></tbody></table></div>
+</div>
+</div>
+<p>Growth is $180 after 5 years and $15,471 after 30. Most of the cost of a subscription shows up late, which is exactly when you’ve stopped noticing the charge.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Limits">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Limits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a>: the first matching rule wins, so put specific patterns above general ones. Patterns are regular expressions with case ignored, so characters like <code>.</code>, <code>+</code>, and <code>(</code> have special meanings. The function only reads <code>Description</code>; a Netflix refund lands in <code>"Subscriptions"</code> just like the charge. An existing <code>Category</code> column is replaced. Both arguments must be <code>polars</code> DataFrames.</li>
+<li><a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a>: it invests the yearly total once, at the end of each year, at one fixed rate. The book’s $267,000 figure for $219 a month assumes monthly deposits, so it comes out higher than this function’s result for the same inputs. The 7% default is a real return, so the result is in today’s dollars. It does not reject negative costs.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="putting-it-together" class="level1">
+<h1>Putting it together</h1>
+<p>The book’s monthly review ends with a subscription audit: list every recurring charge and decide whether it’s worth the cost. The categorized statement already holds that list. The code below pulls the subscription rows and prices each one over the same horizon:</p>
+<div id="cell-subscription-audit" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>subs <span class="op">=</span> categorized.<span class="bu">filter</span>(pl.col(<span class="st">"Category"</span>) <span class="op">==</span> <span class="st">"Subscriptions"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>monthly <span class="op">=</span> <span class="op">-</span>subs[<span class="st">"Amount"</span>]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>audit <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Description"</span>: subs[<span class="st">"Description"</span>],</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"monthly"</span>: monthly,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cost_30"</span>: subscription_opportunity_cost(monthly.to_numpy(), years<span class="op">=</span>years).<span class="bu">round</span>(<span class="dv">2</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>audit</span></code></pre></div>
+<div id="subscription-audit" class="cell-output cell-output-display" data-execution_count="11">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>Description</th><th>monthly</th><th>cost_30</th></tr><tr><td>str</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"Netflix"</td><td>15.99</td><td>18125.14</td></tr><tr><td>"Spotify"</td><td>10.99</td><td>12457.49</td></tr><tr><td>"NYTimes Digital"</td><td>17.0</td><td>19270.0</td></tr><tr><td>"24 Hour Fitness"</td><td>39.99</td><td>45329.84</td></tr></tbody></table></div>
+</div>
+</div>
+<p>These 4 subscriptions cost $83.97 a month, which adds up to $95,182 over 30 years. To put the monthly total in context, <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a> from the <a href="../user-guide/budgeting.html">Budgeting</a> page compares it with the paycheck on the statement:</p>
+<div id="cell-subscription-share" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>paycheck <span class="op">=</span> categorized.<span class="bu">filter</span>(pl.col(<span class="st">"Category"</span>) <span class="op">==</span> <span class="st">"Income"</span>)[<span class="st">"Amount"</span>][<span class="dv">0</span>]</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>subs_share <span class="op">=</span> percent_of_income(expense<span class="op">=</span>audit[<span class="st">"monthly"</span>].<span class="bu">sum</span>(), income<span class="op">=</span>paycheck)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>subs_share</span></code></pre></div>
+<div id="subscription-share" class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>3.49875</code></pre>
+</div>
+</div>
+<p>Subscriptions take about 3.5% of the paycheck. As in the rest of perfinpy, the ratio comes out as a percent, not a decimal (see the conventions in <a href="../user-guide/get-started.html">Get started</a>). The gym membership alone accounts for $45,330 of the 30 year total. That makes it the first one to check against the book’s audit question: have you used it in the last 30 days?</p>
+</section>
+<section id="recap" class="level1">
+<h1>Recap</h1>
+<p><a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a> turns a bank export into categorized spending with a small, stable table of keyword patterns, and anything new falls through to <code>"Other"</code>. <a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a> puts a price on recurring charges by showing what the money would grow to if invested. Together they cover the recording side of personal finance, which feeds the allocation decisions in <a href="../user-guide/budgeting.html">Budgeting</a>.</p>
+<ul>
+<li><a href="https://mjfrigaard.github.io/fm-finance/tracking_spending.html">Tracking Spending</a> in Personal Finance: a field manual</li>
+<li>Reference: <a href="../reference/apply_rules.html#perfinpy.apply_rules" class="gdls-link gdls-code">apply_rules()</a>, <a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a>, <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a></li>
+<li>Next: <a href="../user-guide/budgeting.html">Budgeting</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mjfrigaard\.github\.io\/perfinpy\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/income.html" class="pagination-link" aria-label="Income">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Income</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../user-guide/budgeting.html" class="pagination-link" aria-label="Budgeting">
+        <span class="nav-page-text">Budgeting</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+<div class="nav-footer-center">
+<p>Developed by <strong>Martin&nbsp;Frigaard</strong>.<br>Site created with <strong>Great&nbsp;Docs</strong>.</p>
+</div>
+</div>
+</footer>
+<script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
+<script src="../sidebar-wrap.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
+<script src="../sidebar-filter.js"></script>
+<script src="../dark-mode-toggle.js"></script>
+<script src="../back-to-top.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'on-this-page.js';document.body.appendChild(s);})();</script>
+<script src="../keyboard-nav.js"></script>
+<script src="../copy-code.js"></script>
+<script src="../details.js"></script>
+<script src="../mermaid-renderer.js"></script>
+<script src="../tooltips.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
+<script src="../responsive-tables.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
+<script src="../navbar-widgets.js"></script>
+
+
+
+
+</body></html>

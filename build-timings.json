@@ -1,0 +1,361 @@
+{
+  "build_time": "2026-11-03T07:45:28Z",
+  "total_seconds": 70.65,
+  "pages": [
+    {
+      "page": "reference/to_annual.qmd",
+      "seconds": 5.81,
+      "frozen": false
+    },
+    {
+      "page": "user-guide/managing-debt.qmd",
+      "seconds": 2.752,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/budgeting.qmd",
+      "seconds": 2.603,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/taxes.qmd",
+      "seconds": 2.536,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/emergency-fund.qmd",
+      "seconds": 2.52,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/major-purchases.qmd",
+      "seconds": 2.519,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/tracking-spending.qmd",
+      "seconds": 2.507,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/get-started.qmd",
+      "seconds": 2.506,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/automating-savings.qmd",
+      "seconds": 2.491,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/financial-goals.qmd",
+      "seconds": 2.437,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/asset-allocation.qmd",
+      "seconds": 2.437,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/savings-strategies.qmd",
+      "seconds": 2.398,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/investing-basics.qmd",
+      "seconds": 2.396,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/insurance.qmd",
+      "seconds": 2.375,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/index-funds.qmd",
+      "seconds": 2.359,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/retirement-accounts.qmd",
+      "seconds": 2.354,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/estate-planning.qmd",
+      "seconds": 2.336,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/income.qmd",
+      "seconds": 2.328,
+      "frozen": true
+    },
+    {
+      "page": "user-guide/high-yield-accounts.qmd",
+      "seconds": 2.292,
+      "frozen": true
+    },
+    {
+      "page": "license.qmd",
+      "seconds": 1.915,
+      "frozen": false
+    },
+    {
+      "page": "package-info.qmd",
+      "seconds": 0.613,
+      "frozen": false
+    },
+    {
+      "page": "reference/index.qmd",
+      "seconds": 0.432,
+      "frozen": false
+    },
+    {
+      "page": "reference/to_monthly.qmd",
+      "seconds": 0.399,
+      "frozen": false
+    },
+    {
+      "page": "reference/apr_to_apy.qmd",
+      "seconds": 0.397,
+      "frozen": false
+    },
+    {
+      "page": "reference/income_tax.qmd",
+      "seconds": 0.396,
+      "frozen": false
+    },
+    {
+      "page": "reference/mortgage_payment.qmd",
+      "seconds": 0.386,
+      "frozen": false
+    },
+    {
+      "page": "reference/months_to_payoff.qmd",
+      "seconds": 0.379,
+      "frozen": false
+    },
+    {
+      "page": "reference/future_value_series.qmd",
+      "seconds": 0.378,
+      "frozen": false
+    },
+    {
+      "page": "reference/yearly_fee.qmd",
+      "seconds": 0.375,
+      "frozen": false
+    },
+    {
+      "page": "reference/order_avalanche.qmd",
+      "seconds": 0.372,
+      "frozen": false
+    },
+    {
+      "page": "reference/months_to_ef_goal.qmd",
+      "seconds": 0.372,
+      "frozen": false
+    },
+    {
+      "page": "reference/first_payment_split.qmd",
+      "seconds": 0.371,
+      "frozen": false
+    },
+    {
+      "page": "reference/dti_ratio.qmd",
+      "seconds": 0.369,
+      "frozen": false
+    },
+    {
+      "page": "reference/order_snowball.qmd",
+      "seconds": 0.367,
+      "frozen": false
+    },
+    {
+      "page": "reference/percent_of_income.qmd",
+      "seconds": 0.367,
+      "frozen": false
+    },
+    {
+      "page": "reference/opportunity_cost.qmd",
+      "seconds": 0.366,
+      "frozen": false
+    },
+    {
+      "page": "reference/hysa_balance.qmd",
+      "seconds": 0.366,
+      "frozen": false
+    },
+    {
+      "page": "reference/monthly_standard_payment.qmd",
+      "seconds": 0.365,
+      "frozen": false
+    },
+    {
+      "page": "reference/employer_match.qmd",
+      "seconds": 0.365,
+      "frozen": false
+    },
+    {
+      "page": "reference/apply_rules.qmd",
+      "seconds": 0.365,
+      "frozen": false
+    },
+    {
+      "page": "reference/future_value_after_fees.qmd",
+      "seconds": 0.365,
+      "frozen": false
+    },
+    {
+      "page": "reference/raise_invested_value.qmd",
+      "seconds": 0.363,
+      "frozen": false
+    },
+    {
+      "page": "reference/rebalance_amount.qmd",
+      "seconds": 0.363,
+      "frozen": false
+    },
+    {
+      "page": "reference/rent_buy_threshold.qmd",
+      "seconds": 0.362,
+      "frozen": false
+    },
+    {
+      "page": "reference/break_even_years.qmd",
+      "seconds": 0.362,
+      "frozen": false
+    },
+    {
+      "page": "reference/future_value.qmd",
+      "seconds": 0.361,
+      "frozen": false
+    },
+    {
+      "page": "reference/after_tax_value.qmd",
+      "seconds": 0.361,
+      "frozen": false
+    },
+    {
+      "page": "reference/monthly_for_goal.qmd",
+      "seconds": 0.361,
+      "frozen": false
+    },
+    {
+      "page": "reference/months_to_fund.qmd",
+      "seconds": 0.36,
+      "frozen": false
+    },
+    {
+      "page": "reference/real_return.qmd",
+      "seconds": 0.359,
+      "frozen": false
+    },
+    {
+      "page": "reference/subscription_opportunity_cost.qmd",
+      "seconds": 0.359,
+      "frozen": false
+    },
+    {
+      "page": "reference/monthly_contribution_needed.qmd",
+      "seconds": 0.359,
+      "frozen": false
+    },
+    {
+      "page": "reference/savings_rate.qmd",
+      "seconds": 0.358,
+      "frozen": false
+    },
+    {
+      "page": "reference/net_worth.qmd",
+      "seconds": 0.358,
+      "frozen": false
+    },
+    {
+      "page": "reference/beneficiary_share.qmd",
+      "seconds": 0.357,
+      "frozen": false
+    },
+    {
+      "page": "reference/portfolio_return.qmd",
+      "seconds": 0.357,
+      "frozen": false
+    },
+    {
+      "page": "reference/ef_growth.qmd",
+      "seconds": 0.356,
+      "frozen": false
+    },
+    {
+      "page": "reference/months_to_break_even.qmd",
+      "seconds": 0.355,
+      "frozen": false
+    },
+    {
+      "page": "reference/plan_cost.qmd",
+      "seconds": 0.355,
+      "frozen": false
+    },
+    {
+      "page": "reference/monthly_savings.qmd",
+      "seconds": 0.352,
+      "frozen": false
+    },
+    {
+      "page": "reference/emergency_fund_target.qmd",
+      "seconds": 0.352,
+      "frozen": false
+    },
+    {
+      "page": "reference/idr_monthly_payment.qmd",
+      "seconds": 0.352,
+      "frozen": false
+    },
+    {
+      "page": "reference/raise_kept.qmd",
+      "seconds": 0.348,
+      "frozen": false
+    },
+    {
+      "page": "reference/rule_of_72.qmd",
+      "seconds": 0.347,
+      "frozen": false
+    },
+    {
+      "page": "reference/credit_utilization.qmd",
+      "seconds": 0.346,
+      "frozen": false
+    },
+    {
+      "page": "reference/fixed_cost_ratio.qmd",
+      "seconds": 0.345,
+      "frozen": false
+    },
+    {
+      "page": "reference/loan_income_ratio.qmd",
+      "seconds": 0.345,
+      "frozen": false
+    },
+    {
+      "page": "reference/payoff_vs_invest.qmd",
+      "seconds": 0.344,
+      "frozen": false
+    },
+    {
+      "page": "reference/wealth_formula.qmd",
+      "seconds": 0.344,
+      "frozen": false
+    },
+    {
+      "page": "reference/total_interest.qmd",
+      "seconds": 0.338,
+      "frozen": false
+    },
+    {
+      "page": "index.qmd",
+      "seconds": 0.335,
+      "frozen": false
+    }
+  ]
+}

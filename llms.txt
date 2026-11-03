@@ -1,0 +1,124 @@
+# perfinpy
+
+> Python functions from Personal Finance: a field manual
+
+## Docs
+
+### API Reference
+
+#### Income
+> Foundations. Functions from the Income chapter.
+
+- [wealth_formula](https://mjfrigaard.github.io/perfinpy/reference/wealth_formula.html): Wealth from saving part of an income every year
+- [fixed_cost_ratio](https://mjfrigaard.github.io/perfinpy/reference/fixed_cost_ratio.html): Fixed costs as a percent of take home pay
+- [raise_invested_value](https://mjfrigaard.github.io/perfinpy/reference/raise_invested_value.html): Future value of investing part of a raise
+
+#### Tracking Spending
+> Foundations. Functions from the Tracking Spending chapter.
+
+- [apply_rules](https://mjfrigaard.github.io/perfinpy/reference/apply_rules.html): Categorize transactions with keyword rules
+- [subscription_opportunity_cost](https://mjfrigaard.github.io/perfinpy/reference/subscription_opportunity_cost.html): What a subscription would grow to if invested instead
+
+#### Budgeting
+> Foundations. Functions from the Budgeting chapter.
+
+- [percent_of_income](https://mjfrigaard.github.io/perfinpy/reference/percent_of_income.html): An expense as a percent of income
+- [to_annual](https://mjfrigaard.github.io/perfinpy/reference/to_annual.html): Convert a daily, weekly, or monthly amount to a yearly amount
+- [to_monthly](https://mjfrigaard.github.io/perfinpy/reference/to_monthly.html): Convert a daily, weekly, or yearly amount to a monthly amount
+- [opportunity_cost](https://mjfrigaard.github.io/perfinpy/reference/opportunity_cost.html): What an amount could grow to if invested instead of spent
+- [months_to_break_even](https://mjfrigaard.github.io/perfinpy/reference/months_to_break_even.html): Months until monthly savings cover an upfront cost
+
+#### Managing Debt
+> Foundations. Functions from the Managing Debt chapter.
+
+- [apr_to_apy](https://mjfrigaard.github.io/perfinpy/reference/apr_to_apy.html): Convert an APR to an annual percentage yield (APY)
+- [months_to_payoff](https://mjfrigaard.github.io/perfinpy/reference/months_to_payoff.html): Months to pay off a balance with a fixed payment
+- [total_interest](https://mjfrigaard.github.io/perfinpy/reference/total_interest.html): Total interest paid over the life of a loan
+- [loan_income_ratio](https://mjfrigaard.github.io/perfinpy/reference/loan_income_ratio.html): Total student loans as a multiple of expected starting salary
+- [monthly_standard_payment](https://mjfrigaard.github.io/perfinpy/reference/monthly_standard_payment.html): Monthly payment on a standard student loan repayment plan
+- [idr_monthly_payment](https://mjfrigaard.github.io/perfinpy/reference/idr_monthly_payment.html): Income driven repayment (IDR) monthly payment
+- [dti_ratio](https://mjfrigaard.github.io/perfinpy/reference/dti_ratio.html): Debt to income ratio
+- [payoff_vs_invest](https://mjfrigaard.github.io/perfinpy/reference/payoff_vs_invest.html): Pay off a debt or invest the difference
+- [order_avalanche](https://mjfrigaard.github.io/perfinpy/reference/order_avalanche.html): Order debts for the avalanche method (highest APR first)
+- [order_snowball](https://mjfrigaard.github.io/perfinpy/reference/order_snowball.html): Order debts for the snowball method (smallest balance first)
+- [credit_utilization](https://mjfrigaard.github.io/perfinpy/reference/credit_utilization.html): Credit utilization: a card balance as a percent of its limit
+
+#### Emergency Fund
+> Foundations. Functions from the Emergency Fund chapter.
+
+- [emergency_fund_target](https://mjfrigaard.github.io/perfinpy/reference/emergency_fund_target.html): Emergency fund target
+- [months_to_ef_goal](https://mjfrigaard.github.io/perfinpy/reference/months_to_ef_goal.html): Months to reach an emergency fund target
+- [monthly_contribution_needed](https://mjfrigaard.github.io/perfinpy/reference/monthly_contribution_needed.html): Monthly contribution needed to reach an emergency fund target
+- [ef_growth](https://mjfrigaard.github.io/perfinpy/reference/ef_growth.html): Emergency fund balance after earning interest
+
+#### Savings Strategies
+> Savings. Functions from the Savings Strategies chapter.
+
+- [savings_rate](https://mjfrigaard.github.io/perfinpy/reference/savings_rate.html): Savings rate: the percent of income not spent
+
+#### High-Yield Savings Accounts
+> Savings. Functions from the High-Yield Savings Accounts chapter.
+
+- [hysa_balance](https://mjfrigaard.github.io/perfinpy/reference/hysa_balance.html): High-yield savings account balance
+
+#### Automating Savings
+> Savings. Functions from the Automating Savings chapter.
+
+- [monthly_savings](https://mjfrigaard.github.io/perfinpy/reference/monthly_savings.html): Monthly amount to pay yourself first
+
+#### Investing Basics
+> Investing. Functions from the Investing Basics chapter.
+
+- [future_value](https://mjfrigaard.github.io/perfinpy/reference/future_value.html): Future value of a single amount with yearly compounding
+- [rule_of_72](https://mjfrigaard.github.io/perfinpy/reference/rule_of_72.html): Years for money to double, by the rule of 72
+- [future_value_series](https://mjfrigaard.github.io/perfinpy/reference/future_value_series.html): Future value of a fixed contribution made every period
+- [real_return](https://mjfrigaard.github.io/perfinpy/reference/real_return.html): Real (inflation adjusted) return
+
+#### Retirement Accounts
+> Investing. Functions from the Retirement Accounts chapter.
+
+- [employer_match](https://mjfrigaard.github.io/perfinpy/reference/employer_match.html): Yearly employer match on retirement contributions
+- [after_tax_value](https://mjfrigaard.github.io/perfinpy/reference/after_tax_value.html): After tax value of a retirement contribution
+
+#### Index Funds
+> Investing. Functions from the Index Funds chapter.
+
+- [yearly_fee](https://mjfrigaard.github.io/perfinpy/reference/yearly_fee.html): Yearly fund fee from an expense ratio
+- [future_value_after_fees](https://mjfrigaard.github.io/perfinpy/reference/future_value_after_fees.html): Future value of monthly contributions after fund fees
+
+#### Asset Allocation
+> Investing. Functions from the Asset Allocation chapter.
+
+- [portfolio_return](https://mjfrigaard.github.io/perfinpy/reference/portfolio_return.html): Return on a two fund (stock and bond) portfolio
+- [rebalance_amount](https://mjfrigaard.github.io/perfinpy/reference/rebalance_amount.html): Amount to buy (positive) or sell (negative) to reach a target
+
+#### Taxes
+> Taxes and insurance. Functions from the Taxes chapter.
+
+- [income_tax](https://mjfrigaard.github.io/perfinpy/reference/income_tax.html): Federal income tax for a single filer (2026 brackets)
+- [raise_kept](https://mjfrigaard.github.io/perfinpy/reference/raise_kept.html): How much of a raise you keep after federal income tax
+
+#### Insurance
+> Taxes and insurance. Functions from the Insurance chapter.
+
+- [break_even_years](https://mjfrigaard.github.io/perfinpy/reference/break_even_years.html): Years of premium savings to cover a higher deductible
+- [plan_cost](https://mjfrigaard.github.io/perfinpy/reference/plan_cost.html): Yearly cost of a health plan
+
+#### Financial Goals
+> Planning. Functions from the Financial Goals chapter.
+
+- [monthly_for_goal](https://mjfrigaard.github.io/perfinpy/reference/monthly_for_goal.html): Monthly saving needed to reach a goal
+- [months_to_fund](https://mjfrigaard.github.io/perfinpy/reference/months_to_fund.html): Whole months to fund a goal with no interest
+
+#### Major Purchases
+> Planning. Functions from the Major Purchases chapter.
+
+- [rent_buy_threshold](https://mjfrigaard.github.io/perfinpy/reference/rent_buy_threshold.html): Monthly rent that matches the unrecoverable cost of owning
+- [mortgage_payment](https://mjfrigaard.github.io/perfinpy/reference/mortgage_payment.html): Monthly payment on a fixed rate loan
+- [first_payment_split](https://mjfrigaard.github.io/perfinpy/reference/first_payment_split.html): Interest and principal in a loan's first monthly payment
+
+#### Estate Planning
+> Planning. Functions from the Estate Planning chapter.
+
+- [net_worth](https://mjfrigaard.github.io/perfinpy/reference/net_worth.html): Net worth: total assets minus total debts
+- [beneficiary_share](https://mjfrigaard.github.io/perfinpy/reference/beneficiary_share.html): Share of assets that pass directly to a named beneficiary

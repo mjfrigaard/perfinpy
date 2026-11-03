@@ -1,0 +1,1178 @@
+[
+  {
+    "objectID": "reference/to_annual.html",
+    "href": "reference/to_annual.html",
+    "title": "to_annual()",
+    "section": "",
+    "text": "Convert a daily, weekly, or monthly amount to a yearly amount.\n\n\nUsage\nSource\n\n\nto_annual(amount, period=\"daily\")\n\n\nUses 365 days, 52 weeks, and 12 months per year. From the Budgeting chapter.\n\n\nParameters\n\n\namount: ArrayLike\n\nAmount per period.\n\nperiod: Literal[\"daily\", \"weekly\", \"monthly\"] = \"daily\"\n\nOne of \"daily\", \"weekly\", or \"monthly\".\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nYearly amounts.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf amount is not numeric.\n\n ValueError\n\nIf amount contains missing values, or period is not one of the choices.\n\n\n\n\n\nSee Also\n\n\n\nConvert to a monthly amount.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import to_annual\n&gt;&gt;&gt; # $5 a day coffee\n&gt;&gt;&gt; to_annual(amount=5, period=\"daily\")\n1825.0",
+    "crumbs": [
+      "Reference",
+      "Budgeting",
+      "to_annual"
+    ]
+  },
+  {
+    "objectID": "reference/portfolio_return.html",
+    "href": "reference/portfolio_return.html",
+    "title": "portfolio_return()",
+    "section": "",
+    "text": "Return on a two fund (stock and bond) portfolio.\n\n\nUsage\nSource\n\n\nportfolio_return(stock_pct, stock_return, bond_return)\n\n\nA weighted average of the two returns. Also accepts polars expressions, so it works inside with_columns(). From the Asset Allocation chapter.\n\n\nParameters\n\n\nstock_pct: ArrayLike | pl.Expr\n\nShare of the portfolio in stocks, as a decimal.\n\nstock_return: ArrayLike | pl.Expr\n\nYearly stock return, as a decimal.\n\nbond_return: ArrayLike | pl.Expr\n\nYearly bond return, as a decimal.\n\n\n\n\n\nReturns\n\n\n float, numpy.ndarray, or polars.Expr\n\nPortfolio returns, as decimals. A polars expression when any input is one.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric (or a polars expression).\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; import polars as pl\n&gt;&gt;&gt; from perfinpy import portfolio_return\n&gt;&gt;&gt; # an 80/20 portfolio in an average year\n&gt;&gt;&gt; portfolio_return(stock_pct=0.80, stock_return=0.10, bond_return=0.04)\n0.088\n&gt;&gt;&gt; # 100/0, 80/20, and 60/40 in a bad year\n&gt;&gt;&gt; pl.DataFrame({\"stocks\": [1.0, 0.8, 0.6]}).with_columns(\n...     bad=portfolio_return(pl.col(\"stocks\"), -0.40, 0.0)\n... )[\"bad\"].round(2).to_list()\n[-0.4, -0.32, -0.24]",
+    "crumbs": [
+      "Reference",
+      "Asset Allocation",
+      "portfolio_return"
+    ]
+  },
+  {
+    "objectID": "reference/rebalance_amount.html",
+    "href": "reference/rebalance_amount.html",
+    "title": "rebalance_amount()",
+    "section": "",
+    "text": "Amount to buy (positive) or sell (negative) to reach a target.\n\n\nUsage\nSource\n\n\nrebalance_amount(target_pct, total, current_amount)\n\n\nFrom the Asset Allocation chapter.\n\n\nParameters\n\n\ntarget_pct: ArrayLike\n\nTarget share of the portfolio, as a decimal.\n\ntotal: ArrayLike\n\nTotal portfolio value.\n\ncurrent_amount: ArrayLike\n\nCurrent value of the holding.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nAmounts to buy (positive) or sell (negative).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import rebalance_amount\n&gt;&gt;&gt; # $5,600 in stocks and $2,000 in bonds after a 30% stock drop\n&gt;&gt;&gt; rebalance_amount(target_pct=0.80, total=5600 + 2000, current_amount=5600)\n480.0",
+    "crumbs": [
+      "Reference",
+      "Asset Allocation",
+      "rebalance_amount"
+    ]
+  },
+  {
+    "objectID": "reference/apr_to_apy.html",
+    "href": "reference/apr_to_apy.html",
+    "title": "apr_to_apy()",
+    "section": "",
+    "text": "Convert an APR to an annual percentage yield (APY).\n\n\nUsage\nSource\n\n\napr_to_apy(apr, periods_per_year=365)\n\n\nFrom the Managing Debt chapter.\n\n\nParameters\n\n\napr: ArrayLike\n\nAnnual percentage rate, as a decimal.\n\nperiods_per_year: ArrayLike = 365\n\nCompounding periods per year. Defaults to 365 (daily). Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nAPYs, as decimals.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or periods_per_year is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import apr_to_apy\n&gt;&gt;&gt; # 24% APR compounded daily\n&gt;&gt;&gt; apr_to_apy(apr=0.24)\n0.27114",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "apr_to_apy"
+    ]
+  },
+  {
+    "objectID": "reference/hysa_balance.html",
+    "href": "reference/hysa_balance.html",
+    "title": "hysa_balance()",
+    "section": "",
+    "text": "High-yield savings account balance.\n\n\nUsage\nSource\n\n\nhysa_balance(principal, annual_apy, years=1)\n\n\nGrows principal at annual_apy for years. From the High-Yield Savings Accounts chapter.\n\n\nParameters\n\n\nprincipal: ArrayLike\n\nStarting balance.\n\nannual_apy: ArrayLike\n\nAnnual percentage yield, as a decimal.\n\nyears: ArrayLike = 1\n\nNumber of years. Defaults to 1.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nEnding balances.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import hysa_balance\n&gt;&gt;&gt; # $9,600 at 4% APY after 1 and 5 years\n&gt;&gt;&gt; hysa_balance(principal=9600, annual_apy=0.04, years=[1, 5])\narray([ 9984. , 11679.86786304])",
+    "crumbs": [
+      "Reference",
+      "High-Yield Savings Accounts",
+      "hysa_balance"
+    ]
+  },
+  {
+    "objectID": "reference/monthly_contribution_needed.html",
+    "href": "reference/monthly_contribution_needed.html",
+    "title": "monthly_contribution_needed()",
+    "section": "",
+    "text": "Monthly contribution needed to reach an emergency fund target.\n\n\nUsage\nSource\n\n\nmonthly_contribution_needed(target, current_balance, months)\n\n\nRounded up to whole dollars. Returns 0 when the fund is already at or above the target. From the Emergency Fund chapter.\n\n\nParameters\n\n\ntarget: ArrayLike\n\nTarget balance.\n\ncurrent_balance: ArrayLike\n\nAmount already saved.\n\nmonths: ArrayLike\n\nMonths to reach the target. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n int or numpy.ndarray\n\nWhole dollars per month.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or months is not greater than 0.\n\n\n\n\n\nSee Also\n\n\n\nSolve for the months instead.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import monthly_contribution_needed\n&gt;&gt;&gt; monthly_contribution_needed(target=9600, current_balance=1200, months=18)\n467",
+    "crumbs": [
+      "Reference",
+      "Emergency Fund",
+      "monthly_contribution_needed"
+    ]
+  },
+  {
+    "objectID": "reference/beneficiary_share.html",
+    "href": "reference/beneficiary_share.html",
+    "title": "beneficiary_share()",
+    "section": "",
+    "text": "Share of assets that pass directly to a named beneficiary.\n\n\nUsage\nSource\n\n\nbeneficiary_share(with_beneficiary, without_beneficiary)\n\n\nAssets with a beneficiary (retirement accounts, life insurance, payable on death accounts) skip probate. From the Estate Planning chapter.\n\n\nParameters\n\n\nwith_beneficiary: Mapping[str, float] | ArrayLike\n\nValues of assets with a named beneficiary, as a dict or a sequence.\n\nwithout_beneficiary: Mapping[str, float] | ArrayLike\n\nValues of assets without one, as a dict or a sequence.\n\n\n\n\n\nReturns\n\n\n float\n\nShare, as a decimal (0.8875 is 88.75%).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf a value is not numeric.\n\n ValueError\n\nIf a value is missing, or total assets are not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import beneficiary_share\n&gt;&gt;&gt; with_beneficiary = {\"401k\": 12000, \"roth_ira\": 6000,\n...                     \"life_insurance\": 45000, \"savings_pod\": 8000}\n&gt;&gt;&gt; beneficiary_share(with_beneficiary, {\"car\": 9000})\n0.8875",
+    "crumbs": [
+      "Reference",
+      "Estate Planning",
+      "beneficiary_share"
+    ]
+  },
+  {
+    "objectID": "reference/future_value_after_fees.html",
+    "href": "reference/future_value_after_fees.html",
+    "title": "future_value_after_fees()",
+    "section": "",
+    "text": "Future value of monthly contributions after fund fees.\n\n\nUsage\nSource\n\n\nfuture_value_after_fees(contribution, annual_return, expense_ratio, years)\n\n\nSubtracts the expense ratio from the yearly return, then compounds monthly contributions. From the Index Funds chapter.\n\n\nParameters\n\n\ncontribution: ArrayLike\n\nAmount contributed each month.\n\nannual_return: ArrayLike\n\nYearly return before fees, as a decimal.\n\nexpense_ratio: ArrayLike\n\nYearly expense ratio, as a decimal.\n\nyears: ArrayLike\n\nNumber of years.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nFuture values.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import future_value_after_fees\n&gt;&gt;&gt; # $300/month for 40 years at 7%, index fund vs. active fund\n&gt;&gt;&gt; future_value_after_fees(300, 0.07, [0.0004, 0.01], 40)\narray([778654.71, 597447.22])",
+    "crumbs": [
+      "Reference",
+      "Index Funds",
+      "future_value_after_fees"
+    ]
+  },
+  {
+    "objectID": "reference/income_tax.html",
+    "href": "reference/income_tax.html",
+    "title": "income_tax()",
+    "section": "",
+    "text": "Federal income tax for a single filer (2026 brackets).\n\n\nUsage\nSource\n\n\nincome_tax(income, deduction=16100)\n\n\nSubtracts the deduction, then taxes each slice of taxable income at its bracket’s rate. Uses the 2026 single filer brackets and standard deduction. From the Taxes chapter.\n\n\nParameters\n\n\nincome: float\n\nYearly gross income. A single number.\n\ndeduction: float = 16100\n\nDeduction subtracted before tax. Defaults to 16100 (the 2026 standard deduction). A single number.\n\n\n\n\n\nReturns\n\n\n float\n\nTax owed.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values or is not a single number.\n\n\n\n\n\nSee Also\n\n\n\nHow much of a raise you keep after tax.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import income_tax\n&gt;&gt;&gt; income_tax(income=45000)\n3220.0\n&gt;&gt;&gt; # effective rate\n&gt;&gt;&gt; income_tax(income=45000) / 45000\n0.0715",
+    "crumbs": [
+      "Reference",
+      "Taxes",
+      "income_tax"
+    ]
+  },
+  {
+    "objectID": "reference/total_interest.html",
+    "href": "reference/total_interest.html",
+    "title": "total_interest()",
+    "section": "",
+    "text": "Total interest paid over the life of a loan.\n\n\nUsage\nSource\n\n\ntotal_interest(monthly_payment, n_months, principal)\n\n\nAll payments minus the amount borrowed. From the Managing Debt chapter.\n\n\nParameters\n\n\nmonthly_payment: ArrayLike\n\nFixed monthly payment.\n\nn_months: ArrayLike\n\nNumber of payments.\n\nprincipal: ArrayLike\n\nAmount borrowed.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nInterest paid.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import total_interest\n&gt;&gt;&gt; # 6-year vs. 4-year car loan, $20,000 at 7%\n&gt;&gt;&gt; total_interest(monthly_payment=[340.98, 478.92], n_months=[72, 48],\n...                principal=20000)\narray([4550.56, 2988.16])",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "total_interest"
+    ]
+  },
+  {
+    "objectID": "reference/future_value_series.html",
+    "href": "reference/future_value_series.html",
+    "title": "future_value_series()",
+    "section": "",
+    "text": "Future value of a fixed contribution made every period.\n\n\nUsage\nSource\n\n\nfuture_value_series(contribution, rate, periods)\n\n\nContributions are made at the end of each period. rate is the rate per period, so a monthly series uses annual_rate / 12. A 0% rate gives the sum of the contributions. From the Investing Basics chapter.\n\n\nParameters\n\n\ncontribution: ArrayLike\n\nAmount contributed each period.\n\nrate: ArrayLike\n\nReturn per period, as a decimal.\n\nperiods: ArrayLike\n\nNumber of periods.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nFuture values.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nSee Also\n\n\n\nFuture value of a single amount.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import future_value_series\n&gt;&gt;&gt; # $500/month for 30 years at 7% a year\n&gt;&gt;&gt; future_value_series(contribution=500, rate=0.07 / 12, periods=30 * 12)\n609985.49",
+    "crumbs": [
+      "Reference",
+      "Investing Basics",
+      "future_value_series"
+    ]
+  },
+  {
+    "objectID": "reference/break_even_years.html",
+    "href": "reference/break_even_years.html",
+    "title": "break_even_years()",
+    "section": "",
+    "text": "Years of premium savings to cover a higher deductible.\n\n\nUsage\nSource\n\n\nbreak_even_years(high_deductible, low_deductible, yearly_savings)\n\n\nIf you go longer than this between claims, the higher deductible comes out ahead. From the Insurance chapter.\n\n\nParameters\n\n\nhigh_deductible: ArrayLike\n\nThe higher deductible.\n\nlow_deductible: ArrayLike\n\nThe lower deductible.\n\nyearly_savings: ArrayLike\n\nYearly premium saved by choosing the higher deductible. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nYears.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or yearly_savings is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import break_even_years\n&gt;&gt;&gt; break_even_years(high_deductible=1000, low_deductible=500,\n...                  yearly_savings=150)\n3.33",
+    "crumbs": [
+      "Reference",
+      "Insurance",
+      "break_even_years"
+    ]
+  },
+  {
+    "objectID": "reference/yearly_fee.html",
+    "href": "reference/yearly_fee.html",
+    "title": "yearly_fee()",
+    "section": "",
+    "text": "Yearly fund fee from an expense ratio.\n\n\nUsage\nSource\n\n\nyearly_fee(balance, expense_ratio)\n\n\nFrom the Index Funds chapter.\n\n\nParameters\n\n\nbalance: ArrayLike\n\nAmount invested.\n\nexpense_ratio: ArrayLike\n\nYearly expense ratio, as a decimal (0.0004 is 0.04%).\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nYearly fees.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import yearly_fee\n&gt;&gt;&gt; # $10,000 in an index fund vs. an active fund\n&gt;&gt;&gt; yearly_fee(balance=10000, expense_ratio=[0.0004, 0.01])\narray([ 4., 100.])",
+    "crumbs": [
+      "Reference",
+      "Index Funds",
+      "yearly_fee"
+    ]
+  },
+  {
+    "objectID": "reference/subscription_opportunity_cost.html",
+    "href": "reference/subscription_opportunity_cost.html",
+    "title": "subscription_opportunity_cost()",
+    "section": "",
+    "text": "What a subscription would grow to if invested instead.\n\n\nUsage\nSource\n\n\nsubscription_opportunity_cost(monthly_cost, years, rate=0.07)\n\n\nTreats the yearly cost (monthly_cost * 12) as a contribution made at the end of each year and grows it at rate. From the Tracking Spending chapter.\n\n\nParameters\n\n\nmonthly_cost: ArrayLike\n\nMonthly subscription price.\n\nyears: ArrayLike\n\nNumber of years.\n\nrate: ArrayLike = 0.07\n\nYearly return, as a decimal. Defaults to 0.07.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nFuture values.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import subscription_opportunity_cost\n&gt;&gt;&gt; # $15/month for 30 years at 7%\n&gt;&gt;&gt; subscription_opportunity_cost(monthly_cost=15, years=30)\n17002.94",
+    "crumbs": [
+      "Reference",
+      "Tracking Spending",
+      "subscription_opportunity_cost"
+    ]
+  },
+  {
+    "objectID": "reference/net_worth.html",
+    "href": "reference/net_worth.html",
+    "title": "net_worth()",
+    "section": "",
+    "text": "Net worth: total assets minus total debts.\n\n\nUsage\nSource\n\n\nnet_worth(assets, debts)\n\n\nFrom the Estate Planning chapter.\n\n\nParameters\n\n\nassets: Mapping[str, float] | ArrayLike\n\nAsset values, as a dict of name to amount or a sequence of amounts.\n\ndebts: Mapping[str, float] | ArrayLike\n\nDebt balances, as a dict of name to amount or a sequence of amounts.\n\n\n\n\n\nReturns\n\n\n float\n\nNet worth.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf a value is not numeric.\n\n ValueError\n\nIf a value is missing.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import net_worth\n&gt;&gt;&gt; assets = {\"401k\": 12000, \"roth_ira\": 6000, \"savings\": 8000, \"car\": 9000}\n&gt;&gt;&gt; debts = {\"car_loan\": 6000, \"credit_card\": 1000}\n&gt;&gt;&gt; net_worth(assets, debts)\n28000.0",
+    "crumbs": [
+      "Reference",
+      "Estate Planning",
+      "net_worth"
+    ]
+  },
+  {
+    "objectID": "reference/first_payment_split.html",
+    "href": "reference/first_payment_split.html",
+    "title": "first_payment_split()",
+    "section": "",
+    "text": "Interest and principal in a loan’s first monthly payment.\n\n\nUsage\nSource\n\n\nfirst_payment_split(principal, annual_rate, years)\n\n\nFrom the Major Purchases chapter.\n\n\nParameters\n\n\nprincipal: float\n\nAmount borrowed. A single number.\n\nannual_rate: float\n\nYearly interest rate, as a decimal. A single number.\n\nyears: float\n\nLoan term in years. A single number greater than 0.\n\n\n\n\n\nReturns\n\n\n dict\n\nKeys payment, interest, principal, and pct_interest (the share of the payment that is interest, as a percent).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values or is not a single number, or years is not greater than 0.\n\n\n\n\n\nSee Also\n\n\n\nThe payment formula used here.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import first_payment_split\n&gt;&gt;&gt; split = first_payment_split(principal=480000, annual_rate=0.06, years=30)\n&gt;&gt;&gt; {k: round(v, 2) for k, v in split.items()}\n{‘payment’: 2877.84, ‘interest’: 2400.0, ‘principal’: 477.84, ‘pct_interest’: 83.4}",
+    "crumbs": [
+      "Reference",
+      "Major Purchases",
+      "first_payment_split"
+    ]
+  },
+  {
+    "objectID": "reference/emergency_fund_target.html",
+    "href": "reference/emergency_fund_target.html",
+    "title": "emergency_fund_target()",
+    "section": "",
+    "text": "Emergency fund target.\n\n\nUsage\nSource\n\n\nemergency_fund_target(monthly_expenses, months=3)\n\n\nEssential monthly expenses times the number of months to cover. From the Emergency Fund chapter.\n\n\nParameters\n\n\nmonthly_expenses: ArrayLike\n\nEssential monthly expenses.\n\nmonths: ArrayLike = 3\n\nMonths of expenses to cover. Defaults to 3.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nTarget balances.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import emergency_fund_target\n&gt;&gt;&gt; # 3-month and 6-month targets on $2,400/month\n&gt;&gt;&gt; emergency_fund_target(monthly_expenses=2400, months=[3, 6])\narray([ 7200., 14400.])",
+    "crumbs": [
+      "Reference",
+      "Emergency Fund",
+      "emergency_fund_target"
+    ]
+  },
+  {
+    "objectID": "reference/monthly_savings.html",
+    "href": "reference/monthly_savings.html",
+    "title": "monthly_savings()",
+    "section": "",
+    "text": "Monthly amount to pay yourself first.\n\n\nUsage\nSource\n\n\nmonthly_savings(gross_monthly_income, savings_rate)\n\n\nFrom the Automating Savings chapter.\n\n\nParameters\n\n\ngross_monthly_income: ArrayLike\n\nMonthly income before taxes.\n\nsavings_rate: ArrayLike\n\nShare of income saved, as a decimal.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly savings.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import monthly_savings\n&gt;&gt;&gt; monthly_savings(gross_monthly_income=4000, savings_rate=0.20)\n800.0",
+    "crumbs": [
+      "Reference",
+      "Automating Savings",
+      "monthly_savings"
+    ]
+  },
+  {
+    "objectID": "reference/order_avalanche.html",
+    "href": "reference/order_avalanche.html",
+    "title": "order_avalanche()",
+    "section": "",
+    "text": "Order debts for the avalanche method (highest APR first).\n\n\nUsage\nSource\n\n\norder_avalanche(debts)\n\n\nFrom the Managing Debt chapter.\n\n\nParameters\n\n\ndebts: list[dict[str, Any]]\n\nA list of dicts, each with a numeric apr key.\n\n\n\n\n\nReturns\n\n\n list of dict\n\nA new list, sorted by apr from highest to lowest. Ties keep their original order.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf debts is not a list of dicts, or an apr is not numeric.\n\n ValueError\n\nIf a debt has no apr key, or an apr is missing.\n\n\n\n\n\nSee Also\n\n\n\nSmallest balance first.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import order_avalanche\n&gt;&gt;&gt; debts = [\n...     {\"name\": \"Card A\", \"balance\": 1000, \"apr\": 0.18},\n...     {\"name\": \"Card B\", \"balance\": 5000, \"apr\": 0.24},\n...     {\"name\": \"Card C\", \"balance\": 2000, \"apr\": 0.15},\n... ]\n&gt;&gt;&gt; [d[\"name\"] for d in order_avalanche(debts)]\n[‘Card B’, ‘Card A’, ‘Card C’]",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "order_avalanche"
+    ]
+  },
+  {
+    "objectID": "reference/months_to_break_even.html",
+    "href": "reference/months_to_break_even.html",
+    "title": "months_to_break_even()",
+    "section": "",
+    "text": "Months until monthly savings cover an upfront cost.\n\n\nUsage\nSource\n\n\nmonths_to_break_even(upfront_cost, monthly_savings)\n\n\nThe result is not rounded. From the Budgeting chapter.\n\n\nParameters\n\n\nupfront_cost: ArrayLike\n\nCost paid today.\n\nmonthly_savings: ArrayLike\n\nAmount saved each month. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonths.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or monthly_savings is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import months_to_break_even\n&gt;&gt;&gt; # $500 membership that saves $60 a month\n&gt;&gt;&gt; months_to_break_even(upfront_cost=500, monthly_savings=60)\n8.33",
+    "crumbs": [
+      "Reference",
+      "Budgeting",
+      "months_to_break_even"
+    ]
+  },
+  {
+    "objectID": "reference/real_return.html",
+    "href": "reference/real_return.html",
+    "title": "real_return()",
+    "section": "",
+    "text": "Real (inflation adjusted) return.\n\n\nUsage\nSource\n\n\nreal_return(nominal, inflation)\n\n\nFrom the Investing Basics chapter.\n\n\nParameters\n\n\nnominal: ArrayLike\n\nNominal yearly return, as a decimal.\n\ninflation: ArrayLike\n\nYearly inflation rate, as a decimal.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nReal returns, as decimals.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import real_return\n&gt;&gt;&gt; real_return(nominal=0.07, inflation=0.03)\n0.03883",
+    "crumbs": [
+      "Reference",
+      "Investing Basics",
+      "real_return"
+    ]
+  },
+  {
+    "objectID": "reference/fixed_cost_ratio.html",
+    "href": "reference/fixed_cost_ratio.html",
+    "title": "fixed_cost_ratio()",
+    "section": "",
+    "text": "Fixed costs as a percent of take home pay.\n\n\nUsage\nSource\n\n\nfixed_cost_ratio(fixed_costs, take_home)\n\n\nFrom the Income chapter.\n\n\nParameters\n\n\nfixed_costs: ArrayLike\n\nMonthly fixed costs (rent, insurance, loan payments).\n\ntake_home: ArrayLike\n\nMonthly take home pay. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nPercentages (56.25 is 56.25%).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or take_home is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import fixed_cost_ratio\n&gt;&gt;&gt; fixed_cost_ratio(fixed_costs=1800, take_home=3200)\n56.25",
+    "crumbs": [
+      "Reference",
+      "Income",
+      "fixed_cost_ratio"
+    ]
+  },
+  {
+    "objectID": "reference/payoff_vs_invest.html",
+    "href": "reference/payoff_vs_invest.html",
+    "title": "payoff_vs_invest()",
+    "section": "",
+    "text": "Pay off a debt or invest the difference.\n\n\nUsage\nSource\n\n\npayoff_vs_invest(loan_rate, expected_return)\n\n\nCompares a loan’s interest rate with an expected investment return. From the Managing Debt chapter.\n\n\nParameters\n\n\nloan_rate: float\n\nThe loan’s yearly interest rate, as a decimal. A single number.\n\nexpected_return: float\n\nExpected yearly investment return, as a decimal. A single number.\n\n\n\n\n\nReturns\n\n\n str\n\n\"Pay off the debt\", \"Invest the difference\", or \"Roughly a wash; do both\".\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values or is not a single number.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import payoff_vs_invest\n&gt;&gt;&gt; payoff_vs_invest(loan_rate=0.05, expected_return=0.07)\n‘Invest the difference’",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "payoff_vs_invest"
+    ]
+  },
+  {
+    "objectID": "reference/order_snowball.html",
+    "href": "reference/order_snowball.html",
+    "title": "order_snowball()",
+    "section": "",
+    "text": "Order debts for the snowball method (smallest balance first).\n\n\nUsage\nSource\n\n\norder_snowball(debts)\n\n\nFrom the Managing Debt chapter.\n\n\nParameters\n\n\ndebts: list[dict[str, Any]]\n\nA list of dicts, each with a numeric balance key.\n\n\n\n\n\nReturns\n\n\n list of dict\n\nA new list, sorted by balance from smallest to largest. Ties keep their original order.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf debts is not a list of dicts, or a balance is not numeric.\n\n ValueError\n\nIf a debt has no balance key, or a balance is missing.\n\n\n\n\n\nSee Also\n\n\n\nHighest APR first.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import order_snowball\n&gt;&gt;&gt; debts = [\n...     {\"name\": \"Card A\", \"balance\": 1000, \"apr\": 0.18},\n...     {\"name\": \"Card B\", \"balance\": 5000, \"apr\": 0.24},\n...     {\"name\": \"Card C\", \"balance\": 2000, \"apr\": 0.15},\n... ]\n&gt;&gt;&gt; [d[\"name\"] for d in order_snowball(debts)]\n[‘Card A’, ‘Card C’, ‘Card B’]",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "order_snowball"
+    ]
+  },
+  {
+    "objectID": "reference/rule_of_72.html",
+    "href": "reference/rule_of_72.html",
+    "title": "rule_of_72()",
+    "section": "",
+    "text": "Years for money to double, by the rule of 72.\n\n\nUsage\nSource\n\n\nrule_of_72(annual_return_pct)\n\n\nThe one function in the package that takes a percent rather than a decimal (7, not 0.07). From the Investing Basics chapter.\n\n\nParameters\n\n\nannual_return_pct: ArrayLike\n\nYearly return, as a percent. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nYears to double.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf annual_return_pct is not numeric.\n\n ValueError\n\nIf annual_return_pct contains missing values or is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import rule_of_72\n&gt;&gt;&gt; rule_of_72(annual_return_pct=7)\n10.28",
+    "crumbs": [
+      "Reference",
+      "Investing Basics",
+      "rule_of_72"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "perfinpy",
+    "section": "",
+    "text": "Browse source code Book\n\n\n\nllms.txt llms-full.txt\n\n\n\n\n\n\nMartin Frigaard\n\n\n\nAuthor\n\n \n\n\n\n\nFull license MIT\n\n\n\nRequires: Python &gt;=3.10 Provides-Extra: dev Package Info"
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "perfinpy",
+    "section": "Installation",
+    "text": "Installation\nperfinpy isn’t on PyPI. Install the development version from GitHub:\nuv pip install git+https://github.com/mjfrigaard/perfinpy\nperfinpy depends on numpy and polars."
+  },
+  {
+    "objectID": "index.html#example",
+    "href": "index.html#example",
+    "title": "perfinpy",
+    "section": "Example",
+    "text": "Example\nThe functions keep the book’s names, arguments, and defaults, so code from a chapter runs unchanged:\nfrom perfinpy import future_value, mortgage_payment, percent_of_income\n\n# rent of $1,500 on a $5,000 monthly income\npercent_of_income(expense=1500, income=5000)\n#&gt; 30.0\n\n# $10,000 at 7% over four horizons\nfuture_value(present_value=10000, rate=0.07, years=[5, 10, 20, 30])\n#&gt; array([14025.517307  , 19671.5135729 , 38696.84462486, 76122.55042662])\n\n# a $480,000 mortgage at 6% over 30 years\nmortgage_payment(principal=480000, annual_rate=0.06, years=30)\n#&gt; 2877.842520733233\nRates go in as decimals (0.07 is 7%), ratio functions return percents (30 is 30%), and most functions accept arrays so you can compare options in one call. The user guide has one page for each chapter of the book."
+  },
+  {
+    "objectID": "index.html#development",
+    "href": "index.html#development",
+    "title": "perfinpy",
+    "section": "Development",
+    "text": "Development\nuv venv\nuv pip install -e \".[dev]\"\nuv run pytest\nuv run great-docs build"
+  },
+  {
+    "objectID": "user-guide/retirement-accounts.html",
+    "href": "user-guide/retirement-accounts.html",
+    "title": "Retirement Accounts",
+    "section": "",
+    "text": "A retirement account is a container for your investments, and the container decides how they get taxed. Two questions decide most of the value. How much free money does the employer match add? And does paying tax now (Roth) or later (Traditional) leave you with more? In this page I’ll answer both with employer_match() and after_tax_value(), using the numbers from the Retirement Accounts chapter of the book.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Retirement Accounts"
+    ]
+  },
+  {
+    "objectID": "user-guide/retirement-accounts.html#what-if-you-contribute-less",
+    "href": "user-guide/retirement-accounts.html#what-if-you-contribute-less",
+    "title": "Retirement Accounts",
+    "section": "What if you contribute less?",
+    "text": "What if you contribute less?\nMany employers enroll new hires at 3%. At that rate the match slice shrinks with your contribution:\n\nmatch_3 = employer_match(\n    salary=45000, contribution_pct=0.03, match_limit_pct=0.06, match_rate=0.50\n)\nmatch_3\n\n675.0\n\n\nAt 3% the employer adds only $675, so the default rate leaves $675 a year on the table.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Retirement Accounts"
+    ]
+  },
+  {
+    "objectID": "user-guide/retirement-accounts.html#which-tax-rate-wins",
+    "href": "user-guide/retirement-accounts.html#which-tax-rate-wins",
+    "title": "Retirement Accounts",
+    "section": "Which tax rate wins?",
+    "text": "Which tax rate wins?\nafter_tax_value() takes several tax rates at once. Use your rate today for the Roth and your expected rate in retirement for the Traditional account:\n\ntax_rates = [0.10, 0.12, 0.22, 0.24]\npl.DataFrame({\n    \"tax_rate\": tax_rates,\n    \"after_tax\": after_tax_value(\n        contribution=1000, tax_rate=tax_rates, rate=0.07, years=40\n    ),\n})\n\n\nshape: (4, 2)tax_rateafter_taxf64f640.113477.0120550.1213177.5228990.2211680.0771150.2411380.587958\n\n\nFind your rate now and your rate later in the table. Whichever account is taxed at the lower rate leaves you more.\n\n\n\n\n\n\nWarningLimits\n\n\n\nThese functions cover the math in the chapter, not every plan rule:\n\nemployer_match() handles a single tier match (“50% of the first 6%”). Tiered formulas such as “100% of the first 3%, then 50% of the next 2%” need one call per tier, added together.\nemployer_match() ignores vesting, the yearly contribution limit ($24,500 in 2026), and any match paid only at year end.\nafter_tax_value() applies one tax rate to the whole amount. It ignores the 10% early withdrawal penalty, state taxes, and the fact that income in retirement spans several brackets.\nafter_tax_value() assumes the same return every year and the same investments in both accounts.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Retirement Accounts"
+    ]
+  },
+  {
+    "objectID": "user-guide/asset-allocation.html",
+    "href": "user-guide/asset-allocation.html",
+    "title": "Asset Allocation",
+    "section": "",
+    "text": "Your asset allocation is how you split your investments between stocks and bonds. It does more to decide how your money grows (and how bumpy the ride feels) than which funds you pick. Asset allocation math answers two questions. What does a split do in a good year and a bad year? And how much do you move when you rebalance? In this page I’ll answer both with portfolio_return() and rebalance_amount(), using the numbers from the Asset Allocation chapter of the book.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Asset Allocation"
+    ]
+  },
+  {
+    "objectID": "user-guide/asset-allocation.html#rebalancing-every-fund-at-once",
+    "href": "user-guide/asset-allocation.html#rebalancing-every-fund-at-once",
+    "title": "Asset Allocation",
+    "section": "Rebalancing every fund at once",
+    "text": "Rebalancing every fund at once\nrebalance_amount() takes arrays, so one call rebalances every fund in a portfolio. Suppose the chapter’s three fund portfolio (60% US stocks, 30% international stocks, 10% bonds) has drifted to $6,600, $2,500, and $900:\n\ncurrent = [6600, 2500, 900]\npl.DataFrame({\n    \"fund\": [\"US stocks\", \"international stocks\", \"bonds\"],\n    \"target_pct\": [0.60, 0.30, 0.10],\n    \"current\": current,\n    \"move\": rebalance_amount(\n        target_pct=[0.60, 0.30, 0.10], total=sum(current), current_amount=current\n    ),\n})\n\n\nshape: (3, 4)fundtarget_pctcurrentmovestrf64i64f64\"US stocks\"0.66600-600.0\"international stocks\"0.32500500.0\"bonds\"0.1900100.0\n\n\nSell $600 of US stocks and use it to buy the other two. The moves add up to zero, because rebalancing only shifts money between funds.\n\n\n\n\n\n\nWarningLimits\n\n\n\nBoth functions are simple on purpose:\n\nportfolio_return() covers two assets (stocks and bonds) for one year. The returns you pass are assumptions, and it ignores fees, taxes, and inflation.\nrebalance_amount() doesn’t check that your targets add up to 100%, and total has to include current_amount.\nrebalance_amount() ignores trading costs and the taxes that selling can trigger in a taxable account. Inside a 401(k) or IRA, selling doesn’t trigger taxes.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Asset Allocation"
+    ]
+  },
+  {
+    "objectID": "user-guide/tracking-spending.html",
+    "href": "user-guide/tracking-spending.html",
+    "title": "Tracking Spending",
+    "section": "",
+    "text": "A bank export tells you every dollar that left your account, but it doesn’t tell you where your money went. To answer that, each transaction needs a category, and the small recurring charges need a second look. The Tracking Spending chapter of the book covers both questions. In this page I’ll answer them with two perfinpy functions. apply_rules() sorts transactions into buckets. subscription_opportunity_cost() shows what a subscription would have grown to if you had invested the money instead.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Tracking Spending"
+    ]
+  },
+  {
+    "objectID": "user-guide/tracking-spending.html#when-a-transaction-doesnt-match",
+    "href": "user-guide/tracking-spending.html#when-a-transaction-doesnt-match",
+    "title": "Tracking Spending",
+    "section": "When a transaction doesn’t match",
+    "text": "When a transaction doesn’t match\nNew merchants show up every month. The book’s rule is “when in doubt, Other.” A transaction that matches no pattern lands in \"Other\" until you’ve seen it often enough to deserve its own rule. The code below runs two new transactions through the same rules:\n\nnew_transactions = pl.DataFrame({\n    \"Description\": [\"Venmo Payment\", \"SPOTIFY FAMILY PLAN\"],\n})\napply_rules(df=new_transactions, rules=rules)\n\n\nshape: (2, 2)DescriptionCategorystrstr\"Venmo Payment\"\"Other\"\"SPOTIFY FAMILY PLAN\"\"Subscriptions\"\n\n\nThe Venmo payment falls through to \"Other\". The Spotify charge still lands in \"Subscriptions\" because apply_rules() ignores case, so \"Spotify\" matches \"SPOTIFY\".",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Tracking Spending"
+    ]
+  },
+  {
+    "objectID": "user-guide/high-yield-accounts.html",
+    "href": "user-guide/high-yield-accounts.html",
+    "title": "High-Yield Savings Accounts",
+    "section": "",
+    "text": "Where should your savings live, and what does that choice earn? The High-Yield Savings Accounts chapter of the book makes the case for a high yield savings account (HYSA) at an online bank: it’s insured, you can reach the money in a day or two, and it pays far more than a big bank’s basic savings account. In this page I’ll put numbers on that case with hysa_balance(), using the chapter’s $9,600 emergency fund so you can check every result against the book.\n\nThe high yield accounts function\nhysa_balance() follows the conventions on the Get started page: the APY goes in as a decimal, and every argument accepts arrays.\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nhysa_balance()\nthe balance after growing at an APY for some years\ndollars (annual_apy is a decimal; years defaults to 1)\n\n\n\n\n\nHow much does an emergency fund earn in a year?\nThe chapter follows the $9,600 emergency fund from Emergency Fund into a HYSA paying 4% APY. The APY (annual percentage yield) already includes daily compounding, so a year of growth is one multiplication by 1.04:\n\none_year = hysa_balance(principal=9600, annual_apy=0.04)\none_year, one_year - 9600\n\n(9984.0, 384.0)\n\n\nAfter one year the fund holds $9,984, and $384 of that is interest. years defaults to 1, so the call above doesn’t need it.\n\n\nHow does the balance grow year by year?\nLeave the money alone and each year multiplies the previous balance by 1.04 again. The chapter draws each year as a bar split into the money you put in and the interest it has earned so far:\n\n\n\n$9,600 at 4% APY: deposit and interest earned, year by year\n\n\nThe bluish green base never changes; only the blue interest layer grows. Passing several values to years reproduces every bar in one call:\n\nyears = list(range(6))\nbalances = hysa_balance(principal=9600, annual_apy=0.04, years=years)\npl.DataFrame({\n    \"years\": years,\n    \"deposit\": [9600] * 6,\n    \"interest\": balances - 9600,\n    \"balance\": balances,\n}).with_columns(pl.col(\"interest\", \"balance\").round(2))\n\n\nshape: (6, 4)yearsdepositinterestbalancei64i64f64f64096000.09600.019600384.09984.029600783.3610383.36396001198.6910798.69496001630.6411230.64596002079.8711679.87\n\n\nAfter five years the fund holds $11,679.87, which is the chapter’s $11,680. That’s $2,080 of growth without putting a dollar of the deposit at risk.\n\n\nVariations\nThe chapter compares account types rather than banks. In late 2026 the national average savings rate was 0.39%, a big bank’s basic account often paid 0.01%, and the best online accounts paid 3.8% to 4.2%. annual_apy accepts an array, so one call compares a $10,000 balance across all of them:\n\napys = [0.0001, 0.0039, 0.038, 0.04, 0.042]\npl.DataFrame({\n    \"account\": [\"big bank basic\", \"national average\", \"online low\", \"online typical\", \"online high\"],\n    \"apy\": apys,\n    \"interest_year_1\": hysa_balance(principal=10000, annual_apy=apys) - 10000,\n}).with_columns(pl.col(\"interest_year_1\").round(2))\n\n\nshape: (5, 3)accountapyinterest_year_1strf64f64\"big bank basic\"0.00011.0\"national average\"0.003939.0\"online low\"0.038380.0\"online typical\"0.04400.0\"online high\"0.042420.0\n\n\nThe gap between online banks is small: $40 a year separates the low and high ends on $10,000. The gap between an online bank and a big bank’s basic account is large: $400 against $1. As the chapter puts it, pick an online HYSA and don’t overthink which one.\n\n\n\n\n\n\nWarningLimits\n\n\n\nhysa_balance() grows one lump sum at one rate, so it leaves out a few things:\n\nIt assumes the APY never changes. Real HYSA rates move with interest rates, sometimes several times a year.\nIt doesn’t add deposits along the way. For a fixed monthly deposit, use future_value_series() from Investing Basics.\nIt ignores taxes on interest and inflation.\nIt doesn’t know about the $250,000 FDIC limit per account holder per bank. Balances above that need a second bank.\nIt checks that inputs are numbers, not that they make sense. A negative annual_apy or years returns a result instead of an error.\n\n\n\n\n\nPutting it together\nThe chapter’s two headline numbers are an APY and an emergency fund, and both come from other chapters’ functions. Banks sometimes advertise an APR, the rate before compounding. apr_to_apy() from Managing Debt converts it with daily compounding, the way most HYSAs pay:\n\napy = apr_to_apy(apr=0.0392)\napy\n\n0.03997626956226452\n\n\nA 3.92% APR compounded daily is an APY of 4.00%. Next, emergency_fund_target() from Emergency Fund sets the balance to park: four months of $2,400 in essential expenses. We can then compare that fund after five years in the HYSA and in a big bank’s basic account:\n\nef_target = emergency_fund_target(monthly_expenses=2400, months=4)\nin_hysa = hysa_balance(principal=ef_target, annual_apy=apy, years=5)\nin_basic = hysa_balance(principal=ef_target, annual_apy=0.0001, years=5)\nef_target, round(in_hysa, 2), round(in_basic, 2)\n\n(9600.0, 11678.54, 9604.8)\n\n\nThe same $9,600 fund grows to $11,678.54 in the HYSA and $9,604.80 at the big bank, a difference of $2,074. Finally, ef_growth() from the Emergency Fund chapter does the same math in months, which helps when a goal doesn’t land on a whole year:\n\nef_growth(balance=ef_target, apy=0.04, months=[12, 18])\n\narray([ 9984.        , 10181.72216474])\n\n\nTwelve months matches hysa_balance() with the default one year, and 18 months shows the balance halfway through year two.\n\n\nRecap\nA HYSA keeps your savings safe and reachable while paying hundreds of times what a basic account pays. hysa_balance() grows a balance at an APY, and passing several years or several APYs compares horizons and accounts in one call. With apr_to_apy(), emergency_fund_target(), and ef_growth(), it shows what an emergency fund earns while it waits.\n\nHigh-Yield Savings Accounts in Personal Finance: a field manual\nReference: hysa_balance()\nNext: Automating Savings",
+    "crumbs": [
+      "User Guide",
+      "Savings",
+      "High-Yield Savings Accounts"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html",
+    "href": "user-guide/managing-debt.html",
+    "title": "Managing Debt",
+    "section": "",
+    "text": "Lenders quote whichever number makes a loan look cheapest, and they count on borrowers not running the math. The book’s Managing Debt chapter runs that math. It asks what a balance really costs, how much student debt a salary can carry, which ratios lenders check, and which debt to pay first. In this page I’ll answer the same questions with perfinpy’s 11 managing debt functions. Each example uses the chapter’s numbers, so you can check every result against the book.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#apr-vs.-apy",
+    "href": "user-guide/managing-debt.html#apr-vs.-apy",
+    "title": "Managing Debt",
+    "section": "APR vs. APY",
+    "text": "APR vs. APY\nThe chapter’s example is a credit card with a 24% APR that compounds daily, carrying a $5,000 balance. Credit card companies quote the APR, but compounding (charging interest on interest you haven’t paid yet) means the balance grows faster than the APR suggests.\nBoth bars below represent one year of interest on the same balance. The shorter bar is what the APR implies; the taller bar is what you actually owe:\n\n\n\nAPR cost vs. APY cost on a $5,000 balance (24% APR, daily compounding)\n\n\nThe APY (annual percentage yield) is the effective yearly rate once compounding is included. apr_to_apy() converts one to the other, with periods_per_year defaulting to 365 for daily compounding:\n\napy = apr_to_apy(apr=0.24)\napy\n\n0.27114889144128895\n\n\nA 24% APR compounded daily is really 27.1% a year. On the $5,000 balance, that gap is about $156 of interest the quoted rate never mentions.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#how-long-does-a-minimum-payment-take",
+    "href": "user-guide/managing-debt.html#how-long-does-a-minimum-payment-take",
+    "title": "Managing Debt",
+    "section": "How long does a minimum payment take?",
+    "text": "How long does a minimum payment take?\nThe chapter’s next example is a $5,000 balance at 22% APR with a $100 minimum payment. A $100 payment sounds reasonable until you see how little of it reaches the balance. The principal is the amount you borrowed; interest is what the lender charges on top.\n\n\n\nWhere a $100 minimum payment actually goes\n\n\nOnly the principal slice shrinks the debt. As the balance falls, the interest slice shrinks too, so each payment retires a little more principal than the one before. months_to_payoff() accounts for that, compounding interest monthly at apr / 12:\n\nfirst_interest = 5000 * 0.22 / 12\ncard_months = months_to_payoff(balance=5000, monthly_payment=100, apr=0.22)\nfirst_interest, card_months\n\n(91.66666666666667, 136.77905405676316)\n\n\nThe first month’s interest is about $92, so only $8 of the first payment touches the balance. Paying the minimum clears the card in about 137 months (11.4 years), and the payments add up to about $13,678 on a $5,000 balance. Minimum payments are designed to keep you in debt for years.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#what-does-the-loan-term-cost",
+    "href": "user-guide/managing-debt.html#what-does-the-loan-term-cost",
+    "title": "Managing Debt",
+    "section": "What does the loan term cost?",
+    "text": "What does the loan term cost?\nAn installment loan is one you repay in equal monthly payments, like a car loan or a mortgage. For these loans, total interest is the number that should drive the decision. The chapter’s example is a $20,000 used car loan at 7%. It runs either 6 years at $340.98 a month or 4 years at $478.92 a month.\nThe amount borrowed is the same either way. The bars below stack the principal and interest layers, so the cost of the longer term is visible:\n\n\n\n$20,000 car loan at 7%: principal vs. interest for 6 year and 4 year terms\n\n\nSubtract the principal from everything you pay and the interest layer is what’s left. total_interest() accepts arrays, so both terms fit in one call:\n\ncar_interest = total_interest(\n    monthly_payment=[340.98, 478.92],\n    n_months=[72, 48],\n    principal=20000,\n)\ncar_interest\n\narray([4550.56, 2988.16])\n\n\nThe 6 year loan costs $4,550.56 in interest, and the 4 year loan costs $2,988.16. Shortening the term saves $1,562.40, which is the math behind the 20/4/10 car rule (20% down, no more than 4 years, transportation under 10% of gross income).",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#the-1x-rule",
+    "href": "user-guide/managing-debt.html#the-1x-rule",
+    "title": "Managing Debt",
+    "section": "The 1x rule",
+    "text": "The 1x rule\nThe 1x rule says total student debt at graduation should not exceed your expected first year salary. The chapter’s example borrower has $45,000 in loans and a $42,000 starting salary, repaying on a standard 10 year plan at 6.5%.\nPicture what you borrowed and what your first job pays as two bars side by side. The rule says the loan bar shouldn’t run past the salary bar:\n\n\n\n$45,000 in student loans vs. a $42,000 starting salary\n\n\nloan_income_ratio() divides the loan bar by the salary bar. monthly_standard_payment() then spreads the loan, plus interest, over 120 equal payments, with the 6.5% rate and 10 year term as defaults:\n\nratio = loan_income_ratio(loan_total=45000, expected_salary=42000)\nstudent_payment = monthly_standard_payment(principal=45000)\nratio, student_payment\n\n(1.0714285714285714, 510.9658974901199)\n\n\nThe ratio is 1.07, so this borrower is a little over the 1x rule. The standard payment is about $511 a month, or roughly $0.0114 a month for every dollar borrowed. The 1x rule is a ceiling, not a target; lower earning majors often need a lower personal cap.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#income-driven-repayment",
+    "href": "user-guide/managing-debt.html#income-driven-repayment",
+    "title": "Managing Debt",
+    "section": "Income driven repayment",
+    "text": "Income driven repayment\nWhen the 1x rule is out of reach, federal income driven repayment (IDR) plans cap payments as a share of discretionary income. Discretionary income is your AGI (adjusted gross income, from your tax return) minus a protected multiple of the Federal Poverty Guideline. The chapter’s example is a $50,000 AGI under IBR. IBR protects 1.5 times the 2026 guideline ($15,960) and charges 10% on whatever is left.\nThink of the AGI as one bar. The plan protects the first part of it, and the payment is a small slice of what’s left:\n\n\n\n$50,000 AGI under IBR: protected income, discretionary income, and the yearly payment\n\n\nidr_monthly_payment() subtracts the protected part, takes the payment rate of what’s left, and divides by 12. The defaults are the IBR terms for loans from July 2014 on; older IBR loans use a 15% rate:\n\nibr = idr_monthly_payment(agi=50000)\nibr_old = idr_monthly_payment(agi=50000, payment_rate=0.15)\nibr, ibr_old\n\n(217.17, 325.75)\n\n\nIBR comes to $217.17 a month, and $325.75 for loans made before July 2014. IDR plans change with Congress, the courts, and the Department of Education, so check current terms at studentaid.gov before enrolling.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#debt-to-income-ratio",
+    "href": "user-guide/managing-debt.html#debt-to-income-ratio",
+    "title": "Managing Debt",
+    "section": "Debt to income ratio",
+    "text": "Debt to income ratio\nThe chapter pictures a first job paying $45,000 a year, or $3,750 a month in gross income. Its debts are a $511 student loan payment, a $450 car payment, and $100 in credit card minimums. Gross income is your pay before taxes, and the bar below splits it into what goes to debt and what’s left:\n\n\n\n$3,750 gross monthly income split into debt payments and remaining income\n\n\nDTI (debt to income) is just the debt slice as a share of the whole bar. dti_ratio() returns it as a percent:\n\ndebt_payments = {\"student_loan\": 511, \"car\": 450, \"cards\": 100}\ndti = dti_ratio(\n    monthly_debt_payments=sum(debt_payments.values()),\n    gross_monthly_income=45000 / 12,\n)\ndti\n\n28.293333333333333\n\n\nThe $1,061 in monthly debt payments take about 28% of gross income. The chapter calls 20% to 35% manageable but worth watching; above 43%, most mortgage lenders won’t approve you.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#credit-utilization",
+    "href": "user-guide/managing-debt.html#credit-utilization",
+    "title": "Managing Debt",
+    "section": "Credit utilization",
+    "text": "Credit utilization\nCredit utilization is how much of your available credit you’re using. Credit scores penalize high utilization because using most of your available credit is a sign of money trouble. The chapter’s example is a $900 balance on a first card with a $3,000 limit:\n\n\n\n$900 balance against a $3,000 credit limit: used vs. unused\n\n\ncredit_utilization() divides the used slice by the whole limit and returns a percent:\n\nutilization = credit_utilization(balance=900, credit_limit=3000)\nutilization\n\n30.0\n\n\nThe card sits at 30% utilization, right at the threshold. Keep utilization under 30% on each card and across all cards; under 10% (a $300 balance on this card) is ideal.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#pay-off-or-invest",
+    "href": "user-guide/managing-debt.html#pay-off-or-invest",
+    "title": "Managing Debt",
+    "section": "Pay off or invest?",
+    "text": "Pay off or invest?\nThe chapter compares a 5% student loan against an expected 7% stock market return. The math slightly favors investing, but the bar model adds what the math alone misses:\n\n\n\nGuaranteed 5% debt payoff vs. expected 7% investment return\n\n\npayoff_vs_invest() compares the two rates (as decimals) and returns the option that wins on paper:\n\nloan_rate = 0.05\nexpected_return = 0.07\npayoff_vs_invest(loan_rate=loan_rate, expected_return=expected_return)\n\n'Invest the difference'\n\n\nInvesting wins by about 2.0 percentage points a year. But the return from paying off the loan is guaranteed, and the investment return is not. A guaranteed 5% beats a probable 7% for many people psychologically, so run the math, then add your peace of mind premium.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/managing-debt.html#avalanche-vs.-snowball",
+    "href": "user-guide/managing-debt.html#avalanche-vs.-snowball",
+    "title": "Managing Debt",
+    "section": "Avalanche vs. snowball",
+    "text": "Avalanche vs. snowball\nThe chapter’s example has three credit cards: Card A ($1,000 at 18%), Card B ($5,000 at 24%), and Card C ($2,000 at 15%). The avalanche method pays the highest APR first; the snowball method pays the smallest balance first. Both attack the same three debts, just in a different order:\n\n\n\nAvalanche order (highest APR first) vs. snowball order (smallest balance first)\n\n\nBoth functions take a list of debts (one dict per debt) and return a new, sorted list. order_avalanche() needs an apr key, and order_snowball() needs a balance key. Wrapping the result in pl.DataFrame() prints it as a table:\n\ndebts = [\n    {\"name\": \"Card A\", \"balance\": 1000, \"apr\": 0.18},\n    {\"name\": \"Card B\", \"balance\": 5000, \"apr\": 0.24},\n    {\"name\": \"Card C\", \"balance\": 2000, \"apr\": 0.15},\n]\npl.DataFrame(order_avalanche(debts))\n\n\nshape: (3, 3)namebalanceaprstri64f64\"Card B\"50000.24\"Card A\"10000.18\"Card C\"20000.15\n\n\n\npl.DataFrame(order_snowball(debts))\n\n\nshape: (3, 3)namebalanceaprstri64f64\"Card A\"10000.18\"Card C\"20000.15\"Card B\"50000.24\n\n\nAvalanche wins on paper because a dollar sent to the highest APR stops the most interest. The code below shows how much interest an extra $100 stops next month on each card:\n\nextra_saved = {d[\"name\"]: 100 * d[\"apr\"] / 12 for d in debts}\nextra_saved\n\n{'Card A': 1.5, 'Card B': 2.0, 'Card C': 1.25}\n\n\nAn extra $100 on Card B stops $2.00 of interest, compared with $1.50 on Card A. Snowball pays off Card A first, which costs a little more but delivers a win sooner. If that quick win is the price of actually finishing, it’s often worth it; if you’re disciplined enough for avalanche, take the savings.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Managing Debt"
+    ]
+  },
+  {
+    "objectID": "user-guide/emergency-fund.html",
+    "href": "user-guide/emergency-fund.html",
+    "title": "Emergency Fund",
+    "section": "",
+    "text": "An emergency fund is cash set aside so a car repair or a job loss doesn’t end up on a credit card. Building one comes down to four questions. How big should the fund be, and how long will it take to fill? How much should you save each month to finish by a deadline, and what does the fund earn in a savings account? In this page I’ll answer them with emergency_fund_target(), months_to_ef_goal(), monthly_contribution_needed(), and ef_growth(). The examples below use the numbers from the Emergency Fund chapter of the book, where each formula is built from scratch.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Emergency Fund"
+    ]
+  },
+  {
+    "objectID": "user-guide/emergency-fund.html#longer-deadlines-mean-smaller-payments",
+    "href": "user-guide/emergency-fund.html#longer-deadlines-mean-smaller-payments",
+    "title": "Emergency Fund",
+    "section": "Longer deadlines mean smaller payments",
+    "text": "Longer deadlines mean smaller payments\nThe same comparison works in reverse. The code below finds the monthly amount needed to close the $8,400 gap in one, one and a half, or two years:\n\ndeadline_months = [12, 18, 24]\ndeadlines = pl.DataFrame({\n    \"months\": deadline_months,\n    \"monthly\": monthly_contribution_needed(\n        target=target,\n        current_balance=saved,\n        months=deadline_months,\n    ),\n})\ndeadlines\n\n\nshape: (3, 2)monthsmonthlyi64i64127001846724350\n\n\nStretching the deadline from one year to two drops the monthly amount from $700 to $350.\n\n\n\n\n\n\nWarningLimits\n\n\n\n\nemergency_fund_target() doesn’t choose the number of months for you. The default of 3 is the low end of the range, so pass a larger months for variable income or dependents.\nmonths_to_ef_goal() and monthly_contribution_needed() ignore interest, so they slightly overstate the time and money needed when the fund sits in a HYSA. Both round up and return 0 when the balance already meets the target.\nmonthly_contribution and months must be greater than 0. A zero raises a ValueError instead of returning inf.\nef_growth() assumes the APY stays fixed and nothing goes in or out during the period. Pass the APY as a decimal (0.04), not a percent (4).",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Emergency Fund"
+    ]
+  },
+  {
+    "objectID": "user-guide/insurance.html",
+    "href": "user-guide/insurance.html",
+    "title": "Insurance",
+    "section": "",
+    "text": "Insurance math helps with two everyday choices. Which deductible should you pick, and which health plan costs less over a year? The Insurance chapter of the book answers both with a little arithmetic. In this page I’ll answer the same questions with break_even_years() and plan_cost(), using the chapter’s numbers so you can check every result against the book.",
+    "crumbs": [
+      "User Guide",
+      "Taxes and insurance",
+      "Insurance"
+    ]
+  },
+  {
+    "objectID": "user-guide/insurance.html#health-plans-across-many-kinds-of-year",
+    "href": "user-guide/insurance.html#health-plans-across-many-kinds-of-year",
+    "title": "Insurance",
+    "section": "Health plans across many kinds of year",
+    "text": "Health plans across many kinds of year\nMost years fall somewhere between healthy and worst. One call per plan covers a range of medical bills:\n\nbills = [0.0, 300.0, 1000.0, 2500.0, 5000.0, float(\"inf\")]\npl.DataFrame({\n    \"medical_cost\": bills,\n    \"plan_a\": plan_cost(monthly_premium=100, medical_cost=bills, oop_max=3000),\n    \"plan_b\": plan_cost(monthly_premium=40, medical_cost=bills, oop_max=5000, employer_hsa=500),\n})\n\n\nshape: (6, 3)medical_costplan_aplan_bf64f64f640.01200.0-20.0300.01500.0280.01000.02200.0980.02500.03700.02480.05000.04200.04980.0inf4200.04980.0\n\n\nWith no medical bills at all, Plan B’s cost is negative: the employer’s $500 is more than the $480 of premiums. Plan B stays cheaper until the bills pass about $4,220. Past that point Plan A has hit its maximum, and it comes out ahead.\n\n\n\n\n\n\nWarningLimits\n\n\n\nBoth functions use the simple version of the math in the chapter. A few limits apply:\n\nplan_cost() assumes you pay every medical bill up to the out of pocket maximum. For plans with coinsurance, it slightly overstates the cost.\nplan_cost() ignores copays, tax savings from HSA contributions, and what HSA money could earn if invested.\nbreak_even_years() assumes the premium savings are the same every year and ignores premium increases after a claim.\nbreak_even_years() raises a ValueError when yearly_savings is zero or negative. Text raises a TypeError, and nan raises a ValueError in either function.",
+    "crumbs": [
+      "User Guide",
+      "Taxes and insurance",
+      "Insurance"
+    ]
+  },
+  {
+    "objectID": "user-guide/financial-goals.html",
+    "href": "user-guide/financial-goals.html",
+    "title": "Financial Goals",
+    "section": "",
+    "text": "A goal without a number and a date is a wish. Once you have both, two questions are left: how much do you set aside each month, and which goal do you fund first when you can’t fund them all? In this page I’ll answer both with monthly_for_goal() and months_to_fund(), using the numbers from the Financial Goals chapter of the book so you can check every result.\n\nThe goal functions\nBoth functions accept arrays and follow the conventions on the Get started page.\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nmonthly_for_goal()\nthe monthly deposit that grows into a goal\ndollars per month (annual_rate is a decimal)\n\n\nmonths_to_fund()\nmonths to save a goal with no interest\nwhole months, rounded up (an int)\n\n\n\n\n\nHow much should you save each month?\nThe chapter’s example is a $15,000 down payment in five years. The money sits in a high yield savings account earning 4% a year. Without interest you would divide $15,000 by 60 months and save $250 a month. Interest does part of the work, so you can save a little less.\nThe bar below is the $15,000 goal. Most of it comes from your deposits, and interest fills in the rest:\n\n\n\nA $15,000 goal in 5 years at 4%: your deposits plus interest\n\n\nmonthly_for_goal() works backward from the future value of a series of deposits. It asks which monthly deposit grows into the goal, compounding at annual_rate / 12:\n\nmonthly = monthly_for_goal(goal=15000, annual_rate=0.04, months=60)\nmonthly\n\n226.2478308289896\n\n\nYou need about $226.25 a month, which is $23.75 less than saving without interest. Over five years your deposits total $13,575, and interest adds the other $1,425.\n\n\nWhich goal comes first?\nSay you can save $600 a month toward two goals: a $3,000 trip and a $9,000 car. You can fund them one at a time (trip first, then car), or split the $600 evenly until the trip is paid for and then send everything to the car.\nEach bar below is a goal on a timeline. It starts at month 0 and ends the month the goal is fully funded:\n\n\n\nTwo goals funded with $600 a month: one at a time vs. split evenly\n\n\nmonths_to_fund() divides the goal by the monthly amount going to it and rounds up to a whole month. The last goal is done when all of the money is saved, so its goal is the total of both:\n\none_at_a_time = (\n    months_to_fund(goal=3000, monthly=600),\n    months_to_fund(goal=3000 + 9000, monthly=600),\n)\nsplit_evenly = (\n    months_to_fund(goal=3000, monthly=300),\n    months_to_fund(goal=3000 + 9000, monthly=600),\n)\none_at_a_time, split_evenly\n\n((5, 20), (10, 20))\n\n\nThe trip finishes at month 5 one at a time, or month 10 split evenly. The car finishes at month 20 either way. The order only decides which goal you get first.\n\n\nVariations\nPassing several rates to annual_rate shows how much interest helps the down payment goal. The 0% row is the plain $15,000 ÷ 60:\n\nrates = [0.0, 0.02, 0.04, 0.05]\npl.DataFrame({\n    \"annual_rate\": rates,\n    \"monthly\": monthly_for_goal(goal=15000, annual_rate=rates, months=60),\n})\n\n\nshape: (4, 2)annual_ratemonthlyf64f640.0250.00.02237.9164010.04226.2478310.05220.568505\n\n\nEach point of interest trims the deposit by a few dollars a month. Time matters more. The same goal over three, five, and seven years:\n\nmonths = [36, 60, 84]\npl.DataFrame({\n    \"months\": months,\n    \"monthly\": monthly_for_goal(goal=15000, annual_rate=0.04, months=months),\n    \"months_no_interest\": months_to_fund(goal=15000, monthly=[400, 250, 180]),\n})\n\n\nshape: (3, 3)monthsmonthlymonths_no_interesti64f64i6436392.8597753860226.2478316084155.03209584\n\n\nThe last column runs the other direction: it asks how long $400, $250, or $180 a month takes with no interest at all.\n\n\n\n\n\n\nWarningLimits\n\n\n\nmonthly_for_goal() assumes the same rate every month and a deposit at the end of each month. It ignores taxes on interest and inflation, so a goal priced in today’s dollars will cost more later. months_to_fund() ignores interest entirely and rounds up, so it gives the first month the goal is fully funded.\nBoth functions stop with a ValueError when the divisor isn’t positive:\n\nmonths_to_fund(goal=3000, monthly=0)\n\n\n---------------------------------------------------------------------------\nValueError                                Traceback (most recent call last)\nCell In[6], line 1\n----&gt; 1 months_to_fund(goal=3000, monthly=0)\n\nFile ~/projects/pkgs/Python/perfinpy/src/perfinpy/financial_goals.py:89, in months_to_fund(goal, monthly)\n     56 \"\"\"Whole months to fund a goal with no interest.\n     57 \n     58 From the [Financial Goals](https://mjfrigaard.github.io/fm-finance/financial_goals.html)\n   (...)     86 (5, 20)\n     87 \"\"\"\n     88 goal = _as_numeric(goal, \"goal\")\n---&gt; 89 monthly = _as_positive(monthly, \"monthly\")\n     90 return _ceil(goal / monthly)\n\nFile ~/projects/pkgs/Python/perfinpy/src/perfinpy/_checks.py:38, in _as_positive(x, arg)\n     36 out = _as_numeric(x, arg)\n     37 if np.any(np.asarray(out) &lt;= 0):\n---&gt; 38     raise ValueError(f\"`{arg}` must be greater than 0.\")\n     39 return out\n\nValueError: `monthly` must be greater than 0.\n\n\n\nmonthly_for_goal() does the same when months is 0 or negative.\n\n\n\n\nPutting it together\nBack to the $600 a month. Suppose the down payment comes first, and whatever is left goes to the trip and the car. The down payment takes the amount we found above, and months_to_fund() shows how long the remainder needs for both smaller goals:\n\ndown_payment = monthly_for_goal(goal=15000, annual_rate=0.04, months=60)\nleft_over = 600 - down_payment\nboth_goals = months_to_fund(goal=3000 + 9000, monthly=left_over)\nround(left_over, 2), both_goals\n\n(373.75, 33)\n\n\nWith $373.75 a month left over, the trip and the car take 33 months instead of 20. That trade is the real decision: the down payment stays on schedule, and the smaller goals wait longer. The Major Purchases page picks up the down payment and asks what the mortgage would cost.\n\n\nRecap\nA goal needs a number, a date, and a monthly amount. monthly_for_goal() turns the number and the date into the monthly amount, with interest doing part of the work. months_to_fund() shows that the order of your goals changes which one you reach first, but not when the last one is done.\n\nFinancial Goals in Personal Finance: a field manual\nReference: monthly_for_goal(), months_to_fund()\nNext: Major Purchases",
+    "crumbs": [
+      "User Guide",
+      "Planning",
+      "Financial Goals"
+    ]
+  },
+  {
+    "objectID": "user-guide/automating-savings.html",
+    "href": "user-guide/automating-savings.html",
+    "title": "Automating Savings",
+    "section": "",
+    "text": "Once you know your savings rate and where the money will live, how much should leave each paycheck automatically? The Automating Savings chapter of the book argues for paying yourself first: savings move out before you see them, so saving no longer depends on willpower. In this page I’ll answer the “how much” question with monthly_savings(), using the chapter’s $4,000 gross monthly pay so you can check every result against the book. Then we’ll borrow functions from other chapters to follow the automated money into an emergency fund and an investment account.\n\nThe automating savings function\nmonthly_savings() follows the conventions on the Get started page. Note the units: its savings_rate argument is a decimal (0.20), while the savings_rate() function from Savings Strategies returns a percent (20.0).\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nmonthly_savings()\nthe monthly amount to pay yourself first\ndollars per month (savings_rate is a decimal)\n\n\n\n\n\nHow much should you automate each month?\nThe chapter’s example earns $48,000 a year, or $4,000 a month before taxes, and aims for a 20% savings rate. The rate is measured on gross pay here because 401(k) contributions come out before taxes.\nPicture the gross paycheck as one bar cut into five equal fifths. One fifth goes to savings before you ever see it, and the rest is what you live on:\n\n\n\n$4,000 of gross monthly pay with 20% automated to savings\n\n\nTaking one fifth of the bar is the same as multiplying it by 0.20, which is what monthly_savings() does:\n\nautomated = monthly_savings(gross_monthly_income=4000, savings_rate=0.20)\nautomated\n\n800.0\n\n\nThe paycheck sends $800 a month to savings, which leaves $3,200 for taxes and everything else.\n\n\nHow do you split it across accounts?\nIn practice the 20% goes to several places at once. The chapter splits it into an emergency fund, a 401(k) contribution large enough to get a typical employer match, and sinking funds (money set aside each month for a known future bill). savings_rate accepts an array, so one call prices every destination:\n\nsplit = pl.DataFrame({\n    \"destination\": [\"emergency fund\", \"401(k) match\", \"sinking funds\"],\n    \"rate\": [0.10, 0.05, 0.05],\n})\nsplit = split.with_columns(\n    amount=monthly_savings(gross_monthly_income=4000, savings_rate=split[\"rate\"]),\n)\nsplit\n\n\nshape: (3, 3)destinationrateamountstrf64f64\"emergency fund\"0.1400.0\"401(k) match\"0.05200.0\"sinking funds\"0.05200.0\n\n\nThe three amounts add up to $800, the same 20% from the bar model. Payroll takes the 401(k) share before taxes, so the direct deposit split only needs to send the other $600 to the HYSA.\n\n\nVariations\nThe chapter’s long game is escalation: raise the savings rate with each raise instead of cutting spending. Its timeline pairs a growing salary with a rate that climbs five points every two years. Dividing each salary by 12 gives the monthly income, and arrays in both arguments price every year at once. future_value_series() from Investing Basics then shows what 30 years of each monthly amount could grow to at 7% (rate is per month here, so the yearly return is divided by 12):\n\nsalary = [50000, 54000, 58000, 63000]\nrate = [0.15, 0.20, 0.25, 0.30]\nmonthly = monthly_savings(gross_monthly_income=[s / 12 for s in salary], savings_rate=rate)\npl.DataFrame({\n    \"year\": [1, 3, 5, 7],\n    \"salary\": salary,\n    \"rate\": rate,\n    \"monthly\": monthly.round(2),\n    \"after_30_years\": future_value_series(contribution=monthly, rate=0.07 / 12, periods=30 * 12).round().astype(int),\n})\n\n\nshape: (4, 5)yearsalaryratemonthlyafter_30_yearsi64i64f64f64i641500000.15625.07624823540000.2900.010979745580000.251208.3314741327630000.31575.01921454\n\n\nThe monthly amounts match the chapter’s $625, $900, $1,208, and $1,575, and the 30 year values match its $762k to $1.92M range. Most of that jump is paid for by raises, not by spending less.\n\n\n\n\n\n\nWarningLimits\n\n\n\nmonthly_savings() is a single multiplication, so it leaves a few things to you:\n\nsavings_rate is a decimal. Passing 20 instead of 0.20 returns $80,000, not $800, and no error is raised.\nIt doesn’t check ranges. A negative income or a rate above 1 returns a result instead of an error.\nIt uses whatever income you give it. The chapter uses gross pay; a rate measured on take home pay gives a smaller amount.\nIt assumes a steady paycheck. For gig or commission income, the chapter suggests passing your average monthly income over the last six months.\n\n\n\n\n\nPutting it together\nBack to the $4,000 paycheck. The emergency fund line gets $400 a month until the fund is full. The Emergency Fund chapter’s first job has $2,400 a month in essential expenses, a four month target, and $1,200 already saved. emergency_fund_target() and months_to_ef_goal() show how long the automation takes to finish the job:\n\nef_monthly = monthly_savings(gross_monthly_income=4000, savings_rate=0.10)\nef_target = emergency_fund_target(monthly_expenses=2400, months=4)\nef_months = months_to_ef_goal(\n    target=ef_target, current_balance=1200, monthly_contribution=ef_monthly\n)\nef_target, ef_months\n\n(9600.0, 21)\n\n\nThe $9,600 fund is full in 21 months without a single decision along the way. Once it’s full, the chapter sends the $400 to investing instead. future_value_series() shows what that redirected transfer could become over 30 years at 7%:\n\nredirected = future_value_series(contribution=ef_monthly, rate=0.07 / 12, periods=30 * 12)\nredirected\n\n487988.39831037784\n\n\nThe same $400 transfer could grow to about $487,988. As a last check, percent_of_income() from Budgeting turns the automated dollars back into a rate. It returns a percent, the reverse of the decimal monthly_savings() takes:\n\npercent_of_income(expense=automated, income=4000)\n\n20.0\n\n\n\n\nRecap\nAutomation makes saving the default instead of a monthly decision. monthly_savings() turns a savings rate into the dollar amount to automate, and its array inputs price a split across accounts or a whole escalation plan in one call. Paired with the emergency fund and investing functions, it shows where those automated dollars end up.\n\nAutomating Savings in Personal Finance: a field manual\nReference: monthly_savings()\nNext: Investing Basics",
+    "crumbs": [
+      "User Guide",
+      "Savings",
+      "Automating Savings"
+    ]
+  },
+  {
+    "objectID": "license.html",
+    "href": "license.html",
+    "title": "License",
+    "section": "",
+    "text": "▶\n    License features — MIT License\n\n\n\n\n\nPermissions\n\nCommercial use\nModification\nDistribution\nPrivate use\n\n\nConditions\n\nLicense and copyright notice\n\n\nLimitations\n\nLiability\nWarranty\n\n\n\n\nMIT License\n\nCopyright (c) 2026 Martin Frigaard\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE."
+  },
+  {
+    "objectID": "user-guide/budgeting.html",
+    "href": "user-guide/budgeting.html",
+    "title": "Budgeting",
+    "section": "",
+    "text": "Most budgeting decisions come down to a handful of small calculations. You need to know how big a slice of your paycheck an expense takes and what a daily habit costs over a year. You also need to know what money spent today could have grown into, and how long an upfront purchase takes to pay for itself. The Budgeting chapter of the book builds each of these from scratch. In this page I’ll answer the same questions with percent_of_income(), to_annual(), to_monthly(), opportunity_cost(), and months_to_break_even(), using the chapter’s numbers so you can check every result against the book.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Budgeting"
+    ]
+  },
+  {
+    "objectID": "user-guide/budgeting.html#most-budgets-work-in-months",
+    "href": "user-guide/budgeting.html#most-budgets-work-in-months",
+    "title": "Budgeting",
+    "section": "Most budgets work in months",
+    "text": "Most budgets work in months\nto_monthly() goes in the other direction. It converts a daily, weekly, or annual amount to a monthly one, which is the unit most budgets use. Here is the coffee habit per month:\n\ncoffee_month = to_monthly(amount=5, period=\"daily\")\ncoffee_month\n\n152.20000000000002\n\n\nCoffee runs $152.20 a month, which matches the monthly bar above. The chapter’s second example converts $150 a week in groceries to a monthly amount:\n\ngroceries_month = to_monthly(amount=150, period=\"weekly\")\ngroceries_month\n\n649.5\n\n\nGroceries come to $649.50 a month. That is more than four weeks’ worth, because a month holds about 4.33 weeks.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Budgeting"
+    ]
+  },
+  {
+    "objectID": "user-guide/budgeting.html#one-call-compares-every-time-horizon",
+    "href": "user-guide/budgeting.html#one-call-compares-every-time-horizon",
+    "title": "Budgeting",
+    "section": "One call compares every time horizon",
+    "text": "One call compares every time horizon\nThe same approach works for time horizons. Passing several values to years reproduces each checkpoint in the car bar model:\n\nhorizons = [0, 5, 10, 20, 30]\npl.DataFrame({\n    \"years\": horizons,\n    \"value\": opportunity_cost(amount=25000, rate=0.07, years=horizons),\n})\n\n\nshape: (5, 2)yearsvaluei64f64025000.0535063.7932681049178.7839322096742.11156230190306.376067\n\n\n\n\n\n\n\n\nWarningLimits\n\n\n\nto_monthly() uses rounded factors (30.44 days and 4.33 weeks per month), while to_annual() uses 365 days and 52 weeks per year. A round trip through both functions drifts slightly. The weekly grocery bill gives a different yearly total depending on the path:\n\n(\n    to_annual(amount=150, period=\"weekly\"),\n    to_annual(amount=groceries_month, period=\"monthly\"),\n)\n\n(7800.0, 7794.0)\n\n\nA few other limits apply:\n\nto_annual() accepts \"daily\", \"weekly\", or \"monthly\", and to_monthly() accepts \"daily\", \"weekly\", or \"annual\". Any other period raises a ValueError.\nopportunity_cost() assumes the same return every year and ignores inflation, taxes, and fund fees.\nmonths_to_break_even() assumes the savings are the same every month and ignores what the upfront cost could have earned if invested.\npercent_of_income() and months_to_break_even() raise a ValueError when income or monthly_savings is zero or negative.",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Budgeting"
+    ]
+  },
+  {
+    "objectID": "user-guide/taxes.html",
+    "href": "user-guide/taxes.html",
+    "title": "Taxes",
+    "section": "",
+    "text": "Taxes are the biggest bill most people pay, and two questions come up again and again. How much federal income tax do you owe on your salary? And how much of a raise do you keep once a higher bracket takes its share? The Taxes chapter of the book answers both by slicing income into brackets. In this page I’ll answer the same questions with income_tax() and raise_kept(), using the chapter’s numbers so you can check every result against the book.\n\nThe tax functions\nBoth functions take single numbers only (see the conventions table in Get started). To compare several incomes, loop over them; the Variations section shows how.\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nincome_tax()\n2026 federal income tax for a single filer\ndollars per year\n\n\nraise_kept()\nthe part of a raise left after federal income tax\ndollars per year\n\n\n\n\n\nHow much tax do you owe on a salary?\nThe chapter’s example is a $45,000 salary for a single filer in 2026. The question is the federal income tax bill, and what share of the salary it takes.\nThink of the salary as one long bar. The first $16,100 is covered by the standard deduction and isn’t taxed. The next $12,400 is taxed at 10%. The last $16,500 is taxed at 12%:\n\n\n\nA $45,000 salary, sliced by the standard deduction and 2026 tax brackets\n\n\nincome_tax() subtracts the deduction, multiplies each slice by its own rate, and adds up the slices:\n\ntax = income_tax(income=45000)\neffective = tax / 45000\ntax, effective\n\n(3220.0, 0.07155555555555555)\n\n\nThe tax is $3,220, an effective rate of 7.2%. That is well below 12%, the marginal rate on this salary’s last dollar. The effective rate is a decimal here because we divided it ourselves; income_tax() returns dollars, not a rate.\n\n\nHow much of a raise do you keep?\nNow imagine you earn $66,000 and get a $2,000 raise. Taxable income goes from $49,900 to $51,900, which crosses the 22% line at $50,400. The fear is that the higher bracket eats the raise.\nThe bar below is just the raise. The first $500 fills the rest of the 12% bracket, and only the last $1,500 is taxed at 22%:\n\n\n\nA $2,000 raise that crosses into the 22% bracket\n\n\nraise_kept() takes the tax on the new income, subtracts the tax on the old income, and takes that difference out of the raise:\n\nkept = raise_kept(old_income=66000, raise_amount=2000)\nextra_tax = income_tax(income=68000) - income_tax(income=66000)\nkept, extra_tax\n\n(1610.0, 390.0)\n\n\nYou keep $1,610 of the $2,000 raise, and the extra tax is $390. Crossing into a higher bracket never makes a raise cost you money; only the dollars above the line pay the higher rate.\n\n\nThe call stack\nraise_kept() doesn’t have its own bracket table. It calls income_tax() twice, once on the new income and once on the old income, and subtracts the two results. The tree below shows that relationship:\n\nfrom rich import print\nfrom rich.tree import Tree\n\ntree = Tree(\"raise_kept()\")\ntree.add(\"income_tax(old_income + raise_amount)\")\ntree.add(\"income_tax(old_income)\")\nprint(tree)\n\nraise_kept()\n├── income_tax(old_income + raise_amount)\n└── income_tax(old_income)\nAny change to the brackets in income_tax() flows straight into raise_kept().\n\n\nVariations\nBecause both functions take single numbers, a list comprehension compares several salaries. The table below puts the tax and the effective rate side by side:\n\nincomes = [30000, 45000, 66000, 100000, 150000]\ntaxes = [income_tax(income=i) for i in incomes]\npl.DataFrame({\n    \"income\": incomes,\n    \"tax\": taxes,\n    \"effective_rate\": [t / i for t, i in zip(taxes, incomes)],\n})\n\n\nshape: (5, 3)incometaxeffective_ratei64f64f64300001420.00.047333450003220.00.071556660005740.00.0869710000013170.00.131715000024734.00.164893\n\n\nThe effective rate climbs with income, but it stays below each salary’s top bracket. The same pattern works for raises. Here is a $2,000 raise at each salary:\n\npl.DataFrame({\n    \"income\": incomes,\n    \"kept\": [raise_kept(old_income=i, raise_amount=2000) for i in incomes],\n})\n\n\nshape: (5, 2)incomekepti64f64300001760.0450001760.0660001610.01000001560.01500001520.0\n\n\n\n\n\n\n\n\nWarningLimits\n\n\n\nincome_tax() hard codes the 2026 federal brackets for a single filer and a $16,100 standard deduction. A few other limits apply:\n\nOther years, married filers, and heads of household need different brackets, which the function doesn’t take.\nYou can pass a different deduction (for example, itemized deductions), but not different brackets.\nNeither function counts credits, FICA (7.65%), state or local taxes, or self employment tax.\nBoth functions take single numbers only. A list or array raises a ValueError; text raises a TypeError.\n\n\n\n\n\nPutting it together\nBack to the $45,000 salary. Federal income tax is only part of what comes out of the paycheck. FICA (Social Security and Medicare) takes 7.65% of every dollar, with no deduction. percent_of_income() from the Budgeting page shows how much of the salary the two together claim:\n\nsalary = 45000\nfica = salary * 0.0765\nfederal = income_tax(income=salary)\ntotal = fica + federal\ntotal_share = percent_of_income(expense=total, income=salary)\nfica, federal, total_share\n\n(3442.5, 3220.0, 14.805555555555555)\n\n\nFICA takes $3,442.50 and federal income tax takes $3,220. Together they claim 14.8% of the salary, before any state tax.\nNext, a $2,000 raise on the same salary. All of it stays in the 12% bracket, so you keep a little more than in the $66,000 example:\n\nraise_kept(old_income=salary, raise_amount=2000)\n\n1760.0\n\n\nThis number is before FICA, which takes another 7.65% of the raise.\n\n\nRecap\nTax brackets apply to slices of income, not the whole salary. income_tax() adds up the tax on each slice, and dividing by income gives the effective rate. raise_kept() calls income_tax() twice to show that a raise always leaves you with more money.\n\nTaxes in Personal Finance: a field manual\nReference: income_tax(), raise_kept()\nNext: Insurance",
+    "crumbs": [
+      "User Guide",
+      "Taxes and insurance",
+      "Taxes"
+    ]
+  },
+  {
+    "objectID": "user-guide/major-purchases.html",
+    "href": "user-guide/major-purchases.html",
+    "title": "Major Purchases",
+    "section": "",
+    "text": "A home is the biggest purchase most people ever make, and small percentages turn into tens of thousands of dollars. The Major Purchases chapter of the book asks three questions: when does renting beat buying, what will the mortgage cost each month, and where does the first payment go? In this page I’ll answer them with rent_buy_threshold(), mortgage_payment(), and first_payment_split(), using the chapter’s numbers so you can check each result against the book.",
+    "crumbs": [
+      "User Guide",
+      "Planning",
+      "Major Purchases"
+    ]
+  },
+  {
+    "objectID": "user-guide/major-purchases.html#call-stack",
+    "href": "user-guide/major-purchases.html#call-stack",
+    "title": "Major Purchases",
+    "section": "Call stack",
+    "text": "Call stack\nfirst_payment_split() doesn’t repeat the payment formula. It calls mortgage_payment(), which uses the internal _annuity_factor() helper (the same one behind monthly_for_goal()):\n\nfrom rich import print\nfrom rich.tree import Tree\n\ntree = Tree(\"first_payment_split()\")\ntree.add(\"mortgage_payment()\").add(\"_annuity_factor()\")\nprint(tree)\n\nfirst_payment_split()\n└── mortgage_payment()\n    └── _annuity_factor()",
+    "crumbs": [
+      "User Guide",
+      "Planning",
+      "Major Purchases"
+    ]
+  },
+  {
+    "objectID": "user-guide/get-started.html",
+    "href": "user-guide/get-started.html",
+    "title": "Get started",
+    "section": "",
+    "text": "perfinpy holds the Python functions from Personal Finance: a field manual. Each chapter of the book builds its calculations from scratch so you can see how the formula works. This package collects those same functions, documents them, and tests them, so you can use them without copying code out of the book. On this page I’ll cover how to install perfinpy and the conventions every function follows. Then we’ll take a short tour with one example from each part of the book.",
+    "crumbs": [
+      "User Guide",
+      "Get started",
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "user-guide/get-started.html#foundations",
+    "href": "user-guide/get-started.html#foundations",
+    "title": "Get started",
+    "section": "Foundations",
+    "text": "Foundations\nRent of $1,500 on a $5,000 monthly income:\n\nrent_share = percent_of_income(expense=1500, income=5000)\nrent_share\n\n30.0\n\n\nRent takes 30% of income. A $5,000 credit card balance at 22% APR, paying $100 a month:\n\npayoff = months_to_payoff(balance=5000, monthly_payment=100, apr=0.22)\npayoff\n\n136.77905405676316\n\n\nThat is about 11.4 years of payments.",
+    "crumbs": [
+      "User Guide",
+      "Get started",
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "user-guide/get-started.html#savings",
+    "href": "user-guide/get-started.html#savings",
+    "title": "Get started",
+    "section": "Savings",
+    "text": "Savings\nSpending $2,720 of a $3,200 take home paycheck:\n\nsavings_rate(income=3200, spending=2720)\n\n15.0",
+    "crumbs": [
+      "User Guide",
+      "Get started",
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "user-guide/get-started.html#investing",
+    "href": "user-guide/get-started.html#investing",
+    "title": "Get started",
+    "section": "Investing",
+    "text": "Investing\n$10,000 invested at 7% for 10 years:\n\nfuture_value(present_value=10000, rate=0.07, years=10)\n\n19671.513572895663",
+    "crumbs": [
+      "User Guide",
+      "Get started",
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "user-guide/get-started.html#taxes-and-insurance",
+    "href": "user-guide/get-started.html#taxes-and-insurance",
+    "title": "Get started",
+    "section": "Taxes and insurance",
+    "text": "Taxes and insurance\n2026 federal income tax on a $45,000 salary (single filer), and the effective rate:\n\ntax = income_tax(income=45000)\ntax, tax / 45000\n\n(3220.0, 0.07155555555555555)\n\n\nThe effective rate is 7.2%, well below the 12% top bracket this salary reaches.",
+    "crumbs": [
+      "User Guide",
+      "Get started",
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "user-guide/get-started.html#planning",
+    "href": "user-guide/get-started.html#planning",
+    "title": "Get started",
+    "section": "Planning",
+    "text": "Planning\nThe monthly payment on a $480,000 mortgage at 6% over 30 years:\n\nmortgage_payment(principal=480000, annual_rate=0.06, years=30)\n\n2877.842520733233",
+    "crumbs": [
+      "User Guide",
+      "Get started",
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "user-guide/index-funds.html",
+    "href": "user-guide/index-funds.html",
+    "title": "Index Funds",
+    "section": "",
+    "text": "You can’t control what the market does, but you can control what you pay. Index fund math is about that one thing: what fees cost you. A fee looks tiny for a single year, and it comes out every year, so each dollar it takes stops growing. In this page I’ll measure both with yearly_fee() and future_value_after_fees(), using the numbers from the Index Funds chapter of the book.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Index Funds"
+    ]
+  },
+  {
+    "objectID": "user-guide/index-funds.html#comparing-expense-ratios",
+    "href": "user-guide/index-funds.html#comparing-expense-ratios",
+    "title": "Index Funds",
+    "section": "Comparing expense ratios",
+    "text": "Comparing expense ratios\nThe chapter suggests looking for funds under 0.10%. Passing a range of expense ratios shows what each one leaves after 40 years:\n\nratios = [0.0003, 0.0004, 0.001, 0.005, 0.01]\npl.DataFrame({\n    \"expense_ratio\": ratios,\n    \"fee_on_10k\": yearly_fee(balance=10000, expense_ratio=ratios),\n    \"after_40_years\": future_value_after_fees(300, 0.07, ratios, 40),\n})\n\n\nshape: (5, 3)expense_ratiofee_on_10kafter_40_yearsf64f64f640.00033.0780841.7341920.00044.0778654.7099260.00110.0765675.2372660.00550.0685085.6760240.01100.0597447.220299\n\n\nThe difference between 0.03% and 0.10% is small. The difference between 0.10% and 1% is not.\n\n\n\n\n\n\nWarningLimits\n\n\n\nA few things these functions leave out:\n\nyearly_fee() uses one balance. A fund charges its fee on your balance through the year, so a growing account pays a little more than this.\nfuture_value_after_fees() subtracts the expense ratio from the return and assumes both stay the same every year. Contributions are monthly, made at the end of each month.\nNeither function counts sales charges (loads), trading costs, advisor fees, or taxes in a taxable account.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Index Funds"
+    ]
+  },
+  {
+    "objectID": "user-guide/savings-strategies.html",
+    "href": "user-guide/savings-strategies.html",
+    "title": "Savings Strategies",
+    "section": "",
+    "text": "How much of your paycheck do you actually keep? The Savings Strategies chapter of the book argues that your savings rate is the one number worth tracking above all others, because it sets how fast wealth builds. In this page I’ll answer that question with savings_rate(), using the chapter’s numbers so you can check every result against the book. Then we’ll borrow a few functions from other chapters to follow one paycheck from savings rate to emergency fund to long term investing.\n\nThe savings strategies function\nsavings_rate() follows the conventions on the Get started page. Like the other ratio functions, it returns a percent, not a decimal.\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nsavings_rate()\nthe share of income not spent\npercent (15 is 15%); negative when spending exceeds income\n\n\n\n\n\nWhat is your savings rate?\nThe chapter’s first job takes home $3,200 a month and spends $2,720 of it. Every dollar of the paycheck goes to either spending or savings, so the question is how big the savings slice is.\nThink of the take home pay as one bar. Spending fills most of it, and savings is the slice left at the end:\n\n\n\n$3,200 take home pay: spending and savings\n\n\nsavings_rate() subtracts spending from income, divides by income, and multiplies by 100:\n\nfirst_job_rate = savings_rate(income=3200, spending=2720)\nfirst_job_rate\n\n15.0\n\n\nThe first job saves 15% of take home pay, which lands in the chapter’s average tier (10% to 20%). The result is a percent, so 15.0 means 15%. Income and spending need to cover the same period; a monthly spending total against a yearly salary gives a rate that is badly wrong.\n\n\nWhat do the benchmark tiers look like in dollars?\nThe chapter gives four benchmarks: under 10% is the danger zone, 10% to 20% is average, 20% to 30% is strong, and 30% or more is the path to financial independence. Percentages are easy to compare but hard to picture, so the chapter converts one example from each tier into dollars on a $45,000 income:\n\n\n\nAnnual dollars saved at four savings rate tiers on a $45,000 income\n\n\nEach bar is income minus spending. Because savings_rate() accepts arrays, one call can work backward from the dollars in each bar to the tier it belongs to:\n\nsaved = [3600, 6750, 11250, 15750]\npl.DataFrame({\n    \"tier\": [\"danger zone\", \"average\", \"strong\", \"FI path\"],\n    \"saved\": saved,\n    \"rate\": savings_rate(income=45000, spending=[45000 - s for s in saved]),\n})\n\n\nshape: (4, 3)tiersavedratestri64f64\"danger zone\"36008.0\"average\"675015.0\"strong\"1125025.0\"FI path\"1575035.0\n\n\nThe rates come back as 8, 15, 25, and 35, one for each bar. Moving from the danger zone to the strong tier on the same salary means saving an extra $7,650 a year.\n\n\nVariations\nThe chapter’s central claim is that savings rate matters more than income. It compares someone earning $45,000 and spending $36,000 with someone earning $75,000 and spending $67,500. Passing both people to savings_rate() at once gives their rates:\n\nearners = pl.DataFrame({\n    \"income\": [45000, 75000],\n    \"spending\": [36000, 67500],\n})\nearners = earners.with_columns(\n    saved=pl.col(\"income\") - pl.col(\"spending\"),\n    rate=savings_rate(income=earners[\"income\"], spending=earners[\"spending\"]),\n)\nearners\n\n\nshape: (2, 4)incomespendingsavedratei64i64i64f644500036000900020.07500067500750010.0\n\n\nThe lower earner saves 20% and the higher earner saves 10%. To see where each one ends up, we can borrow future_value_series() from Investing Basics. It grows a yearly contribution at 7% (rate is a decimal per period, and here the period is a year):\n\nyears = [23, 24, 25, 26]\npl.DataFrame({\n    \"years\": years,\n    \"saves_20_pct\": future_value_series(contribution=9000, rate=0.07, periods=years),\n    \"saves_10_pct\": future_value_series(contribution=7500, rate=0.07, periods=years),\n})\n\n\nshape: (4, 3)yearssaves_20_pctsaves_10_pcti64f64f6423480925.268097400771.05674824523590.036864436325.0307225569241.339444474367.7828726618088.233205515073.527671\n\n\nThe $45,000 earner crosses $500,000 in year 24, and the $75,000 earner crosses it in year 26. That matches the chapter’s chart. The higher saver also lives on $36,000 a year, so they need a smaller pile to stop working.\n\n\n\n\n\n\nWarningLimits\n\n\n\nsavings_rate() does one subtraction and one division, so it leaves a few things to you:\n\nIt doesn’t know which income you mean. The chapter uses take home pay here, while Automating Savings measures the rate on gross pay because 401(k) contributions come out before taxes. The same paycheck gives a different rate on each base.\nIt doesn’t check that income and spending cover the same period.\nIt returns a negative rate when spending exceeds income instead of raising an error.\nIt raises an error when income is zero or negative:\n\n\nsavings_rate(income=0, spending=500)\n\n\n---------------------------------------------------------------------------\nValueError                                Traceback (most recent call last)\nCell In[6], line 1\n----&gt; 1 savings_rate(income=0, spending=500)\n\nFile ~/projects/pkgs/Python/perfinpy/src/perfinpy/savings_strategies.py:42, in savings_rate(income, spending)\n     10 def savings_rate(income: ArrayLike, spending: ArrayLike) -&gt; Numeric:\n     11     \"\"\"Savings rate: the percent of income not spent.\n     12 \n     13     From the [Savings Strategies](https://mjfrigaard.github.io/fm-finance/savings_strategies.html)\n   (...)     40     15.0\n     41     \"\"\"\n---&gt; 42     income = _as_positive(income, \"income\")\n     43     spending = _as_numeric(spending, \"spending\")\n     44     return ((income - spending) / income) * 100\n\nFile ~/projects/pkgs/Python/perfinpy/src/perfinpy/_checks.py:38, in _as_positive(x, arg)\n     36 out = _as_numeric(x, arg)\n     37 if np.any(np.asarray(out) &lt;= 0):\n---&gt; 38     raise ValueError(f\"`{arg}` must be greater than 0.\")\n     39 return out\n\nValueError: `income` must be greater than 0.\n\n\n\n\n\n\n\nPutting it together\nBack to the first job saving $480 a month. The chapter says savings should be protected before they grow, so the first stop is an emergency fund. The Emergency Fund chapter uses $2,400 a month in essential expenses and a four month target. emergency_fund_target() sets the goal, and months_to_ef_goal() counts the months to reach it at $480 a month:\n\nmonthly_saved = 3200 - 2720\nef_target = emergency_fund_target(monthly_expenses=2400, months=4)\nef_months = months_to_ef_goal(\n    target=ef_target, current_balance=0, monthly_contribution=monthly_saved\n)\nef_target, ef_months\n\n(9600.0, 20)\n\n\nAt a 15% savings rate, the $9,600 fund is full in 20 months. After that, the same $480 can go to investing instead. future_value_series() takes a monthly rate here, so the 7% yearly return is divided by 12:\n\ninvested = future_value_series(contribution=monthly_saved, rate=0.07 / 12, periods=30 * 12)\ninvested\n\n585586.0779724534\n\n\nThirty years of $480 a month could grow to about $585,586. Nothing about the salary changed; the savings rate did all the work.\n\n\nRecap\nYour savings rate is the lever you fully control, and savings_rate() measures it as a percent of income. One call can check a single paycheck, place several savings amounts on the chapter’s benchmark tiers, or compare people with different salaries. Paired with the emergency fund and investing functions, it shows how a modest rate turns into a protected cushion and then long term wealth.\n\nSavings Strategies in Personal Finance: a field manual\nReference: savings_rate()\nNext: High-Yield Savings Accounts",
+    "crumbs": [
+      "User Guide",
+      "Savings",
+      "Savings Strategies"
+    ]
+  },
+  {
+    "objectID": "user-guide/estate-planning.html",
+    "href": "user-guide/estate-planning.html",
+    "title": "Estate Planning",
+    "section": "",
+    "text": "Your estate is everything you own and everything you owe. Estate planning math asks two things about it: what is it worth, and how much of it do your beneficiary forms control? In this page I’ll answer both with net_worth() and beneficiary_share(), using the 25 year old from the Estate Planning chapter of the book so you can check each result.\n\nThe estate functions\nBoth functions take a dict of name to amount, as the book does. A plain list of amounts works too.\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nnet_worth()\ntotal assets minus total debts\ndollars (a float)\n\n\nbeneficiary_share()\nthe share of assets with a named beneficiary\na decimal (0.8875 is 88.75%)\n\n\n\n\n\nWhat is your estate worth?\nThe chapter’s example is a 25 year old with a 401(k), a Roth IRA, some savings, and a car. On the other side are a car loan and a small credit card balance. The bar model puts what you own on one bar and what you owe on the other:\n\n\n\nAssets, debts, and net worth for a 25 year old\n\n\nNet worth is the length of the top bar minus the length of the bottom bar. net_worth() adds up each dict and subtracts:\n\nassets = {\"401k\": 12000, \"roth_ira\": 6000, \"savings\": 8000, \"car\": 9000}\ndebts = {\"car_loan\": 6000, \"credit_card\": 1000}\nworth = net_worth(assets, debts)\nworth\n\n28000.0\n\n\nThe estate is worth $28,000: $35,000 in assets minus $7,000 in debts.\n\n\nHow much do your beneficiary forms control?\nNow add life insurance through work. Many employers give free coverage equal to one year of salary, say $45,000. It isn’t part of net worth while you’re alive, but it pays out when you die. The bar below shows everything that would pass to someone else, split by what decides who gets it:\n\n\n\nWhat decides who gets each part of the estate\n\n\nThe green sections are decided by forms you fill out online; only the vermillion section depends on a will. beneficiary_share() divides the green sections by the whole bar:\n\nwith_beneficiary = {\n    \"401k\": 12000,\n    \"roth_ira\": 6000,\n    \"life_insurance\": 45000,\n    \"savings_pod\": 8000,\n}\nwithout_beneficiary = {\"car\": 9000}\nshare = beneficiary_share(with_beneficiary, without_beneficiary)\nshare\n\n0.8875\n\n\nAbout 89% of the estate is decided by forms that take minutes to fill out. That’s why the book puts beneficiary designations ahead of a will for most young people. Note that the result is a decimal, not a percent.\n\n\nVariations\nbeneficiary_share() takes one estate at a time, so a list comprehension compares several. Here is the same estate with fewer forms filed:\n\nscenarios = {\n    \"all forms filed\": (with_beneficiary, without_beneficiary),\n    \"no POD on savings\": (\n        {\"401k\": 12000, \"roth_ira\": 6000, \"life_insurance\": 45000},\n        {\"savings\": 8000, \"car\": 9000},\n    ),\n    \"retirement forms only\": (\n        {\"401k\": 12000, \"roth_ira\": 6000},\n        {\"life_insurance\": 45000, \"savings\": 8000, \"car\": 9000},\n    ),\n}\npl.DataFrame({\n    \"scenario\": list(scenarios),\n    \"share\": [beneficiary_share(w, wo) for w, wo in scenarios.values()],\n})\n\n\nshape: (3, 2)scenariosharestrf64\"all forms filed\"0.8875\"no POD on savings\"0.7875\"retirement forms only\"0.225\n\n\nSkipping the life insurance form costs the most, because it is the largest item. (Most employer life insurance asks for a beneficiary at enrollment; the last row shows what happens if you leave it blank.)\n\n\n\n\n\n\nWarningLimits\n\n\n\nnet_worth() adds the values you give it. It doesn’t know what a car is worth next year, so use today’s market value, and enter debts as positive balances. It ignores taxes owed on retirement accounts and the costs of probate.\nbeneficiary_share() returns a decimal, unlike the ratio functions that return percents. It ignores joint ownership, which also passes outside a will, and it stops with a ValueError when total assets aren’t greater than 0:\n\nbeneficiary_share({}, {\"car\": 0})\n\n\n---------------------------------------------------------------------------\nValueError                                Traceback (most recent call last)\nCell In[5], line 1\n----&gt; 1 beneficiary_share({}, {\"car\": 0})\n\nFile ~/projects/pkgs/Python/perfinpy/src/perfinpy/estate_planning.py:97, in beneficiary_share(with_beneficiary, without_beneficiary)\n     95 total = named + _total(without_beneficiary, \"without_beneficiary\")\n     96 if total &lt;= 0:\n---&gt; 97     raise ValueError(\"Total assets must be greater than 0.\")\n     98 return named / total\n\nValueError: Total assets must be greater than 0.\n\n\n\nBoth functions raise a TypeError for text and a ValueError for missing values.\n\n\n\n\nPutting it together\nEstates change as you save. Five years from now, suppose the retirement accounts grow at 7% a year (with future_value() from Investing Basics), savings reach $15,000, the car is paid off and worth $6,000, and the credit card is cleared:\n\nretirement = future_value(present_value=[12000, 6000], rate=0.07, years=5)\nassets_later = {\n    \"401k\": retirement[0],\n    \"roth_ira\": retirement[1],\n    \"savings\": 15000,\n    \"car\": 6000,\n}\nworth_later = net_worth(assets_later, debts={\"car_loan\": 0, \"credit_card\": 0})\nshare_later = beneficiary_share(\n    {\n        \"401k\": retirement[0],\n        \"roth_ira\": retirement[1],\n        \"life_insurance\": 45000,\n        \"savings_pod\": 15000,\n    },\n    {\"car\": 6000},\n)\nround(worth_later, 2), round(share_later, 4)\n\n(46245.93, 0.9342)\n\n\nNet worth grows to $46,246, and the forms now decide 93% of the estate. The bigger the accounts get, the more those ten minute forms matter.\n\n\nRecap\nnet_worth() gives the starting number for any estate plan: what you own minus what you owe. beneficiary_share() shows how much of that estate passes by beneficiary forms instead of a will. For most young people the answer is most of it, so fill in those forms first.\nThis is the last chapter of the book and the last page of the guide.\n\nEstate Planning in Personal Finance: a field manual\nReference: net_worth(), beneficiary_share()\nBack to: Get started",
+    "crumbs": [
+      "User Guide",
+      "Planning",
+      "Estate Planning"
+    ]
+  },
+  {
+    "objectID": "user-guide/income.html",
+    "href": "user-guide/income.html",
+    "title": "Income",
+    "section": "",
+    "text": "A bigger paycheck only builds wealth if some of it stays put. The book’s Income chapter turns that idea into three questions. How much does steady saving grow into? How much of each paycheck is committed before you spend a dollar? And what is a raise worth if you invest part of it? In this page I’ll answer each one with perfinpy, using the same numbers as the chapter.\n\n\n\n\n\n\n\n\nFunction\nReturns\nUnits\n\n\n\n\nwealth_formula()\nthe balance after saving part of a yearly income every year\ndollars; rates go in as decimals\n\n\nfixed_cost_ratio()\nmonthly fixed costs as a share of take home pay\npercent (55, not 0.55)\n\n\nraise_invested_value()\nthe balance after investing part of a monthly raise every month\ndollars; rates go in as decimals\n\n\n\nThe units follow the package conventions described in Get started: rates go in as decimals and ratios come out as percents.\n\nHow much does steady saving grow into?\nThe chapter builds on Scott Galloway’s wealth formula (focus plus stoicism, time, and diversification multiplied together). To put numbers on it, the book uses a worker who earns about the 2025 median for full time workers. This worker saves a fixed share of income every year and invests it. The scenario below sets those inputs:\n\nincome = 62400\nsave_pct = 0.15\nannual_return = 0.08\nwealth_years = 40\n\nThis worker earns $62,400 a year and saves 15% of it, which comes to $9,360 a year. Those savings earn 8% a year for 40 years. Each bar below is the balance at a checkpoint, split into the money put in and what it grew into.\n\n\n\nMoney put in vs. growth at each checkpoint\n\n\nThe green layer rises in a straight line because it is one deposit per year. The blue layer is every deposit growing for the years it has left, and it is the part that takes over. wealth_formula() adds up all of those growing deposits in one call:\n\nwealth_40 = wealth_formula(\n    median_income=income,\n    savings_rate=save_pct,\n    annual_return=annual_return,\n    years=wealth_years,\n)\nwealth_40\n\n2424769.0151255885\n\n\nAfter 40 years the balance is about $2,424,769. Only $374,400 of that is money the worker put in; the other $2,050,369 is growth.\n\n\nHow much of your paycheck is already spoken for?\nFixed costs (rent, loan payments, insurance, utilities) are the bills you can’t easily change from one month to the next. The book’s example is a first job with these monthly numbers:\n\nfixed_costs = 1760\ntake_home = 3200\nceiling_pct = 60\n\nThis paycheck brings in $3,200 of take home pay a month, and $1,760 of it goes to fixed costs. The book suggests keeping fixed costs under 60% of take home pay, which is $1,920 here. The bar below cuts the paycheck into ten equal pieces and marks that ceiling.\n\n\n\nTake home pay split into fixed costs and flexible spending\n\n\nfixed_cost_ratio() divides the fixed costs by take home pay and returns a percent:\n\nratio = fixed_cost_ratio(fixed_costs=fixed_costs, take_home=take_home)\nratio\n\n55.00000000000001\n\n\nFixed costs take 55% of this paycheck, under the 60% ceiling. That leaves $160 of room before a new commitment pushes the budget past it. The Budgeting page picks up from here and splits the flexible part of the paycheck.\n\n\nWhat is a raise really worth?\nThe chapter recommends splitting every raise: half goes to your lifestyle and half gets invested. The book’s raise adds a fixed amount to monthly take home pay:\n\nmonthly_raise = 400\nshare = 0.5\nraise_rate = 0.07\nraise_years = 25\n\nA raise of $400 a month split in half sends $200 a month into investments. That money earns 7% a year for 25 years. The bars below show the balance at each checkpoint.\n\n\n\nA monthly raise contribution invested at each checkpoint\n\n\nraise_invested_value() takes the whole raise and the share you invest, then compounds the contributions monthly:\n\nraise_value = raise_invested_value(\n    monthly_raise=monthly_raise,\n    invest_share=share,\n    rate=raise_rate,\n    years=raise_years,\n)\nraise_value\n\n162014.33860462217\n\n\nHalf of the raise grows to about $162,014. The contributions add up to $60,000, so growth adds about $102,014. The Investing Basics page returns to this future value of contributions formula with future_value_series().\n\n\nVariations\nBoth growth functions accept arrays, so we can compare options in one call. The savings rate is the stoicism lever in Galloway’s formula. The code below keeps the income, return, and horizon from the first section and changes only the share saved:\n\nrates = [0.10, 0.15, 0.20]\npl.DataFrame({\n    \"savings_rate\": rates,\n    \"yearly_savings\": [income * r for r in rates],\n    \"wealth\": wealth_formula(\n        median_income=income,\n        savings_rate=rates,\n        annual_return=annual_return,\n        years=wealth_years,\n    ),\n})\n\n\nshape: (3, 3)savings_rateyearly_savingswealthf64f64f640.16240.01.6165e60.159360.02.4248e60.212480.03.2330e6\n\n\nThe same idea works for the raise. Here is the $400 raise with a quarter, half, three quarters, and all of it invested:\n\nshares = [0.25, 0.50, 0.75, 1.0]\npl.DataFrame({\n    \"invest_share\": shares,\n    \"per_month\": [monthly_raise * s for s in shares],\n    \"value\": raise_invested_value(\n        monthly_raise=monthly_raise,\n        invest_share=shares,\n        rate=raise_rate,\n        years=raise_years,\n    ),\n})\n\n\nshape: (4, 3)invest_shareper_monthvaluef64f64f640.25100.081007.1693020.5200.0162014.3386050.75300.0243021.5079071.0400.0324028.677209\n\n\nBoth tables scale in a straight line with the share saved because the return and horizon don’t change. The horizon is where the curve bends, as the bar models above show.\n\n\n\n\n\n\nWarningLimits\n\n\n\n\nwealth_formula() assumes one deposit at the end of every year, the same income every year (no raises), and the same return every year. It ignores taxes, fees, and inflation, so results are in future dollars.\nraise_invested_value() makes the same assumptions with a deposit at the end of every month and monthly compounding.\nA 0% return in either function gives the plain sum of the deposits instead of nan.\nfixed_cost_ratio() raises a ValueError when take_home is 0 or negative. It doesn’t decide which bills count as fixed, and the 60% ceiling is a guideline from the book, not an argument.\nThe growth functions reject text and nan but not negative values, so check the signs of your inputs.\n\n\n\n\n\nPutting it together\nThe worker from the fixed cost section gets the $400 raise. Investing half is the easy part; the real question is where the lifestyle half goes. If it stays flexible (dinners, trips), fixed costs don’t change. If it goes to a pricier apartment, fixed costs rise by the full lifestyle half. The code below compares the fixed cost ratio before the raise and under both choices:\n\nnew_take_home = take_home + monthly_raise\nplans = pl.DataFrame({\n    \"plan\": [\n        \"before the raise\",\n        \"lifestyle half stays flexible\",\n        \"lifestyle half goes to rent\",\n    ],\n    \"fixed_costs\": [\n        float(fixed_costs),\n        float(fixed_costs),\n        fixed_costs + monthly_raise * (1 - share),\n    ],\n    \"take_home\": [take_home, new_take_home, new_take_home],\n})\nplans = plans.with_columns(\n    ratio=fixed_cost_ratio(\n        fixed_costs=plans[\"fixed_costs\"].to_numpy(),\n        take_home=plans[\"take_home\"].to_numpy(),\n    )\n)\nplans\n\n\nshape: (3, 4)planfixed_coststake_homeratiostrf64i64f64\"before the raise\"1760.0320055.0\"lifestyle half stays flexible\"1760.0360048.888889\"lifestyle half goes to rent\"1960.0360054.444444\n\n\nKeeping the lifestyle half flexible drops the ratio to 48.9%. Moving it into rent leaves the ratio at 54.4%, almost where it started, so the raise buys very little breathing room. This is the lifestyle inflation the chapter warns about: the upgrade becomes a permanent bill.\nThe invested half grows the same way in both plans. The code below values it twice: once with monthly deposits, and once with a single deposit at the end of each year. The yearly version uses wealth_formula(), whose median_income argument accepts any yearly amount:\n\nmonthly_value = raise_invested_value(\n    monthly_raise=monthly_raise,\n    invest_share=share,\n    rate=raise_rate,\n    years=raise_years,\n)\nyearly_value = wealth_formula(\n    median_income=monthly_raise * 12,\n    savings_rate=share,\n    annual_return=raise_rate,\n    years=raise_years,\n)\nmonthly_value, yearly_value\n\n(162014.33860462217, 151797.69051849932)\n\n\nThe same dollars come out about $10,217 ahead when they’re invested every month. Each monthly deposit starts growing sooner, which is one more reason to automate the transfer the day the raise arrives.\n\n\nRecap\nwealth_formula() and raise_invested_value() show how a steady deposit turns into a balance that is mostly growth. Time does more of the work than the deposits do. fixed_cost_ratio() tells you how much of each paycheck is committed before you spend anything, and returns a percent you can compare against the 60% ceiling. Together they make the chapter’s advice measurable: keep fixed costs low, and invest part of every raise before your lifestyle absorbs it.\n\nIncome in Personal Finance: a field manual\nReference: wealth_formula(), fixed_cost_ratio(), raise_invested_value()\nNext: Tracking Spending",
+    "crumbs": [
+      "User Guide",
+      "Foundations",
+      "Income"
+    ]
+  },
+  {
+    "objectID": "user-guide/investing-basics.html",
+    "href": "user-guide/investing-basics.html",
+    "title": "Investing Basics",
+    "section": "",
+    "text": "Investing math is mostly one idea (compounding) applied a few different ways. You want to know what money invested today grows into, how long it takes to double, and what a monthly habit adds up to. You also want to know how much of a return is left once inflation takes its share. In this page I’ll answer those questions with future_value(), rule_of_72(), future_value_series(), and real_return(). The numbers come from the Investing Basics chapter of the book, so you can check every result against it.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Investing Basics"
+    ]
+  },
+  {
+    "objectID": "user-guide/investing-basics.html#how-long-until-money-doubles",
+    "href": "user-guide/investing-basics.html#how-long-until-money-doubles",
+    "title": "Investing Basics",
+    "section": "How long until money doubles?",
+    "text": "How long until money doubles?\nThe rule of 72 is a shortcut: divide 72 by the yearly return (as a percent) to estimate the years it takes to double. rule_of_72() is the one function in the package that takes a percent, so 7% goes in as 7:\n\ndouble_years = rule_of_72(annual_return_pct=7)\ndouble_years\n\n10.285714285714286\n\n\nAt 7%, money doubles about every 10.3 years. That matches the bar model: $10,000 at year 0 is close to $20,000 at year 10 and close to $40,000 at year 20.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Investing Basics"
+    ]
+  },
+  {
+    "objectID": "user-guide/investing-basics.html#one-call-compares-every-checkpoint",
+    "href": "user-guide/investing-basics.html#one-call-compares-every-checkpoint",
+    "title": "Investing Basics",
+    "section": "One call compares every checkpoint",
+    "text": "One call compares every checkpoint\nPassing several horizons to periods reproduces each bar in the contributions bar model, with the money contributed alongside:\n\nyears = [10, 20, 30]\npl.DataFrame({\n    \"years\": years,\n    \"contributed\": [500 * 12 * y for y in years],\n    \"value\": future_value_series(\n        contribution=500, rate=0.07 / 12, periods=[y * 12 for y in years]\n    ),\n})\n\n\nshape: (3, 3)yearscontributedvaluei64i64f64106000086542.40371720120000260463.32991330180000609985.497888\n\n\n\n\n\n\n\n\nWarningLimits\n\n\n\nThese functions are for planning, not prediction. A few things they don’t do:\n\nfuture_value() and future_value_series() assume the same return every year. Real returns bounce around, and they ignore taxes, fund fees, and inflation unless you pass a real return.\nfuture_value_series() assumes each contribution is made at the end of the period. The rate is per period, so passing a yearly rate with monthly periods gives a much larger (wrong) answer. A 0% rate returns the sum of the contributions.\nrule_of_72() is an estimate, and it takes a percent (7, not 0.07). A return of 0 or less raises a ValueError, because money that doesn’t grow never doubles.\nreal_return() returns a decimal, not a percent.",
+    "crumbs": [
+      "User Guide",
+      "Investing",
+      "Investing Basics"
+    ]
+  },
+  {
+    "objectID": "package-info.html",
+    "href": "package-info.html",
+    "title": "Package Info",
+    "section": "",
+    "text": "Package\nVersion Constraint\nLast Published\nPyPI\n\n\n\n\nnumpy\n&gt;=1.24\n2026-10-10\n\n\n\npolars\n&gt;=1.0\n2026-10-25"
+  },
+  {
+    "objectID": "package-info.html#dev",
+    "href": "package-info.html#dev",
+    "title": "Package Info",
+    "section": "dev",
+    "text": "dev\n\n\n\nPackage\nVersion Constraint\nEnvironment Marker\nLast Published\nPyPI\n\n\n\n\npytest\n—\n\n2026-10-27\n\n\n\npytest-cov\n—\n\n2026-03-21\n\n\n\nruff\n—\n\n2026-10-27\n\n\n\nmypy\n—\n\n2026-10-28\n\n\n\nrich\n—\n\n2026-04-12\n\n\n\njupyter\n—\n\n2024-08-30\n\n\n\ngreat-docs\n—\npython_version &gt;= \"3.11\"\n2026-08-13"
+  },
+  {
+    "objectID": "reference/to_monthly.html",
+    "href": "reference/to_monthly.html",
+    "title": "to_monthly()",
+    "section": "",
+    "text": "Convert a daily, weekly, or yearly amount to a monthly amount.\n\n\nUsage\nSource\n\n\nto_monthly(amount, period=\"daily\")\n\n\nUses the book’s rounded factors: 30.44 days and 4.33 weeks per month, so a round trip through to_annual() drifts slightly. From the Budgeting chapter.\n\n\nParameters\n\n\namount: ArrayLike\n\nAmount per period.\n\nperiod: Literal[\"daily\", \"weekly\", \"annual\"] = \"daily\"\n\nOne of \"daily\", \"weekly\", or \"annual\".\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly amounts.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf amount is not numeric.\n\n ValueError\n\nIf amount contains missing values, or period is not one of the choices.\n\n\n\n\n\nSee Also\n\n\n\nConvert to a yearly amount.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import to_monthly\n&gt;&gt;&gt; # $150 a week in groceries\n&gt;&gt;&gt; to_monthly(amount=150, period=\"weekly\")\n649.5",
+    "crumbs": [
+      "Reference",
+      "Budgeting",
+      "to_monthly"
+    ]
+  },
+  {
+    "objectID": "reference/savings_rate.html",
+    "href": "reference/savings_rate.html",
+    "title": "savings_rate()",
+    "section": "",
+    "text": "Savings rate: the percent of income not spent.\n\n\nUsage\nSource\n\n\nsavings_rate(income, spending)\n\n\nFrom the Savings Strategies chapter.\n\n\nParameters\n\n\nincome: ArrayLike\n\nIncome for the period. Must be greater than 0.\n\nspending: ArrayLike\n\nSpending for the same period.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nPercentages (15 is 15%). Negative when spending exceeds income.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or income is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import savings_rate\n&gt;&gt;&gt; savings_rate(income=3200, spending=2720)\n15.0",
+    "crumbs": [
+      "Reference",
+      "Savings Strategies",
+      "savings_rate"
+    ]
+  },
+  {
+    "objectID": "reference/months_to_fund.html",
+    "href": "reference/months_to_fund.html",
+    "title": "months_to_fund()",
+    "section": "",
+    "text": "Whole months to fund a goal with no interest.\n\n\nUsage\nSource\n\n\nmonths_to_fund(goal, monthly)\n\n\nFrom the Financial Goals chapter.\n\n\nParameters\n\n\ngoal: ArrayLike\n\nAmount needed.\n\nmonthly: ArrayLike\n\nAmount saved each month. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n int or numpy.ndarray\n\nWhole months, rounded up.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or monthly is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import months_to_fund\n&gt;&gt;&gt; # one at a time: a $3,000 trip, then a $9,000 car, at $600/month\n&gt;&gt;&gt; months_to_fund(3000, 600), months_to_fund(3000 + 9000, 600)\n(5, 20)",
+    "crumbs": [
+      "Reference",
+      "Financial Goals",
+      "months_to_fund"
+    ]
+  },
+  {
+    "objectID": "reference/mortgage_payment.html",
+    "href": "reference/mortgage_payment.html",
+    "title": "mortgage_payment()",
+    "section": "",
+    "text": "Monthly payment on a fixed rate loan.\n\n\nUsage\nSource\n\n\nmortgage_payment(principal, annual_rate, years)\n\n\nThe standard amortization formula with monthly compounding. A 0% rate gives principal / (years * 12). From the Major Purchases chapter.\n\n\nParameters\n\n\nprincipal: ArrayLike\n\nAmount borrowed.\n\nannual_rate: ArrayLike\n\nYearly interest rate, as a decimal.\n\nyears: ArrayLike\n\nLoan term in years. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly payments (principal and interest only).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or years is not greater than 0.\n\n\n\n\n\nSee Also\n\n\n\nInterest and principal in the first payment.\n\n\n\nStudent loan defaults.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import mortgage_payment\n&gt;&gt;&gt; # $480,000 loan at 6% over 30 years\n&gt;&gt;&gt; mortgage_payment(principal=480000, annual_rate=0.06, years=30)\n2877.84",
+    "crumbs": [
+      "Reference",
+      "Major Purchases",
+      "mortgage_payment"
+    ]
+  },
+  {
+    "objectID": "reference/opportunity_cost.html",
+    "href": "reference/opportunity_cost.html",
+    "title": "opportunity_cost()",
+    "section": "",
+    "text": "What an amount could grow to if invested instead of spent.\n\n\nUsage\nSource\n\n\nopportunity_cost(amount, rate, years)\n\n\nCompounds amount once a year at rate. From the Budgeting chapter.\n\n\nParameters\n\n\namount: ArrayLike\n\nAmount spent today.\n\nrate: ArrayLike\n\nYearly return, as a decimal.\n\nyears: ArrayLike\n\nNumber of years.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nFuture values.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import opportunity_cost\n&gt;&gt;&gt; # $25,000 saved on a car, invested at 7% for 30 years\n&gt;&gt;&gt; opportunity_cost(amount=25000, rate=0.07, years=30)\n190306.37",
+    "crumbs": [
+      "Reference",
+      "Budgeting",
+      "opportunity_cost"
+    ]
+  },
+  {
+    "objectID": "reference/future_value.html",
+    "href": "reference/future_value.html",
+    "title": "future_value()",
+    "section": "",
+    "text": "Future value of a single amount with yearly compounding.\n\n\nUsage\nSource\n\n\nfuture_value(present_value, rate, years)\n\n\nFrom the Investing Basics chapter.\n\n\nParameters\n\n\npresent_value: ArrayLike\n\nAmount invested today.\n\nrate: ArrayLike\n\nYearly return, as a decimal.\n\nyears: ArrayLike\n\nNumber of years.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nFuture values.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nSee Also\n\n\n\nFuture value of regular contributions.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import future_value\n&gt;&gt;&gt; # $10,000 at 7% for 10 years\n&gt;&gt;&gt; future_value(present_value=10000, rate=0.07, years=10)\n19671.51\n&gt;&gt;&gt; # several horizons in one call\n&gt;&gt;&gt; future_value(present_value=10000, rate=0.07, years=[5, 10, 20, 30])\narray([14025.517307 , 19671.5135729 , 38696.84462486, 76122.55042662])",
+    "crumbs": [
+      "Reference",
+      "Investing Basics",
+      "future_value"
+    ]
+  },
+  {
+    "objectID": "reference/after_tax_value.html",
+    "href": "reference/after_tax_value.html",
+    "title": "after_tax_value()",
+    "section": "",
+    "text": "After tax value of a retirement contribution.\n\n\nUsage\nSource\n\n\nafter_tax_value(contribution, tax_rate, rate, years)\n\n\nTaxes the contribution once at tax_rate, then grows it. With the same rate and return, it doesn’t matter whether the tax comes first (Roth) or last (Traditional); only the tax rate does. From the Retirement Accounts chapter.\n\n\nParameters\n\n\ncontribution: ArrayLike\n\nAmount contributed.\n\ntax_rate: ArrayLike\n\nTax rate applied, as a decimal.\n\nrate: ArrayLike\n\nYearly return, as a decimal.\n\nyears: ArrayLike\n\nNumber of years.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nAfter tax values.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import after_tax_value\n&gt;&gt;&gt; # Roth at 12% today vs. Traditional at 22% in retirement\n&gt;&gt;&gt; after_tax_value(contribution=1000, tax_rate=[0.12, 0.22], rate=0.07,\n...                 years=40)\narray([13177.5228985 , 11680.07711458])",
+    "crumbs": [
+      "Reference",
+      "Retirement Accounts",
+      "after_tax_value"
+    ]
+  },
+  {
+    "objectID": "reference/dti_ratio.html",
+    "href": "reference/dti_ratio.html",
+    "title": "dti_ratio()",
+    "section": "",
+    "text": "Debt to income ratio.\n\n\nUsage\nSource\n\n\ndti_ratio(monthly_debt_payments, gross_monthly_income)\n\n\nMonthly debt payments as a percent of gross monthly income. From the Managing Debt chapter.\n\n\nParameters\n\n\nmonthly_debt_payments: ArrayLike\n\nTotal monthly debt payments.\n\ngross_monthly_income: ArrayLike\n\nMonthly income before taxes. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nPercentages (28.3 is 28.3%).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or gross_monthly_income is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import dti_ratio\n&gt;&gt;&gt; dti_ratio(monthly_debt_payments=1061, gross_monthly_income=3750)\n28.29",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "dti_ratio"
+    ]
+  },
+  {
+    "objectID": "reference/rent_buy_threshold.html",
+    "href": "reference/rent_buy_threshold.html",
+    "title": "rent_buy_threshold()",
+    "section": "",
+    "text": "Monthly rent that matches the unrecoverable cost of owning.\n\n\nUsage\nSource\n\n\nrent_buy_threshold(home_value, unrecoverable_rate=0.05)\n\n\nThe 5% rule: property tax, maintenance, and the cost of capital come to about 5% of the home’s value each year. Rent below this monthly amount favors renting. From the Major Purchases chapter.\n\n\nParameters\n\n\nhome_value: ArrayLike\n\nPrice of the home.\n\nunrecoverable_rate: ArrayLike = 0.05\n\nYearly unrecoverable cost, as a decimal. Defaults to 0.05.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly rent thresholds.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import rent_buy_threshold\n&gt;&gt;&gt; rent_buy_threshold(home_value=500000)\n2083.33",
+    "crumbs": [
+      "Reference",
+      "Major Purchases",
+      "rent_buy_threshold"
+    ]
+  },
+  {
+    "objectID": "reference/raise_kept.html",
+    "href": "reference/raise_kept.html",
+    "title": "raise_kept()",
+    "section": "",
+    "text": "How much of a raise you keep after federal income tax.\n\n\nUsage\nSource\n\n\nraise_kept(old_income, raise_amount)\n\n\nThe raise minus the extra tax it adds, using income_tax(). From the Taxes chapter.\n\n\nParameters\n\n\nold_income: float\n\nYearly gross income before the raise. A single number.\n\nraise_amount: float\n\nSize of the raise. A single number.\n\n\n\n\n\nReturns\n\n\n float\n\nAmount of the raise kept after tax.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values or is not a single number.\n\n\n\n\n\nSee Also\n\n\n\nThe tax calculation used here.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import raise_kept\n&gt;&gt;&gt; # $2,000 raise on a $66,000 salary\n&gt;&gt;&gt; raise_kept(old_income=66000, raise_amount=2000)\n1610.0",
+    "crumbs": [
+      "Reference",
+      "Taxes",
+      "raise_kept"
+    ]
+  },
+  {
+    "objectID": "reference/monthly_standard_payment.html",
+    "href": "reference/monthly_standard_payment.html",
+    "title": "monthly_standard_payment()",
+    "section": "",
+    "text": "Monthly payment on a standard student loan repayment plan.\n\n\nUsage\nSource\n\n\nmonthly_standard_payment(principal, annual_rate=0.065, years=10)\n\n\nThe same amortization formula as mortgage_payment(), with student loan defaults (6.5% over 10 years). From the Managing Debt chapter.\n\n\nParameters\n\n\nprincipal: ArrayLike\n\nAmount borrowed.\n\nannual_rate: ArrayLike = 0.065\n\nYearly interest rate, as a decimal. Defaults to 0.065.\n\nyears: ArrayLike = 10\n\nRepayment term in years. Defaults to 10. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly payments.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or years is not greater than 0.\n\n\n\n\n\nSee Also\n\n\n\nThe general amortization formula.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import monthly_standard_payment\n&gt;&gt;&gt; monthly_standard_payment(principal=45000)\n510.96",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "monthly_standard_payment"
+    ]
+  },
+  {
+    "objectID": "reference/raise_invested_value.html",
+    "href": "reference/raise_invested_value.html",
+    "title": "raise_invested_value()",
+    "section": "",
+    "text": "Future value of investing part of a raise.\n\n\nUsage\nSource\n\n\nraise_invested_value(monthly_raise, invest_share, rate, years)\n\n\nInvests monthly_raise * invest_share every month, compounded monthly. From the Income chapter.\n\n\nParameters\n\n\nmonthly_raise: ArrayLike\n\nMonthly increase in take home pay.\n\ninvest_share: ArrayLike\n\nShare of the raise invested, as a decimal.\n\nrate: ArrayLike\n\nYearly return, as a decimal.\n\nyears: ArrayLike\n\nNumber of years.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nEnding balances.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nSee Also\n\n\n\nYearly version for saving part of an income.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import raise_invested_value\n&gt;&gt;&gt; # invest half of a $200/month raise at 7% for 30 years\n&gt;&gt;&gt; raise_invested_value(200, invest_share=0.5, rate=0.07, years=30)\n121997.09",
+    "crumbs": [
+      "Reference",
+      "Income",
+      "raise_invested_value"
+    ]
+  },
+  {
+    "objectID": "reference/plan_cost.html",
+    "href": "reference/plan_cost.html",
+    "title": "plan_cost()",
+    "section": "",
+    "text": "Yearly cost of a health plan.\n\n\nUsage\nSource\n\n\nplan_cost(monthly_premium, medical_cost, oop_max, employer_hsa=0)\n\n\nTwelve premiums plus what you pay for care (capped at the out of pocket maximum), minus any employer HSA contribution. Use float(\"inf\") for medical_cost to get the worst case year. From the Insurance chapter.\n\n\nParameters\n\n\nmonthly_premium: ArrayLike\n\nMonthly premium.\n\nmedical_cost: ArrayLike\n\nMedical costs for the year.\n\noop_max: ArrayLike\n\nOut of pocket maximum.\n\nemployer_hsa: ArrayLike = 0\n\nEmployer HSA contribution. Defaults to 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nYearly costs.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import plan_cost\n&gt;&gt;&gt; # Plan A in a healthy year ($300 of care) and the worst year\n&gt;&gt;&gt; plan_cost(100, [300, float(\"inf\")], oop_max=3000)\narray([1500., 4200.])\n&gt;&gt;&gt; # Plan B, with a $500 employer HSA contribution\n&gt;&gt;&gt; plan_cost(40, [300, float(\"inf\")], oop_max=5000, employer_hsa=500)\narray([ 280., 4980.])",
+    "crumbs": [
+      "Reference",
+      "Insurance",
+      "plan_cost"
+    ]
+  },
+  {
+    "objectID": "reference/loan_income_ratio.html",
+    "href": "reference/loan_income_ratio.html",
+    "title": "loan_income_ratio()",
+    "section": "",
+    "text": "Total student loans as a multiple of expected starting salary.\n\n\nUsage\nSource\n\n\nloan_income_ratio(loan_total, expected_salary)\n\n\nA ratio at or below 1 means you borrow no more than your first year’s salary. From the Managing Debt chapter.\n\n\nParameters\n\n\nloan_total: ArrayLike\n\nTotal amount borrowed.\n\nexpected_salary: ArrayLike\n\nExpected yearly starting salary. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nRatios (1.07 is 107% of salary).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or expected_salary is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import loan_income_ratio\n&gt;&gt;&gt; loan_income_ratio(loan_total=45000, expected_salary=42000)\n1.0714",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "loan_income_ratio"
+    ]
+  },
+  {
+    "objectID": "reference/monthly_for_goal.html",
+    "href": "reference/monthly_for_goal.html",
+    "title": "monthly_for_goal()",
+    "section": "",
+    "text": "Monthly saving needed to reach a goal.\n\n\nUsage\nSource\n\n\nmonthly_for_goal(goal, annual_rate, months)\n\n\nSolves the future value of a series for the contribution, compounding monthly at annual_rate / 12. A 0% rate gives goal / months. From the Financial Goals chapter.\n\n\nParameters\n\n\ngoal: ArrayLike\n\nAmount needed.\n\nannual_rate: ArrayLike\n\nYearly return on savings, as a decimal.\n\nmonths: ArrayLike\n\nMonths until the goal. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly contributions.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or months is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import monthly_for_goal\n&gt;&gt;&gt; # $15,000 in 5 years at 4%, compared to no interest\n&gt;&gt;&gt; monthly_for_goal(goal=15000, annual_rate=[0.04, 0], months=60)\narray([226.24783083, 250. ])",
+    "crumbs": [
+      "Reference",
+      "Financial Goals",
+      "monthly_for_goal"
+    ]
+  },
+  {
+    "objectID": "reference/employer_match.html",
+    "href": "reference/employer_match.html",
+    "title": "employer_match()",
+    "section": "",
+    "text": "Yearly employer match on retirement contributions.\n\n\nUsage\nSource\n\n\nemployer_match(salary, contribution_pct, match_limit_pct, match_rate)\n\n\nThe employer matches match_rate of your contributions, up to match_limit_pct of salary. From the Retirement Accounts chapter.\n\n\nParameters\n\n\nsalary: ArrayLike\n\nYearly salary.\n\ncontribution_pct: ArrayLike\n\nShare of salary you contribute, as a decimal.\n\nmatch_limit_pct: ArrayLike\n\nShare of salary the employer matches up to, as a decimal.\n\nmatch_rate: ArrayLike\n\nShare of each matched dollar the employer adds, as a decimal.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nYearly employer contributions.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import employer_match\n&gt;&gt;&gt; # $45,000 salary, 50% match on the first 6%, contributing 6% or 3%\n&gt;&gt;&gt; employer_match(salary=45000, contribution_pct=[0.06, 0.03],\n...                match_limit_pct=0.06, match_rate=0.50)\narray([1350., 675.])",
+    "crumbs": [
+      "Reference",
+      "Retirement Accounts",
+      "employer_match"
+    ]
+  },
+  {
+    "objectID": "reference/index.html",
+    "href": "reference/index.html",
+    "title": "API Reference",
+    "section": "",
+    "text": "Income\n\nFoundations. Functions from the Income chapter.\n\n\nwealth_formula()\n\nWealth from saving part of an income every year.\n\nfixed_cost_ratio()\n\nFixed costs as a percent of take home pay.\n\nraise_invested_value()\n\nFuture value of investing part of a raise.\n\n\n\n\nTracking Spending\n\nFoundations. Functions from the Tracking Spending chapter.\n\n\napply_rules()\n\nCategorize transactions with keyword rules.\n\nsubscription_opportunity_cost()\n\nWhat a subscription would grow to if invested instead.\n\n\n\n\nBudgeting\n\nFoundations. Functions from the Budgeting chapter.\n\n\npercent_of_income()\n\nAn expense as a percent of income.\n\nto_annual()\n\nConvert a daily, weekly, or monthly amount to a yearly amount.\n\nto_monthly()\n\nConvert a daily, weekly, or yearly amount to a monthly amount.\n\nopportunity_cost()\n\nWhat an amount could grow to if invested instead of spent.\n\nmonths_to_break_even()\n\nMonths until monthly savings cover an upfront cost.\n\n\n\n\nManaging Debt\n\nFoundations. Functions from the Managing Debt chapter.\n\n\napr_to_apy()\n\nConvert an APR to an annual percentage yield (APY).\n\nmonths_to_payoff()\n\nMonths to pay off a balance with a fixed payment.\n\ntotal_interest()\n\nTotal interest paid over the life of a loan.\n\nloan_income_ratio()\n\nTotal student loans as a multiple of expected starting salary.\n\nmonthly_standard_payment()\n\nMonthly payment on a standard student loan repayment plan.\n\nidr_monthly_payment()\n\nIncome driven repayment (IDR) monthly payment.\n\ndti_ratio()\n\nDebt to income ratio.\n\npayoff_vs_invest()\n\nPay off a debt or invest the difference.\n\norder_avalanche()\n\nOrder debts for the avalanche method (highest APR first).\n\norder_snowball()\n\nOrder debts for the snowball method (smallest balance first).\n\ncredit_utilization()\n\nCredit utilization: a card balance as a percent of its limit.\n\n\n\n\nEmergency Fund\n\nFoundations. Functions from the Emergency Fund chapter.\n\n\nemergency_fund_target()\n\nEmergency fund target.\n\nmonths_to_ef_goal()\n\nMonths to reach an emergency fund target.\n\nmonthly_contribution_needed()\n\nMonthly contribution needed to reach an emergency fund target.\n\nef_growth()\n\nEmergency fund balance after earning interest.\n\n\n\n\nSavings Strategies\n\nSavings. Functions from the Savings Strategies chapter.\n\n\nsavings_rate()\n\nSavings rate: the percent of income not spent.\n\n\n\n\nHigh-Yield Savings Accounts\n\nSavings. Functions from the High-Yield Savings Accounts chapter.\n\n\nhysa_balance()\n\nHigh-yield savings account balance.\n\n\n\n\nAutomating Savings\n\nSavings. Functions from the Automating Savings chapter.\n\n\nmonthly_savings()\n\nMonthly amount to pay yourself first.\n\n\n\n\nInvesting Basics\n\nInvesting. Functions from the Investing Basics chapter.\n\n\nfuture_value()\n\nFuture value of a single amount with yearly compounding.\n\nrule_of_72()\n\nYears for money to double, by the rule of 72.\n\nfuture_value_series()\n\nFuture value of a fixed contribution made every period.\n\nreal_return()\n\nReal (inflation adjusted) return.\n\n\n\n\nRetirement Accounts\n\nInvesting. Functions from the Retirement Accounts chapter.\n\n\nemployer_match()\n\nYearly employer match on retirement contributions.\n\nafter_tax_value()\n\nAfter tax value of a retirement contribution.\n\n\n\n\nIndex Funds\n\nInvesting. Functions from the Index Funds chapter.\n\n\nyearly_fee()\n\nYearly fund fee from an expense ratio.\n\nfuture_value_after_fees()\n\nFuture value of monthly contributions after fund fees.\n\n\n\n\nAsset Allocation\n\nInvesting. Functions from the Asset Allocation chapter.\n\n\nportfolio_return()\n\nReturn on a two fund (stock and bond) portfolio.\n\nrebalance_amount()\n\nAmount to buy (positive) or sell (negative) to reach a target.\n\n\n\n\nTaxes\n\nTaxes and insurance. Functions from the Taxes chapter.\n\n\nincome_tax()\n\nFederal income tax for a single filer (2026 brackets).\n\nraise_kept()\n\nHow much of a raise you keep after federal income tax.\n\n\n\n\nInsurance\n\nTaxes and insurance. Functions from the Insurance chapter.\n\n\nbreak_even_years()\n\nYears of premium savings to cover a higher deductible.\n\nplan_cost()\n\nYearly cost of a health plan.\n\n\n\n\nFinancial Goals\n\nPlanning. Functions from the Financial Goals chapter.\n\n\nmonthly_for_goal()\n\nMonthly saving needed to reach a goal.\n\nmonths_to_fund()\n\nWhole months to fund a goal with no interest.\n\n\n\n\nMajor Purchases\n\nPlanning. Functions from the Major Purchases chapter.\n\n\nrent_buy_threshold()\n\nMonthly rent that matches the unrecoverable cost of owning.\n\nmortgage_payment()\n\nMonthly payment on a fixed rate loan.\n\nfirst_payment_split()\n\nInterest and principal in a loan’s first monthly payment.\n\n\n\n\nEstate Planning\n\nPlanning. Functions from the Estate Planning chapter.\n\n\nnet_worth()\n\nNet worth: total assets minus total debts.\n\nbeneficiary_share()\n\nShare of assets that pass directly to a named beneficiary.",
+    "crumbs": [
+      "Reference",
+      "API Index"
+    ]
+  },
+  {
+    "objectID": "reference/apply_rules.html",
+    "href": "reference/apply_rules.html",
+    "title": "apply_rules()",
+    "section": "",
+    "text": "Categorize transactions with keyword rules.\n\n\nUsage\nSource\n\n\napply_rules(df, rules)\n\n\nEach row of rules holds a regular expression (Pattern) and the Category it assigns. Rules are tried in order and the first match wins; matching ignores case. Descriptions that match no rule get \"Other\". From the Tracking Spending chapter.\n\n\nParameters\n\n\ndf: pl.DataFrame\n\nTransactions with a string Description column.\n\nrules: pl.DataFrame\n\nRules with string Pattern and Category columns.\n\n\n\n\n\nReturns\n\n\n polars.DataFrame\n\ndf with a Category column added (or replaced).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf df or rules is not a polars DataFrame.\n\n ValueError\n\nIf a required column is missing.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; import polars as pl\n&gt;&gt;&gt; from perfinpy import apply_rules\n&gt;&gt;&gt; transactions = pl.DataFrame(\n...     {\"Description\": [\"SAFEWAY #123\", \"NETFLIX.COM\", \"ATM FEE\"]}\n... )\n&gt;&gt;&gt; rules = pl.DataFrame(\n...     {\"Pattern\": [\"safeway\", \"netflix\"],\n...      \"Category\": [\"Groceries\", \"Subscriptions\"]}\n... )\n&gt;&gt;&gt; apply_rules(transactions, rules)[\"Category\"].to_list()\n[‘Groceries’, ‘Subscriptions’, ‘Other’]",
+    "crumbs": [
+      "Reference",
+      "Tracking Spending",
+      "apply_rules"
+    ]
+  },
+  {
+    "objectID": "reference/idr_monthly_payment.html",
+    "href": "reference/idr_monthly_payment.html",
+    "title": "idr_monthly_payment()",
+    "section": "",
+    "text": "Income driven repayment (IDR) monthly payment.\n\n\nUsage\nSource\n\n\nidr_monthly_payment(\n    agi, poverty_guideline=15960, threshold_pct=1.5, payment_rate=0.1\n)\n\n\nDiscretionary income is adjusted gross income (AGI) above threshold_pct times the poverty guideline. The yearly payment is payment_rate of that, split into 12 months and rounded to cents. From the Managing Debt chapter.\n\n\nParameters\n\n\nagi: ArrayLike\n\nAdjusted gross income.\n\npoverty_guideline: ArrayLike = 15960\n\nFederal poverty guideline for the household size. Defaults to 15960 (one person).\n\nthreshold_pct: ArrayLike = 1.5\n\nMultiple of the poverty guideline that is protected. Defaults to 1.5 (150%).\n\npayment_rate: ArrayLike = 0.1\n\nShare of discretionary income paid each year. Defaults to 0.10.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonthly payments.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import idr_monthly_payment\n&gt;&gt;&gt; # IBR: $50,000 AGI, 150% threshold, 10% rate\n&gt;&gt;&gt; idr_monthly_payment(agi=50000)\n217.17\n&gt;&gt;&gt; # IBR for loans before July 2014: 15% rate\n&gt;&gt;&gt; idr_monthly_payment(agi=50000, payment_rate=0.15)\n325.75",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "idr_monthly_payment"
+    ]
+  },
+  {
+    "objectID": "reference/wealth_formula.html",
+    "href": "reference/wealth_formula.html",
+    "title": "wealth_formula()",
+    "section": "",
+    "text": "Wealth from saving part of an income every year.\n\n\nUsage\nSource\n\n\nwealth_formula(median_income, savings_rate, annual_return, years)\n\n\nThe future value of saving median_income * savings_rate at the end of each year (contributions plus growth). From the Income chapter.\n\n\nParameters\n\n\nmedian_income: ArrayLike\n\nYearly income.\n\nsavings_rate: ArrayLike\n\nShare of income saved, as a decimal.\n\nannual_return: ArrayLike\n\nYearly return, as a decimal. A 0% return gives the sum of the contributions.\n\nyears: ArrayLike\n\nNumber of years.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nEnding balances.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nSee Also\n\n\n\nMonthly version for investing part of a raise.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import wealth_formula\n&gt;&gt;&gt; # $45,000 income, 20% saved, 7% return, 30 years\n&gt;&gt;&gt; wealth_formula(45000, savings_rate=0.20, annual_return=0.07, years=30)\n850147.07",
+    "crumbs": [
+      "Reference",
+      "Income",
+      "wealth_formula"
+    ]
+  },
+  {
+    "objectID": "reference/percent_of_income.html",
+    "href": "reference/percent_of_income.html",
+    "title": "percent_of_income()",
+    "section": "",
+    "text": "An expense as a percent of income.\n\n\nUsage\nSource\n\n\npercent_of_income(expense, income)\n\n\nexpense and income must cover the same period. From the Budgeting chapter.\n\n\nParameters\n\n\nexpense: ArrayLike\n\nAmount spent.\n\nincome: ArrayLike\n\nIncome for the same period. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nPercentages (30 is 30%).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or income is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import percent_of_income\n&gt;&gt;&gt; percent_of_income(expense=1500, income=5000)\n30.0",
+    "crumbs": [
+      "Reference",
+      "Budgeting",
+      "percent_of_income"
+    ]
+  },
+  {
+    "objectID": "reference/months_to_ef_goal.html",
+    "href": "reference/months_to_ef_goal.html",
+    "title": "months_to_ef_goal()",
+    "section": "",
+    "text": "Months to reach an emergency fund target.\n\n\nUsage\nSource\n\n\nmonths_to_ef_goal(target, current_balance, monthly_contribution)\n\n\nRounded up to whole months. Returns 0 when the fund is already at or above the target. From the Emergency Fund chapter.\n\n\nParameters\n\n\ntarget: ArrayLike\n\nTarget balance.\n\ncurrent_balance: ArrayLike\n\nAmount already saved.\n\nmonthly_contribution: ArrayLike\n\nAmount added each month. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n int or numpy.ndarray\n\nWhole months.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or monthly_contribution is not greater than 0.\n\n\n\n\n\nSee Also\n\n\n\nSolve for the contribution instead.\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import months_to_ef_goal\n&gt;&gt;&gt; months_to_ef_goal(target=9600, current_balance=1200,\n...                   monthly_contribution=400)\n21",
+    "crumbs": [
+      "Reference",
+      "Emergency Fund",
+      "months_to_ef_goal"
+    ]
+  },
+  {
+    "objectID": "reference/months_to_payoff.html",
+    "href": "reference/months_to_payoff.html",
+    "title": "months_to_payoff()",
+    "section": "",
+    "text": "Months to pay off a balance with a fixed payment.\n\n\nUsage\nSource\n\n\nmonths_to_payoff(balance, monthly_payment, apr)\n\n\nInterest compounds monthly at apr / 12. The result is not rounded; the last payment is a partial one. From the Managing Debt chapter.\n\n\nParameters\n\n\nbalance: ArrayLike\n\nCurrent balance. Must be greater than 0.\n\nmonthly_payment: ArrayLike\n\nFixed monthly payment. Must be greater than 0.\n\napr: ArrayLike\n\nAnnual percentage rate, as a decimal.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nMonths.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, balance or monthly_payment is not greater than 0, or the payment does not cover the first month’s interest (the balance would never be paid off).\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import months_to_payoff\n&gt;&gt;&gt; # $5,000 balance, $100/month, 22% APR\n&gt;&gt;&gt; months_to_payoff(balance=5000, monthly_payment=100, apr=0.22)\n136.779",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "months_to_payoff"
+    ]
+  },
+  {
+    "objectID": "reference/credit_utilization.html",
+    "href": "reference/credit_utilization.html",
+    "title": "credit_utilization()",
+    "section": "",
+    "text": "Credit utilization: a card balance as a percent of its limit.\n\n\nUsage\nSource\n\n\ncredit_utilization(balance, credit_limit)\n\n\nFrom the Managing Debt chapter.\n\n\nParameters\n\n\nbalance: ArrayLike\n\nCard balance.\n\ncredit_limit: ArrayLike\n\nCredit limit. Must be greater than 0.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nPercentages (30 is 30%).\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values, or credit_limit is not greater than 0.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import credit_utilization\n&gt;&gt;&gt; credit_utilization(balance=900, credit_limit=3000)\n30.0",
+    "crumbs": [
+      "Reference",
+      "Managing Debt",
+      "credit_utilization"
+    ]
+  },
+  {
+    "objectID": "reference/ef_growth.html",
+    "href": "reference/ef_growth.html",
+    "title": "ef_growth()",
+    "section": "",
+    "text": "Emergency fund balance after earning interest.\n\n\nUsage\nSource\n\n\nef_growth(balance, apy, months)\n\n\nGrows balance at apy for months / 12 years. From the Emergency Fund chapter.\n\n\nParameters\n\n\nbalance: ArrayLike\n\nStarting balance.\n\napy: ArrayLike\n\nAnnual percentage yield, as a decimal.\n\nmonths: ArrayLike\n\nNumber of months.\n\n\n\n\n\nReturns\n\n\n float or numpy.ndarray\n\nEnding balances.\n\n\n\n\n\nRaises\n\n\n TypeError\n\nIf an argument is not numeric.\n\n ValueError\n\nIf an argument contains missing values.\n\n\n\n\n\nExamples\n&gt;&gt;&gt; from perfinpy import ef_growth\n&gt;&gt;&gt; ef_growth(balance=9600, apy=0.04, months=12)\n9984.0",
+    "crumbs": [
+      "Reference",
+      "Emergency Fund",
+      "ef_growth"
+    ]
+  }
+]

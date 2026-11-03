@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Budgeting – perfinpy | perfinpy</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../user-guide/managing-debt.html" rel="next">
+<link href="../user-guide/tracking-spending.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-da3a441c3c7246fda6cc7ef6fe580490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script src="../theme-init.js"></script>
+
+
+  <link rel="alternate" type="text/markdown" href="budgeting.md">
+  <link rel="canonical" href="https://mjfrigaard.github.io/perfinpy/user-guide/budgeting.html">
+  <meta name="description" content="Most budgeting decisions come down to a handful of small calculations. You need to know how big a slice of your paycheck an expense takes and what a...">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Budgeting – perfinpy | perfinpy">
+  <meta property="og:description" content="Most budgeting decisions come down to a handful of small calculations. You need to know how big a slice of your paycheck an expense takes and what a...">
+  <meta property="og:url" content="https://mjfrigaard.github.io/perfinpy/user-guide/budgeting.html">
+  <meta property="og:site_name" content="perfinpy">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Budgeting – perfinpy | perfinpy">
+  <meta name="twitter:description" content="Most budgeting decisions come down to a handful of small calculations. You need to know how big a slice of your paycheck an expense takes and what a...">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">perfinpy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class=""></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../user-guide/get-started.html" aria-current="page"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reference/index.html"> 
+<span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <span class="nav-link">
+<div id="github-widget" data-owner="mjfrigaard" data-repo="perfinpy" data-stars="0" data-forks="0"></div>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Budgeting</h1>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Get started</span></a>
+</div>
+      <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get started</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Foundations</span></a>
+</div>
+      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/income.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Income</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/tracking-spending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tracking Spending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/budgeting.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Budgeting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/managing-debt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Managing Debt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/emergency-fund.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Emergency Fund</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Savings</span></a>
+</div>
+      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/savings-strategies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Savings Strategies</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/high-yield-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">High-Yield Savings Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/automating-savings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automating Savings</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Investing</span></a>
+</div>
+      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/investing-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Investing Basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/retirement-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Retirement Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/index-funds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index Funds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asset Allocation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Taxes and insurance</span></a>
+</div>
+      <ul id="quarto-sidebar-section-5" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/taxes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Taxes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/insurance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Insurance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Planning</span></a>
+</div>
+      <ul id="quarto-sidebar-section-6" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/financial-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Financial Goals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/major-purchases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Major Purchases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/estate-planning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estate Planning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#the-budgeting-functions" id="toc-the-budgeting-functions" class="nav-link active" data-scroll-target="#the-budgeting-functions">The budgeting functions</a></li>
+  <li><a href="#what-share-of-income-does-an-expense-take" id="toc-what-share-of-income-does-an-expense-take" class="nav-link" data-scroll-target="#what-share-of-income-does-an-expense-take">What share of income does an expense take?</a></li>
+  <li><a href="#what-does-a-small-habit-cost-over-a-year" id="toc-what-does-a-small-habit-cost-over-a-year" class="nav-link" data-scroll-target="#what-does-a-small-habit-cost-over-a-year">What does a small habit cost over a year?</a>
+  <ul class="collapse">
+  <li><a href="#most-budgets-work-in-months" id="toc-most-budgets-work-in-months" class="nav-link" data-scroll-target="#most-budgets-work-in-months">Most budgets work in months</a></li>
+  </ul></li>
+  <li><a href="#what-could-the-money-have-become" id="toc-what-could-the-money-have-become" class="nav-link" data-scroll-target="#what-could-the-money-have-become">What could the money have become?</a></li>
+  <li><a href="#when-does-an-upfront-cost-pay-for-itself" id="toc-when-does-an-upfront-cost-pay-for-itself" class="nav-link" data-scroll-target="#when-does-an-upfront-cost-pay-for-itself">When does an upfront cost pay for itself?</a></li>
+  <li><a href="#variations" id="toc-variations" class="nav-link" data-scroll-target="#variations">Variations</a>
+  <ul class="collapse">
+  <li><a href="#one-call-compares-every-time-horizon" id="toc-one-call-compares-every-time-horizon" class="nav-link" data-scroll-target="#one-call-compares-every-time-horizon">One call compares every time horizon</a></li>
+  </ul></li>
+  <li><a href="#putting-it-together" id="toc-putting-it-together" class="nav-link" data-scroll-target="#putting-it-together">Putting it together</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Budgeting</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Most budgeting decisions come down to a handful of small calculations. You need to know how big a slice of your paycheck an expense takes and what a daily habit costs over a year. You also need to know what money spent today could have grown into, and how long an upfront purchase takes to pay for itself. The <a href="https://mjfrigaard.github.io/fm-finance/budgeting.html">Budgeting</a> chapter of the book builds each of these from scratch. In this page I’ll answer the same questions with <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a>, <a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a>, <a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a>, <a href="../reference/opportunity_cost.html#perfinpy.opportunity_cost" class="gdls-link gdls-code">opportunity_cost()</a>, and <a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a>, using the chapter’s numbers so you can check every result against the book.</p>
+<section id="the-budgeting-functions" class="level1">
+<h1>The budgeting functions</h1>
+<p>All five functions accept arrays, and they follow the conventions in <a href="../user-guide/get-started.html">Get started</a>: rates go in as decimals and ratios come out as percents.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a></td>
+<td>an expense as a share of income</td>
+<td>percent (<code>30</code> is 30%)</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a></td>
+<td>a daily, weekly, or monthly amount per year</td>
+<td>dollars per year</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a></td>
+<td>a daily, weekly, or annual amount per month</td>
+<td>dollars per month</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/opportunity_cost.html#perfinpy.opportunity_cost" class="gdls-link gdls-code">opportunity_cost()</a></td>
+<td>what an amount could grow to if invested</td>
+<td>dollars (<code>rate</code> is a decimal)</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a></td>
+<td>months until savings cover an upfront cost</td>
+<td>months, not rounded</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-share-of-income-does-an-expense-take" class="level1">
+<h1>What share of income does an expense take?</h1>
+<p>The chapter’s first job example takes home $3,200 a month and pays $960 in rent. The question is how much of that paycheck rent claims.</p>
+<p>Think of the monthly take home pay as a single bar. Rent is one slice of it, and the rest of the bar is what’s left for everything else:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/budgeting-pct-bar-model.png" class="img-fluid figure-img" alt="Bar model: one horizontal bar for $3,200 of monthly take home pay, split into a vermillion slice labeled Rent $960 and a bluish green slice labeled Remaining $2,240. The rent slice covers just under a third of the bar."></p>
+<figcaption>Rent ($960) as a share of $3,200 take home pay</figcaption>
+</figure>
+</div>
+<p><a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a> divides the width of the slice by the width of the whole bar, then multiplies by 100:</p>
+<div id="cell-rent-share" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>rent_share <span class="op">=</span> percent_of_income(expense<span class="op">=</span><span class="dv">960</span>, income<span class="op">=</span><span class="dv">3200</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>rent_share</span></code></pre></div>
+<div id="rent-share" class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>30.0</code></pre>
+</div>
+</div>
+<p>Rent takes 30% of take home pay. The result is a percent, not a decimal, so <code>30</code> means 30% (see the conventions table in <a href="../user-guide/get-started.html">Get started</a>). The expense and the income need to cover the same period. A monthly rent against a yearly salary gives a share that is off by a factor of 12.</p>
+</section>
+<section id="what-does-a-small-habit-cost-over-a-year" class="level1">
+<h1>What does a small habit cost over a year?</h1>
+<p>A $5 daily coffee doesn’t feel expensive, because you only ever pay $5 at a time. The same habit looks very different at longer time scales:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/budgeting-annual-bar-model.png" class="img-fluid figure-img" alt="Bar chart of the same $5 a day coffee habit at four time scales: daily $5, weekly $35, monthly $152, and annual $1,825. The annual bar towers over the other three, which barely rise above zero."></p>
+<figcaption>The same $5 a day habit across four time periods</figcaption>
+</figure>
+</div>
+<p>Each bar is the one before it scaled by the number of periods it contains. <a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a> makes the daily to yearly jump in one step:</p>
+<div id="cell-coffee-annual" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>coffee_year <span class="op">=</span> to_annual(amount<span class="op">=</span><span class="dv">5</span>, period<span class="op">=</span><span class="st">"daily"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>coffee_year</span></code></pre></div>
+<div id="coffee-annual" class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>1825.0</code></pre>
+</div>
+</div>
+<p>The coffee habit costs $1,825 a year. Suddenly it’s a real number you can evaluate.</p>
+<section id="most-budgets-work-in-months" class="level2">
+<h2 class="anchored" data-anchor-id="most-budgets-work-in-months">Most budgets work in months</h2>
+<p><a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a> goes in the other direction. It converts a daily, weekly, or annual amount to a monthly one, which is the unit most budgets use. Here is the coffee habit per month:</p>
+<div id="cell-coffee-monthly" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>coffee_month <span class="op">=</span> to_monthly(amount<span class="op">=</span><span class="dv">5</span>, period<span class="op">=</span><span class="st">"daily"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>coffee_month</span></code></pre></div>
+<div id="coffee-monthly" class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>152.20000000000002</code></pre>
+</div>
+</div>
+<p>Coffee runs $152.20 a month, which matches the monthly bar above. The chapter’s second example converts $150 a week in groceries to a monthly amount:</p>
+<div id="cell-groceries-monthly" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>groceries_month <span class="op">=</span> to_monthly(amount<span class="op">=</span><span class="dv">150</span>, period<span class="op">=</span><span class="st">"weekly"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>groceries_month</span></code></pre></div>
+<div id="groceries-monthly" class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>649.5</code></pre>
+</div>
+</div>
+<p>Groceries come to $649.50 a month. That is more than four weeks’ worth, because a month holds about 4.33 weeks.</p>
+</section>
+</section>
+<section id="what-could-the-money-have-become" class="level1">
+<h1>What could the money have become?</h1>
+<p>The chapter frames opportunity cost with a car. Buying a used one for $15,000 instead of a new one for $40,000 frees up $25,000, which the chapter invests at 7% a year. Every dollar spent isn’t just that dollar; it’s what that dollar could have become.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/budgeting-opp-cost-bar-model.png" class="img-fluid figure-img" alt="Bar chart of $25,000 invested at 7% a year, with bluish green bars at year 0 ($25,000), year 5 ($35,064), year 10 ($49,179), year 20 ($96,742), and year 30 ($190,306). Each bar is taller than the last, and the gaps between them widen over time."></p>
+<figcaption>$25,000 invested at 7%: value at each checkpoint</figcaption>
+</figure>
+</div>
+<p>Each year multiplies the previous bar by 1.07. <a href="../reference/opportunity_cost.html#perfinpy.opportunity_cost" class="gdls-link gdls-code">opportunity_cost()</a> compounds the amount over the full horizon, with the rate as a decimal:</p>
+<div id="cell-car-gap" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>car_gap <span class="op">=</span> opportunity_cost(amount<span class="op">=</span><span class="dv">25000</span>, rate<span class="op">=</span><span class="fl">0.07</span>, years<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>car_gap</span></code></pre></div>
+<div id="car-gap" class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>190306.37606655105</code></pre>
+</div>
+</div>
+<p>After 30 years, the $25,000 gap grows to about $190,306. That’s not a car payment difference; that’s a retirement chapter.</p>
+</section>
+<section id="when-does-an-upfront-cost-pay-for-itself" class="level1">
+<h1>When does an upfront cost pay for itself?</h1>
+<p>Some purchases cost money now to save money later: a membership, a better phone plan, or a used bike for commuting. The chapter’s example is a $500 membership that saves $60 a month.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/budgeting-break-even-bar-model.png" class="img-fluid figure-img" alt="Bar chart of cumulative savings at $60 a month over 10 months, rising from $60 in month 1 to $600 in month 10, with a dashed vermillion line marking the $500 upfront cost. Months 1 through 8 are bluish green and sit below the line; months 9 and 10 are blue and rise above it."></p>
+<figcaption>$60 a month in savings accumulating toward a $500 upfront cost</figcaption>
+</figure>
+</div>
+<p>Each month the cumulative savings bar grows by $60, and break even is the first month that bar crosses the $500 line. <a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a> divides the upfront cost by the monthly savings:</p>
+<div id="cell-membership" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>be_months <span class="op">=</span> months_to_break_even(upfront_cost<span class="op">=</span><span class="dv">500</span>, monthly_savings<span class="op">=</span><span class="dv">60</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>be_months</span></code></pre></div>
+<div id="membership" class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>8.333333333333334</code></pre>
+</div>
+</div>
+<p>The membership pays for itself after 8.3 months. The result isn’t rounded. Use <code>math.ceil()</code> to find the first whole month you come out ahead: month 9, the first bar above the line in the bar model. If you’ll keep the membership longer than that, it’s worth the upfront cost.</p>
+</section>
+<section id="variations" class="level1">
+<h1>Variations</h1>
+<p>Array inputs let one call answer several versions of the same question. The chapter’s periodic expenses are a good example. Setting aside one twelfth of each annual cost every month builds a sinking fund (money saved each month for a known future expense). <a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a> converts every expense at once:</p>
+<div id="cell-sinking-funds" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sinking <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"expense"</span>: [<span class="st">"car insurance"</span>, <span class="st">"gifts"</span>, <span class="st">"car maintenance"</span>, <span class="st">"vacation"</span>],</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"annual"</span>: [<span class="dv">1200</span>, <span class="dv">600</span>, <span class="dv">1200</span>, <span class="dv">2400</span>],</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>sinking <span class="op">=</span> sinking.with_columns(</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    monthly<span class="op">=</span>to_monthly(amount<span class="op">=</span>sinking[<span class="st">"annual"</span>].to_numpy(), period<span class="op">=</span><span class="st">"annual"</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>sinking</span></code></pre></div>
+<div id="sinking-funds" class="cell-output cell-output-display" data-execution_count="8">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>expense</th><th>annual</th><th>monthly</th></tr><tr><td>str</td><td>i64</td><td>f64</td></tr></thead><tbody><tr><td>"car insurance"</td><td>1200</td><td>100.0</td></tr><tr><td>"gifts"</td><td>600</td><td>50.0</td></tr><tr><td>"car maintenance"</td><td>1200</td><td>100.0</td></tr><tr><td>"vacation"</td><td>2400</td><td>200.0</td></tr></tbody></table></div>
+</div>
+</div>
+<p>Together these periodic expenses need $450 a month. When a bill arrives, the money is already there.</p>
+<section id="one-call-compares-every-time-horizon" class="level2">
+<h2 class="anchored" data-anchor-id="one-call-compares-every-time-horizon">One call compares every time horizon</h2>
+<p>The same approach works for time horizons. Passing several values to <code>years</code> reproduces each checkpoint in the car bar model:</p>
+<div id="cell-car-gap-horizons" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>horizons <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>]</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pl.DataFrame({</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"years"</span>: horizons,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"value"</span>: opportunity_cost(amount<span class="op">=</span><span class="dv">25000</span>, rate<span class="op">=</span><span class="fl">0.07</span>, years<span class="op">=</span>horizons),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div id="car-gap-horizons" class="cell-output cell-output-display" data-execution_count="9">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 2)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>years</th><th>value</th></tr><tr><td>i64</td><td>f64</td></tr></thead><tbody><tr><td>0</td><td>25000.0</td></tr><tr><td>5</td><td>35063.793268</td></tr><tr><td>10</td><td>49178.783932</td></tr><tr><td>20</td><td>96742.111562</td></tr><tr><td>30</td><td>190306.376067</td></tr></tbody></table></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Limits">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Limits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a> uses rounded factors (30.44 days and 4.33 weeks per month), while <a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a> uses 365 days and 52 weeks per year. A round trip through both functions drifts slightly. The weekly grocery bill gives a different yearly total depending on the path:</p>
+<div id="cell-round-trip" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    to_annual(amount<span class="op">=</span><span class="dv">150</span>, period<span class="op">=</span><span class="st">"weekly"</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    to_annual(amount<span class="op">=</span>groceries_month, period<span class="op">=</span><span class="st">"monthly"</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div id="round-trip" class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>(7800.0, 7794.0)</code></pre>
+</div>
+</div>
+<p>A few other limits apply:</p>
+<ul>
+<li><a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a> accepts <code>"daily"</code>, <code>"weekly"</code>, or <code>"monthly"</code>, and <a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a> accepts <code>"daily"</code>, <code>"weekly"</code>, or <code>"annual"</code>. Any other <code>period</code> raises a <code>ValueError</code>.</li>
+<li><a href="../reference/opportunity_cost.html#perfinpy.opportunity_cost" class="gdls-link gdls-code">opportunity_cost()</a> assumes the same return every year and ignores inflation, taxes, and fund fees.</li>
+<li><a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a> assumes the savings are the same every month and ignores what the upfront cost could have earned if invested.</li>
+<li><a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a> and <a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a> raise a <code>ValueError</code> when <code>income</code> or <a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings</a> is zero or negative.</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="putting-it-together" class="level1">
+<h1>Putting it together</h1>
+<p>Back to the $3,200 first job budget. The sections above produced four monthly costs: rent, groceries, coffee, and sinking funds. <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a> takes the whole column at once, so one call shows how much of the paycheck each category claims:</p>
+<div id="cell-budget" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>budget <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"category"</span>: [<span class="st">"rent"</span>, <span class="st">"groceries"</span>, <span class="st">"coffee"</span>, <span class="st">"sinking funds"</span>],</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"monthly"</span>: [<span class="fl">960.0</span>, groceries_month, coffee_month, sinking[<span class="st">"monthly"</span>].<span class="bu">sum</span>()],</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>budget <span class="op">=</span> budget.with_columns(</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    percent<span class="op">=</span>percent_of_income(expense<span class="op">=</span>budget[<span class="st">"monthly"</span>].to_numpy(), income<span class="op">=</span><span class="dv">3200</span>).<span class="bu">round</span>(<span class="dv">1</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>budget</span></code></pre></div>
+<div id="budget" class="cell-output cell-output-display" data-execution_count="11">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>category</th><th>monthly</th><th>percent</th></tr><tr><td>str</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"rent"</td><td>960.0</td><td>30.0</td></tr><tr><td>"groceries"</td><td>649.5</td><td>20.3</td></tr><tr><td>"coffee"</td><td>152.2</td><td>4.8</td></tr><tr><td>"sinking funds"</td><td>450.0</td><td>14.1</td></tr></tbody></table></div>
+</div>
+</div>
+<p>These four categories take 69.1% of take home pay, which leaves $988.30 a month for investments, savings, and fun money.</p>
+<p>Coffee is the smallest line in the budget, but it’s also the easiest to change. The code below invests one year of coffee money at 7% for 30 years instead:</p>
+<div id="cell-coffee-invested" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>coffee_invested <span class="op">=</span> opportunity_cost(amount<span class="op">=</span>coffee_year, rate<span class="op">=</span><span class="fl">0.07</span>, years<span class="op">=</span><span class="dv">30</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>coffee_invested</span></code></pre></div>
+<div id="coffee-invested" class="cell-output cell-output-display" data-execution_count="13">
+<pre><code>13892.365452858226</code></pre>
+</div>
+</div>
+<p>One year of $5 coffees could grow to about $13,892. That doesn’t mean you should give up coffee; it means the choice now has a price you can see. The <a href="../user-guide/tracking-spending.html">Tracking Spending</a> page applies the same idea to recurring costs with <a href="../reference/subscription_opportunity_cost.html#perfinpy.subscription_opportunity_cost" class="gdls-link gdls-code">subscription_opportunity_cost()</a>.</p>
+</section>
+<section id="recap" class="level1">
+<h1>Recap</h1>
+<p>Budgeting math is middle school math, and these five functions cover the calculations the chapter relies on most. <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a> shows how big a slice each expense takes, <a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a> and <a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a> put costs on the same time scale, and <a href="../reference/opportunity_cost.html#perfinpy.opportunity_cost" class="gdls-link gdls-code">opportunity_cost()</a> and <a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a> put a price on spending decisions. Because each one accepts arrays, a single call can compare a whole budget, a list of periodic expenses, or several time horizons.</p>
+<ul>
+<li><a href="https://mjfrigaard.github.io/fm-finance/budgeting.html">Budgeting</a> in Personal Finance: a field manual</li>
+<li>Reference: <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a>, <a href="../reference/to_annual.html#perfinpy.to_annual" class="gdls-link gdls-code">to_annual()</a>, <a href="../reference/to_monthly.html#perfinpy.to_monthly" class="gdls-link gdls-code">to_monthly()</a>, <a href="../reference/opportunity_cost.html#perfinpy.opportunity_cost" class="gdls-link gdls-code">opportunity_cost()</a>, <a href="../reference/months_to_break_even.html#perfinpy.months_to_break_even" class="gdls-link gdls-code">months_to_break_even()</a></li>
+<li>Next: <a href="../user-guide/managing-debt.html">Managing Debt</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mjfrigaard\.github\.io\/perfinpy\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/tracking-spending.html" class="pagination-link" aria-label="Tracking Spending">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Tracking Spending</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../user-guide/managing-debt.html" class="pagination-link" aria-label="Managing Debt">
+        <span class="nav-page-text">Managing Debt</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+<div class="nav-footer-center">
+<p>Developed by <strong>Martin&nbsp;Frigaard</strong>.<br>Site created with <strong>Great&nbsp;Docs</strong>.</p>
+</div>
+</div>
+</footer>
+<script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
+<script src="../sidebar-wrap.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
+<script src="../sidebar-filter.js"></script>
+<script src="../dark-mode-toggle.js"></script>
+<script src="../back-to-top.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'on-this-page.js';document.body.appendChild(s);})();</script>
+<script src="../keyboard-nav.js"></script>
+<script src="../copy-code.js"></script>
+<script src="../details.js"></script>
+<script src="../mermaid-renderer.js"></script>
+<script src="../tooltips.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
+<script src="../responsive-tables.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
+<script src="../navbar-widgets.js"></script>
+
+
+
+
+</body></html>

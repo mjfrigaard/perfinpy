@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Automating Savings – perfinpy | perfinpy</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../user-guide/investing-basics.html" rel="next">
+<link href="../user-guide/high-yield-accounts.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-da3a441c3c7246fda6cc7ef6fe580490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script src="../theme-init.js"></script>
+
+
+  <link rel="alternate" type="text/markdown" href="automating-savings.md">
+  <link rel="canonical" href="https://mjfrigaard.github.io/perfinpy/user-guide/automating-savings.html">
+  <meta name="description" content="Once you know your savings rate and where the money will live, how much should leave each paycheck automatically? The Automating Savings chapter of the...">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Automating Savings – perfinpy | perfinpy">
+  <meta property="og:description" content="Once you know your savings rate and where the money will live, how much should leave each paycheck automatically? The Automating Savings chapter of the...">
+  <meta property="og:url" content="https://mjfrigaard.github.io/perfinpy/user-guide/automating-savings.html">
+  <meta property="og:site_name" content="perfinpy">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Automating Savings – perfinpy | perfinpy">
+  <meta name="twitter:description" content="Once you know your savings rate and where the money will live, how much should leave each paycheck automatically? The Automating Savings chapter of the...">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">perfinpy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class=""></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../user-guide/get-started.html" aria-current="page"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reference/index.html"> 
+<span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <span class="nav-link">
+<div id="github-widget" data-owner="mjfrigaard" data-repo="perfinpy" data-stars="0" data-forks="0"></div>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Automating Savings</h1>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Get started</span></a>
+</div>
+      <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get started</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Foundations</span></a>
+</div>
+      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/income.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Income</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/tracking-spending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tracking Spending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/budgeting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Budgeting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/managing-debt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Managing Debt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/emergency-fund.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Emergency Fund</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Savings</span></a>
+</div>
+      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/savings-strategies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Savings Strategies</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/high-yield-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">High-Yield Savings Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/automating-savings.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Automating Savings</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Investing</span></a>
+</div>
+      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/investing-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Investing Basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/retirement-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Retirement Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/index-funds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index Funds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asset Allocation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Taxes and insurance</span></a>
+</div>
+      <ul id="quarto-sidebar-section-5" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/taxes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Taxes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/insurance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Insurance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Planning</span></a>
+</div>
+      <ul id="quarto-sidebar-section-6" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/financial-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Financial Goals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/major-purchases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Major Purchases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/estate-planning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estate Planning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#the-automating-savings-function" id="toc-the-automating-savings-function" class="nav-link active" data-scroll-target="#the-automating-savings-function">The automating savings function</a></li>
+  <li><a href="#how-much-should-you-automate-each-month" id="toc-how-much-should-you-automate-each-month" class="nav-link" data-scroll-target="#how-much-should-you-automate-each-month">How much should you automate each month?</a></li>
+  <li><a href="#how-do-you-split-it-across-accounts" id="toc-how-do-you-split-it-across-accounts" class="nav-link" data-scroll-target="#how-do-you-split-it-across-accounts">How do you split it across accounts?</a></li>
+  <li><a href="#variations" id="toc-variations" class="nav-link" data-scroll-target="#variations">Variations</a></li>
+  <li><a href="#putting-it-together" id="toc-putting-it-together" class="nav-link" data-scroll-target="#putting-it-together">Putting it together</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Automating Savings</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Once you know your savings rate and where the money will live, how much should leave each paycheck automatically? The <a href="https://mjfrigaard.github.io/fm-finance/automating_savings.html">Automating Savings</a> chapter of the book argues for paying yourself first: savings move out before you see them, so saving no longer depends on willpower. In this page I’ll answer the “how much” question with <a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a>, using the chapter’s $4,000 gross monthly pay so you can check every result against the book. Then we’ll borrow functions from other chapters to follow the automated money into an emergency fund and an investment account.</p>
+<section id="the-automating-savings-function" class="level1">
+<h1>The automating savings function</h1>
+<p><a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a> follows the conventions on the <a href="../user-guide/get-started.html">Get started</a> page. Note the units: its <a href="../reference/savings_rate.html#perfinpy.savings_rate" class="gdls-link gdls-code">savings_rate</a> argument is a decimal (<code>0.20</code>), while the <a href="../reference/savings_rate.html#perfinpy.savings_rate" class="gdls-link gdls-code">savings_rate()</a> function from <a href="../user-guide/savings-strategies.html">Savings Strategies</a> returns a percent (<code>20.0</code>).</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a></td>
+<td>the monthly amount to pay yourself first</td>
+<td>dollars per month (<a href="../reference/savings_rate.html#perfinpy.savings_rate" class="gdls-link gdls-code">savings_rate</a> is a decimal)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-much-should-you-automate-each-month" class="level1">
+<h1>How much should you automate each month?</h1>
+<p>The chapter’s example earns $48,000 a year, or $4,000 a month before taxes, and aims for a 20% savings rate. The rate is measured on gross pay here because 401(k) contributions come out before taxes.</p>
+<p>Picture the gross paycheck as one bar cut into five equal fifths. One fifth goes to savings before you ever see it, and the rest is what you live on:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/automating-savings-pyf-bar-model.png" class="img-fluid figure-img" alt="Bar model: one horizontal bar for $4,000 of gross monthly pay, with dotted lines dividing it into five equal fifths. The first fifth is blue and labeled Automated savings ($800); the other four fifths are bluish green and labeled Everything else ($3,200)."></p>
+<figcaption>$4,000 of gross monthly pay with 20% automated to savings</figcaption>
+</figure>
+</div>
+<p>Taking one fifth of the bar is the same as multiplying it by 0.20, which is what <a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a> does:</p>
+<div id="cell-pay-yourself-first" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>automated <span class="op">=</span> monthly_savings(gross_monthly_income<span class="op">=</span><span class="dv">4000</span>, savings_rate<span class="op">=</span><span class="fl">0.20</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>automated</span></code></pre></div>
+<div id="pay-yourself-first" class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>800.0</code></pre>
+</div>
+</div>
+<p>The paycheck sends $800 a month to savings, which leaves $3,200 for taxes and everything else.</p>
+</section>
+<section id="how-do-you-split-it-across-accounts" class="level1">
+<h1>How do you split it across accounts?</h1>
+<p>In practice the 20% goes to several places at once. The chapter splits it into an emergency fund, a 401(k) contribution large enough to get a typical employer match, and sinking funds (money set aside each month for a known future bill). <a href="../reference/savings_rate.html#perfinpy.savings_rate" class="gdls-link gdls-code">savings_rate</a> accepts an array, so one call prices every destination:</p>
+<div id="cell-split" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>split <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"destination"</span>: [<span class="st">"emergency fund"</span>, <span class="st">"401(k) match"</span>, <span class="st">"sinking funds"</span>],</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rate"</span>: [<span class="fl">0.10</span>, <span class="fl">0.05</span>, <span class="fl">0.05</span>],</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>split <span class="op">=</span> split.with_columns(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    amount<span class="op">=</span>monthly_savings(gross_monthly_income<span class="op">=</span><span class="dv">4000</span>, savings_rate<span class="op">=</span>split[<span class="st">"rate"</span>]),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>split</span></code></pre></div>
+<div id="split" class="cell-output cell-output-display" data-execution_count="3">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>destination</th><th>rate</th><th>amount</th></tr><tr><td>str</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"emergency fund"</td><td>0.1</td><td>400.0</td></tr><tr><td>"401(k) match"</td><td>0.05</td><td>200.0</td></tr><tr><td>"sinking funds"</td><td>0.05</td><td>200.0</td></tr></tbody></table></div>
+</div>
+</div>
+<p>The three amounts add up to $800, the same 20% from the bar model. Payroll takes the 401(k) share before taxes, so the direct deposit split only needs to send the other $600 to the HYSA.</p>
+</section>
+<section id="variations" class="level1">
+<h1>Variations</h1>
+<p>The chapter’s long game is escalation: raise the savings rate with each raise instead of cutting spending. Its timeline pairs a growing salary with a rate that climbs five points every two years. Dividing each salary by 12 gives the monthly income, and arrays in both arguments price every year at once. <a href="../reference/future_value_series.html#perfinpy.future_value_series" class="gdls-link gdls-code">future_value_series()</a> from <a href="../user-guide/investing-basics.html">Investing Basics</a> then shows what 30 years of each monthly amount could grow to at 7% (<code>rate</code> is per month here, so the yearly return is divided by 12):</p>
+<div id="cell-escalation" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>salary <span class="op">=</span> [<span class="dv">50000</span>, <span class="dv">54000</span>, <span class="dv">58000</span>, <span class="dv">63000</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>rate <span class="op">=</span> [<span class="fl">0.15</span>, <span class="fl">0.20</span>, <span class="fl">0.25</span>, <span class="fl">0.30</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>monthly <span class="op">=</span> monthly_savings(gross_monthly_income<span class="op">=</span>[s <span class="op">/</span> <span class="dv">12</span> <span class="cf">for</span> s <span class="kw">in</span> salary], savings_rate<span class="op">=</span>rate)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pl.DataFrame({</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"year"</span>: [<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>],</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"salary"</span>: salary,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rate"</span>: rate,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"monthly"</span>: monthly.<span class="bu">round</span>(<span class="dv">2</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">"after_30_years"</span>: future_value_series(contribution<span class="op">=</span>monthly, rate<span class="op">=</span><span class="fl">0.07</span> <span class="op">/</span> <span class="dv">12</span>, periods<span class="op">=</span><span class="dv">30</span> <span class="op">*</span> <span class="dv">12</span>).<span class="bu">round</span>().astype(<span class="bu">int</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div id="escalation" class="cell-output cell-output-display" data-execution_count="4">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 5)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>year</th><th>salary</th><th>rate</th><th>monthly</th><th>after_30_years</th></tr><tr><td>i64</td><td>i64</td><td>f64</td><td>f64</td><td>i64</td></tr></thead><tbody><tr><td>1</td><td>50000</td><td>0.15</td><td>625.0</td><td>762482</td></tr><tr><td>3</td><td>54000</td><td>0.2</td><td>900.0</td><td>1097974</td></tr><tr><td>5</td><td>58000</td><td>0.25</td><td>1208.33</td><td>1474132</td></tr><tr><td>7</td><td>63000</td><td>0.3</td><td>1575.0</td><td>1921454</td></tr></tbody></table></div>
+</div>
+</div>
+<p>The monthly amounts match the chapter’s $625, $900, $1,208, and $1,575, and the 30 year values match its $762k to $1.92M range. Most of that jump is paid for by raises, not by spending less.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Limits">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Limits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a> is a single multiplication, so it leaves a few things to you:</p>
+<ul>
+<li><a href="../reference/savings_rate.html#perfinpy.savings_rate" class="gdls-link gdls-code">savings_rate</a> is a decimal. Passing <code>20</code> instead of <code>0.20</code> returns $80,000, not $800, and no error is raised.</li>
+<li>It doesn’t check ranges. A negative income or a rate above 1 returns a result instead of an error.</li>
+<li>It uses whatever income you give it. The chapter uses gross pay; a rate measured on take home pay gives a smaller amount.</li>
+<li>It assumes a steady paycheck. For gig or commission income, the chapter suggests passing your average monthly income over the last six months.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="putting-it-together" class="level1">
+<h1>Putting it together</h1>
+<p>Back to the $4,000 paycheck. The emergency fund line gets $400 a month until the fund is full. The <a href="../user-guide/emergency-fund.html">Emergency Fund</a> chapter’s first job has $2,400 a month in essential expenses, a four month target, and $1,200 already saved. <a href="../reference/emergency_fund_target.html#perfinpy.emergency_fund_target" class="gdls-link gdls-code">emergency_fund_target()</a> and <a href="../reference/months_to_ef_goal.html#perfinpy.months_to_ef_goal" class="gdls-link gdls-code">months_to_ef_goal()</a> show how long the automation takes to finish the job:</p>
+<div id="cell-ef-plan" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>ef_monthly <span class="op">=</span> monthly_savings(gross_monthly_income<span class="op">=</span><span class="dv">4000</span>, savings_rate<span class="op">=</span><span class="fl">0.10</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>ef_target <span class="op">=</span> emergency_fund_target(monthly_expenses<span class="op">=</span><span class="dv">2400</span>, months<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>ef_months <span class="op">=</span> months_to_ef_goal(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    target<span class="op">=</span>ef_target, current_balance<span class="op">=</span><span class="dv">1200</span>, monthly_contribution<span class="op">=</span>ef_monthly</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>ef_target, ef_months</span></code></pre></div>
+<div id="ef-plan" class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>(9600.0, 21)</code></pre>
+</div>
+</div>
+<p>The $9,600 fund is full in 21 months without a single decision along the way. Once it’s full, the chapter sends the $400 to investing instead. <a href="../reference/future_value_series.html#perfinpy.future_value_series" class="gdls-link gdls-code">future_value_series()</a> shows what that redirected transfer could become over 30 years at 7%:</p>
+<div id="cell-redirect" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>redirected <span class="op">=</span> future_value_series(contribution<span class="op">=</span>ef_monthly, rate<span class="op">=</span><span class="fl">0.07</span> <span class="op">/</span> <span class="dv">12</span>, periods<span class="op">=</span><span class="dv">30</span> <span class="op">*</span> <span class="dv">12</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>redirected</span></code></pre></div>
+<div id="redirect" class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>487988.39831037784</code></pre>
+</div>
+</div>
+<p>The same $400 transfer could grow to about $487,988. As a last check, <a href="../reference/percent_of_income.html#perfinpy.percent_of_income" class="gdls-link gdls-code">percent_of_income()</a> from <a href="../user-guide/budgeting.html">Budgeting</a> turns the automated dollars back into a rate. It returns a percent, the reverse of the decimal <a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a> takes:</p>
+<div id="cell-round-trip" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>percent_of_income(expense<span class="op">=</span>automated, income<span class="op">=</span><span class="dv">4000</span>)</span></code></pre></div>
+<div id="round-trip" class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>20.0</code></pre>
+</div>
+</div>
+</section>
+<section id="recap" class="level1">
+<h1>Recap</h1>
+<p>Automation makes saving the default instead of a monthly decision. <a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a> turns a savings rate into the dollar amount to automate, and its array inputs price a split across accounts or a whole escalation plan in one call. Paired with the emergency fund and investing functions, it shows where those automated dollars end up.</p>
+<ul>
+<li><a href="https://mjfrigaard.github.io/fm-finance/automating_savings.html">Automating Savings</a> in Personal Finance: a field manual</li>
+<li>Reference: <a href="../reference/monthly_savings.html#perfinpy.monthly_savings" class="gdls-link gdls-code">monthly_savings()</a></li>
+<li>Next: <a href="../user-guide/investing-basics.html">Investing Basics</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mjfrigaard\.github\.io\/perfinpy\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/high-yield-accounts.html" class="pagination-link" aria-label="High-Yield Savings Accounts">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">High-Yield Savings Accounts</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../user-guide/investing-basics.html" class="pagination-link" aria-label="Investing Basics">
+        <span class="nav-page-text">Investing Basics</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+<div class="nav-footer-center">
+<p>Developed by <strong>Martin&nbsp;Frigaard</strong>.<br>Site created with <strong>Great&nbsp;Docs</strong>.</p>
+</div>
+</div>
+</footer>
+<script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
+<script src="../sidebar-wrap.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
+<script src="../sidebar-filter.js"></script>
+<script src="../dark-mode-toggle.js"></script>
+<script src="../back-to-top.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'on-this-page.js';document.body.appendChild(s);})();</script>
+<script src="../keyboard-nav.js"></script>
+<script src="../copy-code.js"></script>
+<script src="../details.js"></script>
+<script src="../mermaid-renderer.js"></script>
+<script src="../tooltips.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
+<script src="../responsive-tables.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
+<script src="../navbar-widgets.js"></script>
+
+
+
+
+</body></html>

@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>High-Yield Savings Accounts – perfinpy | perfinpy</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../user-guide/automating-savings.html" rel="next">
+<link href="../user-guide/savings-strategies.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-da3a441c3c7246fda6cc7ef6fe580490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script src="../theme-init.js"></script>
+
+
+  <link rel="alternate" type="text/markdown" href="high-yield-accounts.md">
+  <link rel="canonical" href="https://mjfrigaard.github.io/perfinpy/user-guide/high-yield-accounts.html">
+  <meta name="description" content="Where should your savings live, and what does that choice earn? The High-Yield Savings Accounts chapter of the book makes the case for a high yield...">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="High-Yield Savings Accounts – perfinpy | perfinpy">
+  <meta property="og:description" content="Where should your savings live, and what does that choice earn? The High-Yield Savings Accounts chapter of the book makes the case for a high yield...">
+  <meta property="og:url" content="https://mjfrigaard.github.io/perfinpy/user-guide/high-yield-accounts.html">
+  <meta property="og:site_name" content="perfinpy">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="High-Yield Savings Accounts – perfinpy | perfinpy">
+  <meta name="twitter:description" content="Where should your savings live, and what does that choice earn? The High-Yield Savings Accounts chapter of the book makes the case for a high yield...">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">perfinpy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class=""></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../user-guide/get-started.html" aria-current="page"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reference/index.html"> 
+<span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <span class="nav-link">
+<div id="github-widget" data-owner="mjfrigaard" data-repo="perfinpy" data-stars="0" data-forks="0"></div>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">High-Yield Savings Accounts</h1>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Get started</span></a>
+</div>
+      <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get started</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Foundations</span></a>
+</div>
+      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/income.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Income</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/tracking-spending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tracking Spending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/budgeting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Budgeting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/managing-debt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Managing Debt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/emergency-fund.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Emergency Fund</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Savings</span></a>
+</div>
+      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/savings-strategies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Savings Strategies</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/high-yield-accounts.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">High-Yield Savings Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/automating-savings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automating Savings</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Investing</span></a>
+</div>
+      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/investing-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Investing Basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/retirement-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Retirement Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/index-funds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index Funds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asset Allocation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Taxes and insurance</span></a>
+</div>
+      <ul id="quarto-sidebar-section-5" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/taxes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Taxes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/insurance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Insurance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Planning</span></a>
+</div>
+      <ul id="quarto-sidebar-section-6" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/financial-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Financial Goals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/major-purchases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Major Purchases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/estate-planning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estate Planning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#the-high-yield-accounts-function" id="toc-the-high-yield-accounts-function" class="nav-link active" data-scroll-target="#the-high-yield-accounts-function">The high yield accounts function</a></li>
+  <li><a href="#how-much-does-an-emergency-fund-earn-in-a-year" id="toc-how-much-does-an-emergency-fund-earn-in-a-year" class="nav-link" data-scroll-target="#how-much-does-an-emergency-fund-earn-in-a-year">How much does an emergency fund earn in a year?</a></li>
+  <li><a href="#how-does-the-balance-grow-year-by-year" id="toc-how-does-the-balance-grow-year-by-year" class="nav-link" data-scroll-target="#how-does-the-balance-grow-year-by-year">How does the balance grow year by year?</a></li>
+  <li><a href="#variations" id="toc-variations" class="nav-link" data-scroll-target="#variations">Variations</a></li>
+  <li><a href="#putting-it-together" id="toc-putting-it-together" class="nav-link" data-scroll-target="#putting-it-together">Putting it together</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">High-Yield Savings Accounts</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Where should your savings live, and what does that choice earn? The <a href="https://mjfrigaard.github.io/fm-finance/high_yield_accounts.html">High-Yield Savings Accounts</a> chapter of the book makes the case for a high yield savings account (HYSA) at an online bank: it’s insured, you can reach the money in a day or two, and it pays far more than a big bank’s basic savings account. In this page I’ll put numbers on that case with <a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a>, using the chapter’s $9,600 emergency fund so you can check every result against the book.</p>
+<section id="the-high-yield-accounts-function" class="level1">
+<h1>The high yield accounts function</h1>
+<p><a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a> follows the conventions on the <a href="../user-guide/get-started.html">Get started</a> page: the APY goes in as a decimal, and every argument accepts arrays.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a></td>
+<td>the balance after growing at an APY for some years</td>
+<td>dollars (<code>annual_apy</code> is a decimal; <code>years</code> defaults to 1)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="how-much-does-an-emergency-fund-earn-in-a-year" class="level1">
+<h1>How much does an emergency fund earn in a year?</h1>
+<p>The chapter follows the $9,600 emergency fund from <a href="../user-guide/emergency-fund.html">Emergency Fund</a> into a HYSA paying 4% APY. The APY (annual percentage yield) already includes daily compounding, so a year of growth is one multiplication by 1.04:</p>
+<div id="cell-one-year" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>one_year <span class="op">=</span> hysa_balance(principal<span class="op">=</span><span class="dv">9600</span>, annual_apy<span class="op">=</span><span class="fl">0.04</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>one_year, one_year <span class="op">-</span> <span class="dv">9600</span></span></code></pre></div>
+<div id="one-year" class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>(9984.0, 384.0)</code></pre>
+</div>
+</div>
+<p>After one year the fund holds $9,984, and $384 of that is interest. <code>years</code> defaults to 1, so the call above doesn’t need it.</p>
+</section>
+<section id="how-does-the-balance-grow-year-by-year" class="level1">
+<h1>How does the balance grow year by year?</h1>
+<p>Leave the money alone and each year multiplies the previous balance by 1.04 again. The chapter draws each year as a bar split into the money you put in and the interest it has earned so far:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/high-yield-accounts-hysa-bar-model.png" class="img-fluid figure-img" alt="Stacked bar chart of a $9,600 deposit at 4% APY over years 0 through 5. Each bar has the same bluish green base for the $9,600 deposit, topped by a blue layer for interest earned that grows each year. Bar totals read $9,600, $9,984, $10,383, $10,799, $11,231, and $11,680."></p>
+<figcaption>$9,600 at 4% APY: deposit and interest earned, year by year</figcaption>
+</figure>
+</div>
+<p>The bluish green base never changes; only the blue interest layer grows. Passing several values to <code>years</code> reproduces every bar in one call:</p>
+<div id="cell-five-years" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>years <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">6</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>balances <span class="op">=</span> hysa_balance(principal<span class="op">=</span><span class="dv">9600</span>, annual_apy<span class="op">=</span><span class="fl">0.04</span>, years<span class="op">=</span>years)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pl.DataFrame({</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"years"</span>: years,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"deposit"</span>: [<span class="dv">9600</span>] <span class="op">*</span> <span class="dv">6</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"interest"</span>: balances <span class="op">-</span> <span class="dv">9600</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"balance"</span>: balances,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}).with_columns(pl.col(<span class="st">"interest"</span>, <span class="st">"balance"</span>).<span class="bu">round</span>(<span class="dv">2</span>))</span></code></pre></div>
+<div id="five-years" class="cell-output cell-output-display" data-execution_count="3">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (6, 4)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>years</th><th>deposit</th><th>interest</th><th>balance</th></tr><tr><td>i64</td><td>i64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>0</td><td>9600</td><td>0.0</td><td>9600.0</td></tr><tr><td>1</td><td>9600</td><td>384.0</td><td>9984.0</td></tr><tr><td>2</td><td>9600</td><td>783.36</td><td>10383.36</td></tr><tr><td>3</td><td>9600</td><td>1198.69</td><td>10798.69</td></tr><tr><td>4</td><td>9600</td><td>1630.64</td><td>11230.64</td></tr><tr><td>5</td><td>9600</td><td>2079.87</td><td>11679.87</td></tr></tbody></table></div>
+</div>
+</div>
+<p>After five years the fund holds $11,679.87, which is the chapter’s $11,680. That’s $2,080 of growth without putting a dollar of the deposit at risk.</p>
+</section>
+<section id="variations" class="level1">
+<h1>Variations</h1>
+<p>The chapter compares account types rather than banks. In late 2026 the national average savings rate was 0.39%, a big bank’s basic account often paid 0.01%, and the best online accounts paid 3.8% to 4.2%. <code>annual_apy</code> accepts an array, so one call compares a $10,000 balance across all of them:</p>
+<div id="cell-compare-apy" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>apys <span class="op">=</span> [<span class="fl">0.0001</span>, <span class="fl">0.0039</span>, <span class="fl">0.038</span>, <span class="fl">0.04</span>, <span class="fl">0.042</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>pl.DataFrame({</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"account"</span>: [<span class="st">"big bank basic"</span>, <span class="st">"national average"</span>, <span class="st">"online low"</span>, <span class="st">"online typical"</span>, <span class="st">"online high"</span>],</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"apy"</span>: apys,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"interest_year_1"</span>: hysa_balance(principal<span class="op">=</span><span class="dv">10000</span>, annual_apy<span class="op">=</span>apys) <span class="op">-</span> <span class="dv">10000</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>}).with_columns(pl.col(<span class="st">"interest_year_1"</span>).<span class="bu">round</span>(<span class="dv">2</span>))</span></code></pre></div>
+<div id="compare-apy" class="cell-output cell-output-display" data-execution_count="4">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (5, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>account</th><th>apy</th><th>interest_year_1</th></tr><tr><td>str</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"big bank basic"</td><td>0.0001</td><td>1.0</td></tr><tr><td>"national average"</td><td>0.0039</td><td>39.0</td></tr><tr><td>"online low"</td><td>0.038</td><td>380.0</td></tr><tr><td>"online typical"</td><td>0.04</td><td>400.0</td></tr><tr><td>"online high"</td><td>0.042</td><td>420.0</td></tr></tbody></table></div>
+</div>
+</div>
+<p>The gap between online banks is small: $40 a year separates the low and high ends on $10,000. The gap between an online bank and a big bank’s basic account is large: $400 against $1. As the chapter puts it, pick an online HYSA and don’t overthink which one.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Limits">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Limits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a> grows one lump sum at one rate, so it leaves out a few things:</p>
+<ul>
+<li>It assumes the APY never changes. Real HYSA rates move with interest rates, sometimes several times a year.</li>
+<li>It doesn’t add deposits along the way. For a fixed monthly deposit, use <a href="../reference/future_value_series.html#perfinpy.future_value_series" class="gdls-link gdls-code">future_value_series()</a> from <a href="../user-guide/investing-basics.html">Investing Basics</a>.</li>
+<li>It ignores taxes on interest and inflation.</li>
+<li>It doesn’t know about the $250,000 FDIC limit per account holder per bank. Balances above that need a second bank.</li>
+<li>It checks that inputs are numbers, not that they make sense. A negative <code>annual_apy</code> or <code>years</code> returns a result instead of an error.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="putting-it-together" class="level1">
+<h1>Putting it together</h1>
+<p>The chapter’s two headline numbers are an APY and an emergency fund, and both come from other chapters’ functions. Banks sometimes advertise an APR, the rate before compounding. <a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a> from <a href="../user-guide/managing-debt.html">Managing Debt</a> converts it with daily compounding, the way most HYSAs pay:</p>
+<div id="cell-apr-to-apy" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>apy <span class="op">=</span> apr_to_apy(apr<span class="op">=</span><span class="fl">0.0392</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>apy</span></code></pre></div>
+<div id="apr-to-apy" class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>0.03997626956226452</code></pre>
+</div>
+</div>
+<p>A 3.92% APR compounded daily is an APY of 4.00%. Next, <a href="../reference/emergency_fund_target.html#perfinpy.emergency_fund_target" class="gdls-link gdls-code">emergency_fund_target()</a> from <a href="../user-guide/emergency-fund.html">Emergency Fund</a> sets the balance to park: four months of $2,400 in essential expenses. We can then compare that fund after five years in the HYSA and in a big bank’s basic account:</p>
+<div id="cell-ef-in-hysa" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ef_target <span class="op">=</span> emergency_fund_target(monthly_expenses<span class="op">=</span><span class="dv">2400</span>, months<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>in_hysa <span class="op">=</span> hysa_balance(principal<span class="op">=</span>ef_target, annual_apy<span class="op">=</span>apy, years<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>in_basic <span class="op">=</span> hysa_balance(principal<span class="op">=</span>ef_target, annual_apy<span class="op">=</span><span class="fl">0.0001</span>, years<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>ef_target, <span class="bu">round</span>(in_hysa, <span class="dv">2</span>), <span class="bu">round</span>(in_basic, <span class="dv">2</span>)</span></code></pre></div>
+<div id="ef-in-hysa" class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>(9600.0, 11678.54, 9604.8)</code></pre>
+</div>
+</div>
+<p>The same $9,600 fund grows to $11,678.54 in the HYSA and $9,604.80 at the big bank, a difference of $2,074. Finally, <a href="../reference/ef_growth.html#perfinpy.ef_growth" class="gdls-link gdls-code">ef_growth()</a> from the Emergency Fund chapter does the same math in months, which helps when a goal doesn’t land on a whole year:</p>
+<div id="cell-ef-growth" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ef_growth(balance<span class="op">=</span>ef_target, apy<span class="op">=</span><span class="fl">0.04</span>, months<span class="op">=</span>[<span class="dv">12</span>, <span class="dv">18</span>])</span></code></pre></div>
+<div id="ef-growth" class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>array([ 9984.        , 10181.72216474])</code></pre>
+</div>
+</div>
+<p>Twelve months matches <a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a> with the default one year, and 18 months shows the balance halfway through year two.</p>
+</section>
+<section id="recap" class="level1">
+<h1>Recap</h1>
+<p>A HYSA keeps your savings safe and reachable while paying hundreds of times what a basic account pays. <a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a> grows a balance at an APY, and passing several years or several APYs compares horizons and accounts in one call. With <a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a>, <a href="../reference/emergency_fund_target.html#perfinpy.emergency_fund_target" class="gdls-link gdls-code">emergency_fund_target()</a>, and <a href="../reference/ef_growth.html#perfinpy.ef_growth" class="gdls-link gdls-code">ef_growth()</a>, it shows what an emergency fund earns while it waits.</p>
+<ul>
+<li><a href="https://mjfrigaard.github.io/fm-finance/high_yield_accounts.html">High-Yield Savings Accounts</a> in Personal Finance: a field manual</li>
+<li>Reference: <a href="../reference/hysa_balance.html#perfinpy.hysa_balance" class="gdls-link gdls-code">hysa_balance()</a></li>
+<li>Next: <a href="../user-guide/automating-savings.html">Automating Savings</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mjfrigaard\.github\.io\/perfinpy\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/savings-strategies.html" class="pagination-link" aria-label="Savings Strategies">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Savings Strategies</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../user-guide/automating-savings.html" class="pagination-link" aria-label="Automating Savings">
+        <span class="nav-page-text">Automating Savings</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+<div class="nav-footer-center">
+<p>Developed by <strong>Martin&nbsp;Frigaard</strong>.<br>Site created with <strong>Great&nbsp;Docs</strong>.</p>
+</div>
+</div>
+</footer>
+<script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
+<script src="../sidebar-wrap.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
+<script src="../sidebar-filter.js"></script>
+<script src="../dark-mode-toggle.js"></script>
+<script src="../back-to-top.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'on-this-page.js';document.body.appendChild(s);})();</script>
+<script src="../keyboard-nav.js"></script>
+<script src="../copy-code.js"></script>
+<script src="../details.js"></script>
+<script src="../mermaid-renderer.js"></script>
+<script src="../tooltips.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
+<script src="../responsive-tables.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
+<script src="../navbar-widgets.js"></script>
+
+
+
+
+</body></html>

@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.30">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Managing Debt – perfinpy | perfinpy</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../user-guide/emergency-fund.html" rel="next">
+<link href="../user-guide/budgeting.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-b6a8276bf55561bdbc268162d41bd1f7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-da3a441c3c7246fda6cc7ef6fe580490.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'termshow.css'}));</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-compare.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-compare.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script>document.head.appendChild(Object.assign(document.createElement('link'),{rel:'stylesheet',href:(document.querySelector('meta[name="quarto:offset"]')||{content:''}).content+'gd-lightbox-annotate.css'}));</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'gd-lightbox-annotate.js';s.defer=true;document.head.appendChild(s);})();</script>
+<script src="../theme-init.js"></script>
+
+
+  <link rel="alternate" type="text/markdown" href="managing-debt.md">
+  <link rel="canonical" href="https://mjfrigaard.github.io/perfinpy/user-guide/managing-debt.html">
+  <meta name="description" content="Lenders quote whichever number makes a loan look cheapest, and they count on borrowers not running the math. The book’s Managing Debt chapter runs that...">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Managing Debt – perfinpy | perfinpy">
+  <meta property="og:description" content="Lenders quote whichever number makes a loan look cheapest, and they count on borrowers not running the math. The book’s Managing Debt chapter runs that...">
+  <meta property="og:url" content="https://mjfrigaard.github.io/perfinpy/user-guide/managing-debt.html">
+  <meta property="og:site_name" content="perfinpy">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Managing Debt – perfinpy | perfinpy">
+  <meta name="twitter:description" content="Lenders quote whichever number makes a loan look cheapest, and they count on borrowers not running the math. The book’s Managing Debt chapter runs that...">
+</head>
+
+<body class="nav-sidebar floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">perfinpy</span>
+    </a>
+  </div>
+            <div id="quarto-search" class=""></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../user-guide/get-started.html" aria-current="page"> 
+<span class="menu-text">User Guide</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../reference/index.html"> 
+<span class="menu-text">Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <span class="nav-link">
+<div id="github-widget" data-owner="mjfrigaard" data-repo="perfinpy" data-stars="0" data-forks="0"></div>
+    </span>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Managing Debt</h1>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Get started</span></a>
+</div>
+      <ul id="quarto-sidebar-section-1" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get started</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Foundations</span></a>
+</div>
+      <ul id="quarto-sidebar-section-2" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/income.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Income</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/tracking-spending.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Tracking Spending</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/budgeting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Budgeting</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/managing-debt.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Managing Debt</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/emergency-fund.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Emergency Fund</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Savings</span></a>
+</div>
+      <ul id="quarto-sidebar-section-3" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/savings-strategies.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Savings Strategies</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/high-yield-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">High-Yield Savings Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/automating-savings.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Automating Savings</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Investing</span></a>
+</div>
+      <ul id="quarto-sidebar-section-4" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/investing-basics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Investing Basics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/retirement-accounts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Retirement Accounts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/index-funds.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Index Funds</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/asset-allocation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Asset Allocation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Taxes and insurance</span></a>
+</div>
+      <ul id="quarto-sidebar-section-5" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/taxes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Taxes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/insurance.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Insurance</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start">
+ <span class="menu-text">Planning</span></a>
+</div>
+      <ul id="quarto-sidebar-section-6" class="list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/financial-goals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Financial Goals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/major-purchases.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Major Purchases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../user-guide/estate-planning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Estate Planning</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul class="collapse">
+  <li><a href="#the-managing-debt-functions" id="toc-the-managing-debt-functions" class="nav-link active" data-scroll-target="#the-managing-debt-functions">The managing debt functions</a></li>
+  <li><a href="#what-does-a-balance-really-cost" id="toc-what-does-a-balance-really-cost" class="nav-link" data-scroll-target="#what-does-a-balance-really-cost">What does a balance really cost?</a>
+  <ul class="collapse">
+  <li><a href="#apr-vs.-apy" id="toc-apr-vs.-apy" class="nav-link" data-scroll-target="#apr-vs.-apy">APR vs.&nbsp;APY</a></li>
+  <li><a href="#how-long-does-a-minimum-payment-take" id="toc-how-long-does-a-minimum-payment-take" class="nav-link" data-scroll-target="#how-long-does-a-minimum-payment-take">How long does a minimum payment take?</a></li>
+  <li><a href="#what-does-the-loan-term-cost" id="toc-what-does-the-loan-term-cost" class="nav-link" data-scroll-target="#what-does-the-loan-term-cost">What does the loan term cost?</a></li>
+  </ul></li>
+  <li><a href="#how-much-student-debt-can-a-salary-carry" id="toc-how-much-student-debt-can-a-salary-carry" class="nav-link" data-scroll-target="#how-much-student-debt-can-a-salary-carry">How much student debt can a salary carry?</a>
+  <ul class="collapse">
+  <li><a href="#the-1x-rule" id="toc-the-1x-rule" class="nav-link" data-scroll-target="#the-1x-rule">The 1x rule</a></li>
+  <li><a href="#income-driven-repayment" id="toc-income-driven-repayment" class="nav-link" data-scroll-target="#income-driven-repayment">Income driven repayment</a></li>
+  </ul></li>
+  <li><a href="#what-ratios-do-lenders-check" id="toc-what-ratios-do-lenders-check" class="nav-link" data-scroll-target="#what-ratios-do-lenders-check">What ratios do lenders check?</a>
+  <ul class="collapse">
+  <li><a href="#debt-to-income-ratio" id="toc-debt-to-income-ratio" class="nav-link" data-scroll-target="#debt-to-income-ratio">Debt to income ratio</a></li>
+  <li><a href="#credit-utilization" id="toc-credit-utilization" class="nav-link" data-scroll-target="#credit-utilization">Credit utilization</a></li>
+  </ul></li>
+  <li><a href="#which-debt-should-you-pay-first" id="toc-which-debt-should-you-pay-first" class="nav-link" data-scroll-target="#which-debt-should-you-pay-first">Which debt should you pay first?</a>
+  <ul class="collapse">
+  <li><a href="#pay-off-or-invest" id="toc-pay-off-or-invest" class="nav-link" data-scroll-target="#pay-off-or-invest">Pay off or invest?</a></li>
+  <li><a href="#avalanche-vs.-snowball" id="toc-avalanche-vs.-snowball" class="nav-link" data-scroll-target="#avalanche-vs.-snowball">Avalanche vs.&nbsp;snowball</a></li>
+  </ul></li>
+  <li><a href="#variations" id="toc-variations" class="nav-link" data-scroll-target="#variations">Variations</a></li>
+  <li><a href="#what-these-functions-dont-model" id="toc-what-these-functions-dont-model" class="nav-link" data-scroll-target="#what-these-functions-dont-model">What these functions don’t model</a></li>
+  <li><a href="#putting-it-together" id="toc-putting-it-together" class="nav-link" data-scroll-target="#putting-it-together">Putting it together</a></li>
+  <li><a href="#how-monthly_standard_payment-works" id="toc-how-monthly_standard_payment-works" class="nav-link" data-scroll-target="#how-monthly_standard_payment-works">How <code>monthly_standard_payment()</code> works</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap">Recap</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Managing Debt</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Lenders quote whichever number makes a loan look cheapest, and they count on borrowers not running the math. The book’s <a href="https://mjfrigaard.github.io/fm-finance/managing_debt.html">Managing Debt</a> chapter runs that math. It asks what a balance really costs, how much student debt a salary can carry, which ratios lenders check, and which debt to pay first. In this page I’ll answer the same questions with perfinpy’s 11 managing debt functions. Each example uses the chapter’s numbers, so you can check every result against the book.</p>
+<section id="the-managing-debt-functions" class="level1">
+<h1>The managing debt functions</h1>
+<p>The functions follow the conventions in <a href="../user-guide/get-started.html">Get started</a>: rates go in as decimals and ratios come out as percents. The one exception to watch is <a href="../reference/loan_income_ratio.html#perfinpy.loan_income_ratio" class="gdls-link gdls-code">loan_income_ratio()</a>, which returns a plain ratio rather than a percent.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Function</th>
+<th>Returns</th>
+<th>Units</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a></td>
+<td>the effective yearly rate of an APR</td>
+<td>decimal (<code>0.27</code> is 27%)</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/months_to_payoff.html#perfinpy.months_to_payoff" class="gdls-link gdls-code">months_to_payoff()</a></td>
+<td>months to clear a balance with a fixed payment</td>
+<td>months, not rounded</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/total_interest.html#perfinpy.total_interest" class="gdls-link gdls-code">total_interest()</a></td>
+<td>all payments minus the amount borrowed</td>
+<td>dollars</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/loan_income_ratio.html#perfinpy.loan_income_ratio" class="gdls-link gdls-code">loan_income_ratio()</a></td>
+<td>student loans relative to starting salary</td>
+<td>ratio (<code>1</code> is one year of salary)</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a></td>
+<td>payment on a standard student loan plan</td>
+<td>dollars per month</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/idr_monthly_payment.html#perfinpy.idr_monthly_payment" class="gdls-link gdls-code">idr_monthly_payment()</a></td>
+<td>payment on an income driven repayment plan</td>
+<td>dollars per month, rounded to cents</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/dti_ratio.html#perfinpy.dti_ratio" class="gdls-link gdls-code">dti_ratio()</a></td>
+<td>debt payments as a share of gross income</td>
+<td>percent (<code>28</code> is 28%)</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/payoff_vs_invest.html#perfinpy.payoff_vs_invest" class="gdls-link gdls-code">payoff_vs_invest()</a></td>
+<td>whether to pay off a loan or invest</td>
+<td>a single string</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/order_avalanche.html#perfinpy.order_avalanche" class="gdls-link gdls-code">order_avalanche()</a></td>
+<td>debts sorted by APR, highest first</td>
+<td>a list of dicts</td>
+</tr>
+<tr class="even">
+<td><a href="../reference/order_snowball.html#perfinpy.order_snowball" class="gdls-link gdls-code">order_snowball()</a></td>
+<td>debts sorted by balance, smallest first</td>
+<td>a list of dicts</td>
+</tr>
+<tr class="odd">
+<td><a href="../reference/credit_utilization.html#perfinpy.credit_utilization" class="gdls-link gdls-code">credit_utilization()</a></td>
+<td>a card balance as a share of the limit</td>
+<td>percent (<code>30</code> is 30%)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="what-does-a-balance-really-cost" class="level1">
+<h1>What does a balance really cost?</h1>
+<p>Every debt has a price, called the APR (annual percentage rate): the yearly cost of borrowing, shown as a percent of what you owe. The APR is only the starting point. Compounding, slow payments, and long terms all add to what you pay, and the three functions in this section measure each one.</p>
+<section id="apr-vs.-apy" class="level2">
+<h2 class="anchored" data-anchor-id="apr-vs.-apy">APR vs.&nbsp;APY</h2>
+<p>The chapter’s example is a credit card with a 24% APR that compounds daily, carrying a $5,000 balance. Credit card companies quote the APR, but compounding (charging interest on interest you haven’t paid yet) means the balance grows faster than the APR suggests.</p>
+<p>Both bars below represent one year of interest on the same balance. The shorter bar is what the APR implies; the taller bar is what you actually owe:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-apr-apy-bar-model.png" class="img-fluid figure-img" alt="Bar chart of one year of interest on a $5,000 balance. The bluish green APR cost bar, labeled stated, reaches $1,200. The vermillion APY cost bar, labeled actual, reaches $1,356, and a double headed arrow at its top marks the $156 difference as hidden cost."></p>
+<figcaption>APR cost vs.&nbsp;APY cost on a $5,000 balance (24% APR, daily compounding)</figcaption>
+</figure>
+</div>
+<p>The APY (annual percentage yield) is the effective yearly rate once compounding is included. <a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a> converts one to the other, with <code>periods_per_year</code> defaulting to 365 for daily compounding:</p>
+<div id="cell-apr-apy" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>apy <span class="op">=</span> apr_to_apy(apr<span class="op">=</span><span class="fl">0.24</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>apy</span></code></pre></div>
+<div id="apr-apy" class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>0.27114889144128895</code></pre>
+</div>
+</div>
+<p>A 24% APR compounded daily is really 27.1% a year. On the $5,000 balance, that gap is about $156 of interest the quoted rate never mentions.</p>
+</section>
+<section id="how-long-does-a-minimum-payment-take" class="level2">
+<h2 class="anchored" data-anchor-id="how-long-does-a-minimum-payment-take">How long does a minimum payment take?</h2>
+<p>The chapter’s next example is a $5,000 balance at 22% APR with a $100 minimum payment. A $100 payment sounds reasonable until you see how little of it reaches the balance. The principal is the amount you borrowed; interest is what the lender charges on top.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-min-payment-bar-model.png" class="img-fluid figure-img" alt="Bar chart splitting a $100 payment into two bars. A tall vermillion bar shows $92 going to interest, and a short blue bar shows $8 going to principal reduction."></p>
+<figcaption>Where a $100 minimum payment actually goes</figcaption>
+</figure>
+</div>
+<p>Only the principal slice shrinks the debt. As the balance falls, the interest slice shrinks too, so each payment retires a little more principal than the one before. <a href="../reference/months_to_payoff.html#perfinpy.months_to_payoff" class="gdls-link gdls-code">months_to_payoff()</a> accounts for that, compounding interest monthly at <code>apr / 12</code>:</p>
+<div id="cell-min-payoff" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>first_interest <span class="op">=</span> <span class="dv">5000</span> <span class="op">*</span> <span class="fl">0.22</span> <span class="op">/</span> <span class="dv">12</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>card_months <span class="op">=</span> months_to_payoff(balance<span class="op">=</span><span class="dv">5000</span>, monthly_payment<span class="op">=</span><span class="dv">100</span>, apr<span class="op">=</span><span class="fl">0.22</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>first_interest, card_months</span></code></pre></div>
+<div id="min-payoff" class="cell-output cell-output-display" data-execution_count="3">
+<pre><code>(91.66666666666667, 136.77905405676316)</code></pre>
+</div>
+</div>
+<p>The first month’s interest is about $92, so only $8 of the first payment touches the balance. Paying the minimum clears the card in about 137 months (11.4 years), and the payments add up to about $13,678 on a $5,000 balance. Minimum payments are designed to keep you in debt for years.</p>
+</section>
+<section id="what-does-the-loan-term-cost" class="level2">
+<h2 class="anchored" data-anchor-id="what-does-the-loan-term-cost">What does the loan term cost?</h2>
+<p>An installment loan is one you repay in equal monthly payments, like a car loan or a mortgage. For these loans, total interest is the number that should drive the decision. The chapter’s example is a $20,000 used car loan at 7%. It runs either 6 years at $340.98 a month or 4 years at $478.92 a month.</p>
+<p>The amount borrowed is the same either way. The bars below stack the principal and interest layers, so the cost of the longer term is visible:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-total-interest-bar-model.png" class="img-fluid figure-img" alt="Two stacked bars of total paid on a $20,000 car loan. The 6-year loan stacks a $4,551 vermillion interest layer on a $20,000 bluish green principal layer. The 4-year loan stacks a thinner $2,988 interest layer on the same $20,000 of principal."></p>
+<figcaption>$20,000 car loan at 7%: principal vs.&nbsp;interest for 6 year and 4 year terms</figcaption>
+</figure>
+</div>
+<p>Subtract the principal from everything you pay and the interest layer is what’s left. <a href="../reference/total_interest.html#perfinpy.total_interest" class="gdls-link gdls-code">total_interest()</a> accepts arrays, so both terms fit in one call:</p>
+<div id="cell-total-interest" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>car_interest <span class="op">=</span> total_interest(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    monthly_payment<span class="op">=</span>[<span class="fl">340.98</span>, <span class="fl">478.92</span>],</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    n_months<span class="op">=</span>[<span class="dv">72</span>, <span class="dv">48</span>],</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    principal<span class="op">=</span><span class="dv">20000</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>car_interest</span></code></pre></div>
+<div id="total-interest" class="cell-output cell-output-display" data-execution_count="4">
+<pre><code>array([4550.56, 2988.16])</code></pre>
+</div>
+</div>
+<p>The 6 year loan costs $4,550.56 in interest, and the 4 year loan costs $2,988.16. Shortening the term saves $1,562.40, which is the math behind the 20/4/10 car rule (20% down, no more than 4 years, transportation under 10% of gross income).</p>
+</section>
+</section>
+<section id="how-much-student-debt-can-a-salary-carry" class="level1">
+<h1>How much student debt can a salary carry?</h1>
+<p>Student loans sit in a complicated middle ground. Education is an investment in your future earning potential, but only when the math works. The chapter gives two tools for checking it: the 1x rule before you borrow, and income driven repayment after.</p>
+<section id="the-1x-rule" class="level2">
+<h2 class="anchored" data-anchor-id="the-1x-rule">The 1x rule</h2>
+<p>The 1x rule says total student debt at graduation should not exceed your expected first year salary. The chapter’s example borrower has $45,000 in loans and a $42,000 starting salary, repaying on a standard 10 year plan at 6.5%.</p>
+<p>Picture what you borrowed and what your first job pays as two bars side by side. The rule says the loan bar shouldn’t run past the salary bar:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-loan-income-bar-model.png" class="img-fluid figure-img" alt="Two horizontal bars. The vermillion student loans bar is $45,000 and the bluish green starting salary bar is $42,000. A dashed vertical line at $42,000 marks the end of the salary bar, and the loan bar runs a little past it."></p>
+<figcaption>$45,000 in student loans vs.&nbsp;a $42,000 starting salary</figcaption>
+</figure>
+</div>
+<p><a href="../reference/loan_income_ratio.html#perfinpy.loan_income_ratio" class="gdls-link gdls-code">loan_income_ratio()</a> divides the loan bar by the salary bar. <a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a> then spreads the loan, plus interest, over 120 equal payments, with the 6.5% rate and 10 year term as defaults:</p>
+<div id="cell-loan-income" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>ratio <span class="op">=</span> loan_income_ratio(loan_total<span class="op">=</span><span class="dv">45000</span>, expected_salary<span class="op">=</span><span class="dv">42000</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>student_payment <span class="op">=</span> monthly_standard_payment(principal<span class="op">=</span><span class="dv">45000</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>ratio, student_payment</span></code></pre></div>
+<div id="loan-income" class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>(1.0714285714285714, 510.9658974901199)</code></pre>
+</div>
+</div>
+<p>The ratio is 1.07, so this borrower is a little over the 1x rule. The standard payment is about $511 a month, or roughly $0.0114 a month for every dollar borrowed. The 1x rule is a ceiling, not a target; lower earning majors often need a lower personal cap.</p>
+</section>
+<section id="income-driven-repayment" class="level2">
+<h2 class="anchored" data-anchor-id="income-driven-repayment">Income driven repayment</h2>
+<p>When the 1x rule is out of reach, federal income driven repayment (IDR) plans cap payments as a share of discretionary income. Discretionary income is your AGI (adjusted gross income, from your tax return) minus a protected multiple of the Federal Poverty Guideline. The chapter’s example is a $50,000 AGI under IBR. IBR protects 1.5 times the 2026 guideline ($15,960) and charges 10% on whatever is left.</p>
+<p>Think of the AGI as one bar. The plan protects the first part of it, and the payment is a small slice of what’s left:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-idr-bar-model.png" class="img-fluid figure-img" alt="A single horizontal bar for $50,000 of AGI, split into three segments. A light bluish green segment of $23,940 is protected income (1.5 times $15,960). A narrow vermillion segment of $2,606 a year is the payment (10% of discretionary income). A bluish green segment of $23,454 is the rest of discretionary income."></p>
+<figcaption>$50,000 AGI under IBR: protected income, discretionary income, and the yearly payment</figcaption>
+</figure>
+</div>
+<p><a href="../reference/idr_monthly_payment.html#perfinpy.idr_monthly_payment" class="gdls-link gdls-code">idr_monthly_payment()</a> subtracts the protected part, takes the payment rate of what’s left, and divides by 12. The defaults are the IBR terms for loans from July 2014 on; older IBR loans use a 15% rate:</p>
+<div id="cell-idr-payment" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>ibr <span class="op">=</span> idr_monthly_payment(agi<span class="op">=</span><span class="dv">50000</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>ibr_old <span class="op">=</span> idr_monthly_payment(agi<span class="op">=</span><span class="dv">50000</span>, payment_rate<span class="op">=</span><span class="fl">0.15</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>ibr, ibr_old</span></code></pre></div>
+<div id="idr-payment" class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>(217.17, 325.75)</code></pre>
+</div>
+</div>
+<p>IBR comes to $217.17 a month, and $325.75 for loans made before July 2014. IDR plans change with Congress, the courts, and the Department of Education, so check current terms at <a href="https://studentaid.gov/manage-loans/repayment/plans">studentaid.gov</a> before enrolling.</p>
+</section>
+</section>
+<section id="what-ratios-do-lenders-check" class="level1">
+<h1>What ratios do lenders check?</h1>
+<p>Lenders don’t just look at what you owe; they look at how much of your income and credit is already spoken for. These two ratios are what lenders calculate about you, so it pays to calculate them about yourself first.</p>
+<section id="debt-to-income-ratio" class="level2">
+<h2 class="anchored" data-anchor-id="debt-to-income-ratio">Debt to income ratio</h2>
+<p>The chapter pictures a first job paying $45,000 a year, or $3,750 a month in gross income. Its debts are a $511 student loan payment, a $450 car payment, and $100 in credit card minimums. Gross income is your pay before taxes, and the bar below splits it into what goes to debt and what’s left:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-dti-bar-model.png" class="img-fluid figure-img" alt="A horizontal bar for $3,750 of gross monthly income. A vermillion segment of $1,061 (28%) is debt payments, and a bluish green segment of $2,689 (72%) is remaining income. A dashed line marks the 43% danger zone, to the right of where the debt segment ends."></p>
+<figcaption>$3,750 gross monthly income split into debt payments and remaining income</figcaption>
+</figure>
+</div>
+<p>DTI (debt to income) is just the debt slice as a share of the whole bar. <a href="../reference/dti_ratio.html#perfinpy.dti_ratio" class="gdls-link gdls-code">dti_ratio()</a> returns it as a percent:</p>
+<div id="cell-dti" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>debt_payments <span class="op">=</span> {<span class="st">"student_loan"</span>: <span class="dv">511</span>, <span class="st">"car"</span>: <span class="dv">450</span>, <span class="st">"cards"</span>: <span class="dv">100</span>}</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dti <span class="op">=</span> dti_ratio(</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    monthly_debt_payments<span class="op">=</span><span class="bu">sum</span>(debt_payments.values()),</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    gross_monthly_income<span class="op">=</span><span class="dv">45000</span> <span class="op">/</span> <span class="dv">12</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>dti</span></code></pre></div>
+<div id="dti" class="cell-output cell-output-display" data-execution_count="7">
+<pre><code>28.293333333333333</code></pre>
+</div>
+</div>
+<p>The $1,061 in monthly debt payments take about 28% of gross income. The chapter calls 20% to 35% manageable but worth watching; above 43%, most mortgage lenders won’t approve you.</p>
+</section>
+<section id="credit-utilization" class="level2">
+<h2 class="anchored" data-anchor-id="credit-utilization">Credit utilization</h2>
+<p>Credit utilization is how much of your available credit you’re using. Credit scores penalize high utilization because using most of your available credit is a sign of money trouble. The chapter’s example is a $900 balance on a first card with a $3,000 limit:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-utilization-bar-model.png" class="img-fluid figure-img" alt="A horizontal bar for a $3,000 credit limit. A vermillion segment of $900 (30%) is the used balance, and a light bluish green segment of $2,100 (70%) is unused credit. A blue dashed line marks the 10% ideal at $300, and a vermillion dashed line marks the 30% threshold, exactly where the used balance ends."></p>
+<figcaption>$900 balance against a $3,000 credit limit: used vs.&nbsp;unused</figcaption>
+</figure>
+</div>
+<p><a href="../reference/credit_utilization.html#perfinpy.credit_utilization" class="gdls-link gdls-code">credit_utilization()</a> divides the used slice by the whole limit and returns a percent:</p>
+<div id="cell-utilization" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>utilization <span class="op">=</span> credit_utilization(balance<span class="op">=</span><span class="dv">900</span>, credit_limit<span class="op">=</span><span class="dv">3000</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>utilization</span></code></pre></div>
+<div id="utilization" class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>30.0</code></pre>
+</div>
+</div>
+<p>The card sits at 30% utilization, right at the threshold. Keep utilization under 30% on each card and across all cards; under 10% (a $300 balance on this card) is ideal.</p>
+</section>
+</section>
+<section id="which-debt-should-you-pay-first" class="level1">
+<h1>Which debt should you pay first?</h1>
+<p>Not all debt is created equal. Attack it in order of damage potential. This section covers two versions of that decision. The first is whether extra money should go to a loan or to investments; the second is which of several debts to attack first.</p>
+<section id="pay-off-or-invest" class="level2">
+<h2 class="anchored" data-anchor-id="pay-off-or-invest">Pay off or invest?</h2>
+<p>The chapter compares a 5% student loan against an expected 7% stock market return. The math slightly favors investing, but the bar model adds what the math alone misses:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-payoff-invest-bar-model.png" class="img-fluid figure-img" alt="Two bars of annual return. The blue pay off debt bar reaches 5% and is labeled certain. The taller bluish green invest bar reaches 7% and is labeled expected, not guaranteed."></p>
+<figcaption>Guaranteed 5% debt payoff vs.&nbsp;expected 7% investment return</figcaption>
+</figure>
+</div>
+<p><a href="../reference/payoff_vs_invest.html#perfinpy.payoff_vs_invest" class="gdls-link gdls-code">payoff_vs_invest()</a> compares the two rates (as decimals) and returns the option that wins on paper:</p>
+<div id="cell-payoff-vs-invest" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>loan_rate <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>expected_return <span class="op">=</span> <span class="fl">0.07</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>payoff_vs_invest(loan_rate<span class="op">=</span>loan_rate, expected_return<span class="op">=</span>expected_return)</span></code></pre></div>
+<div id="payoff-vs-invest" class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>'Invest the difference'</code></pre>
+</div>
+</div>
+<p>Investing wins by about 2.0 percentage points a year. But the return from paying off the loan is guaranteed, and the investment return is not. A guaranteed 5% beats a probable 7% for many people psychologically, so run the math, then add your peace of mind premium.</p>
+</section>
+<section id="avalanche-vs.-snowball" class="level2">
+<h2 class="anchored" data-anchor-id="avalanche-vs.-snowball">Avalanche vs.&nbsp;snowball</h2>
+<p>The chapter’s example has three credit cards: Card A ($1,000 at 18%), Card B ($5,000 at 24%), and Card C ($2,000 at 15%). The avalanche method pays the highest APR first; the snowball method pays the smallest balance first. Both attack the same three debts, just in a different order:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/managing-debt-avalanche-snowball-bar-model.png" class="img-fluid figure-img" alt="Two panels of bars showing the attack order for three cards. The avalanche panel goes Card B ($5,000 at 24%) first, Card A ($1,000 at 18%) second, and Card C ($2,000 at 15%) third. The snowball panel goes Card A first, Card C second, and Card B third."></p>
+<figcaption>Avalanche order (highest APR first) vs.&nbsp;snowball order (smallest balance first)</figcaption>
+</figure>
+</div>
+<p>Both functions take a list of debts (one dict per debt) and return a new, sorted list. <a href="../reference/order_avalanche.html#perfinpy.order_avalanche" class="gdls-link gdls-code">order_avalanche()</a> needs an <code>apr</code> key, and <a href="../reference/order_snowball.html#perfinpy.order_snowball" class="gdls-link gdls-code">order_snowball()</a> needs a <code>balance</code> key. Wrapping the result in <code>pl.DataFrame()</code> prints it as a table:</p>
+<div id="cell-avalanche" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>debts <span class="op">=</span> [</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Card A"</span>, <span class="st">"balance"</span>: <span class="dv">1000</span>, <span class="st">"apr"</span>: <span class="fl">0.18</span>},</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Card B"</span>, <span class="st">"balance"</span>: <span class="dv">5000</span>, <span class="st">"apr"</span>: <span class="fl">0.24</span>},</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Card C"</span>, <span class="st">"balance"</span>: <span class="dv">2000</span>, <span class="st">"apr"</span>: <span class="fl">0.15</span>},</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>pl.DataFrame(order_avalanche(debts))</span></code></pre></div>
+<div id="avalanche" class="cell-output cell-output-display" data-execution_count="10">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>name</th><th>balance</th><th>apr</th></tr><tr><td>str</td><td>i64</td><td>f64</td></tr></thead><tbody><tr><td>"Card B"</td><td>5000</td><td>0.24</td></tr><tr><td>"Card A"</td><td>1000</td><td>0.18</td></tr><tr><td>"Card C"</td><td>2000</td><td>0.15</td></tr></tbody></table></div>
+</div>
+</div>
+<div id="cell-snowball" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>pl.DataFrame(order_snowball(debts))</span></code></pre></div>
+<div id="snowball" class="cell-output cell-output-display" data-execution_count="11">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>name</th><th>balance</th><th>apr</th></tr><tr><td>str</td><td>i64</td><td>f64</td></tr></thead><tbody><tr><td>"Card A"</td><td>1000</td><td>0.18</td></tr><tr><td>"Card C"</td><td>2000</td><td>0.15</td></tr><tr><td>"Card B"</td><td>5000</td><td>0.24</td></tr></tbody></table></div>
+</div>
+</div>
+<p>Avalanche wins on paper because a dollar sent to the highest APR stops the most interest. The code below shows how much interest an extra $100 stops next month on each card:</p>
+<div id="cell-extra-payment" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>extra_saved <span class="op">=</span> {d[<span class="st">"name"</span>]: <span class="dv">100</span> <span class="op">*</span> d[<span class="st">"apr"</span>] <span class="op">/</span> <span class="dv">12</span> <span class="cf">for</span> d <span class="kw">in</span> debts}</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>extra_saved</span></code></pre></div>
+<div id="extra-payment" class="cell-output cell-output-display" data-execution_count="12">
+<pre><code>{'Card A': 1.5, 'Card B': 2.0, 'Card C': 1.25}</code></pre>
+</div>
+</div>
+<p>An extra $100 on Card B stops $2.00 of interest, compared with $1.50 on Card A. Snowball pays off Card A first, which costs a little more but delivers a win sooner. If that quick win is the price of actually finishing, it’s often worth it; if you’re disciplined enough for avalanche, take the savings.</p>
+</section>
+</section>
+<section id="variations" class="level1">
+<h1>Variations</h1>
+<p>Most of these functions accept arrays, so one call can compare several versions of the same decision. Raising the credit card payment from the minimum shows how fast the payoff time and the interest fall:</p>
+<div id="cell-vary-card-payment" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> math</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>card_payment <span class="op">=</span> [<span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">300</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>card_payoff <span class="op">=</span> months_to_payoff(balance<span class="op">=</span><span class="dv">5000</span>, monthly_payment<span class="op">=</span>card_payment, apr<span class="op">=</span><span class="fl">0.22</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>card_cost <span class="op">=</span> total_interest(</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    monthly_payment<span class="op">=</span>card_payment, n_months<span class="op">=</span>card_payoff, principal<span class="op">=</span><span class="dv">5000</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>pl.DataFrame({<span class="st">"payment"</span>: card_payment, <span class="st">"months"</span>: card_payoff, <span class="st">"interest"</span>: card_cost})</span></code></pre></div>
+<div id="vary-card-payment" class="cell-output cell-output-display" data-execution_count="13">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>payment</th><th>months</th><th>interest</th></tr><tr><td>i64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>100</td><td>136.779054</td><td>8677.905406</td></tr><tr><td>150</td><td>51.986889</td><td>2798.033306</td></tr><tr><td>200</td><td>33.747686</td><td>1749.537239</td></tr><tr><td>300</td><td>20.071394</td><td>1021.418167</td></tr></tbody></table></div>
+</div>
+</div>
+<p>Doubling the payment from $100 to $200 cuts the interest from about $8,678 to about $1,750, and the card is gone in 34 months instead of 137.</p>
+<p>The car loan payments in the total interest example come from the same amortization formula that <a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a> uses. Changing the rate to 7% and passing several terms reproduces them, along with the interest for each term:</p>
+<div id="cell-vary-car-term" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>car_years <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>car_payment <span class="op">=</span> monthly_standard_payment(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    principal<span class="op">=</span><span class="dv">20000</span>, annual_rate<span class="op">=</span><span class="fl">0.07</span>, years<span class="op">=</span>car_years</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>pl.DataFrame({</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"years"</span>: car_years,</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"payment"</span>: car_payment,</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"interest"</span>: total_interest(</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>        monthly_payment<span class="op">=</span>car_payment,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>        n_months<span class="op">=</span>[y <span class="op">*</span> <span class="dv">12</span> <span class="cf">for</span> y <span class="kw">in</span> car_years],</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>        principal<span class="op">=</span><span class="dv">20000</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<div id="vary-car-term" class="cell-output cell-output-display" data-execution_count="14">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (4, 3)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>years</th><th>payment</th><th>interest</th></tr><tr><td>i64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>3</td><td>617.541937</td><td>2231.509743</td></tr><tr><td>4</td><td>478.924893</td><td>2988.394876</td></tr><tr><td>5</td><td>396.023971</td><td>3761.438248</td></tr><tr><td>6</td><td>340.980129</td><td>4550.56932</td></tr></tbody></table></div>
+</div>
+</div>
+<p>The IDR plans differ only in the protected multiple and the payment rate, so <a href="../reference/idr_monthly_payment.html#perfinpy.idr_monthly_payment" class="gdls-link gdls-code">idr_monthly_payment()</a> can compare them for the same $50,000 AGI. SAVE protected 225% of the guideline and charged 5% on undergraduate loans before it ended in March 2026:</p>
+<div id="cell-vary-idr-plans" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>idr_plans <span class="op">=</span> pl.DataFrame({</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"plan"</span>: [</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>        <span class="st">"IBR (loans from July 2014)"</span>,</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        <span class="st">"IBR (loans before July 2014)"</span>,</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"SAVE (ended 2026)"</span>,</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"threshold_pct"</span>: [<span class="fl">1.5</span>, <span class="fl">1.5</span>, <span class="fl">2.25</span>],</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"payment_rate"</span>: [<span class="fl">0.10</span>, <span class="fl">0.15</span>, <span class="fl">0.05</span>],</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>idr_plans.with_columns(</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    monthly<span class="op">=</span>idr_monthly_payment(</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>        agi<span class="op">=</span><span class="dv">50000</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>        threshold_pct<span class="op">=</span>idr_plans[<span class="st">"threshold_pct"</span>].to_numpy(),</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>        payment_rate<span class="op">=</span>idr_plans[<span class="st">"payment_rate"</span>].to_numpy(),</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div id="vary-idr-plans" class="cell-output cell-output-display" data-execution_count="15">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 4)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>plan</th><th>threshold_pct</th><th>payment_rate</th><th>monthly</th></tr><tr><td>str</td><td>f64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"IBR (loans from July 2014)"</td><td>1.5</td><td>0.1</td><td>217.17</td></tr><tr><td>"IBR (loans before July 2014)"</td><td>1.5</td><td>0.15</td><td>325.75</td></tr><tr><td>"SAVE (ended 2026)"</td><td>2.25</td><td>0.05</td><td>58.71</td></tr></tbody></table></div>
+</div>
+</div>
+</section>
+<section id="what-these-functions-dont-model" class="level1">
+<h1>What these functions don’t model</h1>
+<div class="callout callout-style-default callout-warning callout-titled" title="Limits">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Limits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><a href="../reference/months_to_payoff.html#perfinpy.months_to_payoff" class="gdls-link gdls-code">months_to_payoff()</a> raises a <code>ValueError</code> when the payment doesn’t cover the first month’s interest, because the balance would never be paid off. A $90 payment on the $5,000 card at 22% falls short of the first month’s interest:</p>
+<div id="payoff-error" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>months_to_payoff(balance<span class="op">=</span><span class="dv">5000</span>, monthly_payment<span class="op">=</span><span class="dv">90</span>, apr<span class="op">=</span><span class="fl">0.22</span>)</span></code></pre></div>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-cyan-fg">Cell</span><span class="ansi-cyan-fg"> </span><span class="ansi-green-fg">In[16]</span><span class="ansi-green-fg">, line 1</span>
+<span class="ansi-green-fg">----&gt; </span><span class="ansi-green-fg">1</span> months_to_payoff(balance=<span class="ansi-green-fg">5000</span>, monthly_payment=<span class="ansi-green-fg">90</span>, apr=<span class="ansi-green-fg">0.22</span>)
+
+<span class="ansi-cyan-fg">File </span><span class="ansi-green-fg">~/projects/pkgs/Python/perfinpy/src/perfinpy/managing_debt.py:98</span>, in <span class="ansi-cyan-fg">months_to_payoff</span><span class="ansi-blue-fg">(balance, monthly_payment, apr)</span>
+<span class="ansi-green-fg">     96</span> apr = _as_numeric(apr, <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">apr</span><span class="ansi-yellow-fg">"</span>)
+<span class="ansi-green-fg">     97</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> np.any(np.asarray(monthly_payment &lt;= balance * apr / <span class="ansi-green-fg">12</span>)):
+<span class="ansi-green-fg">---&gt; </span><span class="ansi-green-fg">98</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">ValueError</span>(
+<span class="ansi-green-fg">     99</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">`monthly_payment` must be larger than the monthly interest </span><span class="ansi-yellow-fg">"</span>
+<span class="ansi-green-fg">    100</span>         <span class="ansi-yellow-fg">"</span><span class="ansi-yellow-fg">(`balance * apr / 12`).</span><span class="ansi-yellow-fg">"</span>
+<span class="ansi-green-fg">    101</span>     )
+<span class="ansi-green-fg">    102</span> r = np.asarray(apr / <span class="ansi-green-fg">12</span>)
+<span class="ansi-green-fg">    103</span> ratio = np.asarray(balance / monthly_payment)
+
+<span class="ansi-red-fg">ValueError</span>: `monthly_payment` must be larger than the monthly interest (`balance * apr / 12`).</pre>
+</div>
+</div>
+</div>
+<p>A few other limits apply:</p>
+<ul>
+<li><a href="../reference/months_to_payoff.html#perfinpy.months_to_payoff" class="gdls-link gdls-code">months_to_payoff()</a> and <a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a> assume a constant rate and no new charges. The months aren’t rounded, so the last payment is a partial one.</li>
+<li><a href="../reference/total_interest.html#perfinpy.total_interest" class="gdls-link gdls-code">total_interest()</a> uses whatever payment you give it. A payment rounded to cents gives a total that differs from the exact one by a few cents.</li>
+<li><a href="../reference/idr_monthly_payment.html#perfinpy.idr_monthly_payment" class="gdls-link gdls-code">idr_monthly_payment()</a> defaults to the 2026 poverty guideline for one person in the contiguous U.S. It doesn’t cover RAP, which bases payments on total AGI instead of discretionary income.</li>
+<li><a href="../reference/payoff_vs_invest.html#perfinpy.payoff_vs_invest" class="gdls-link gdls-code">payoff_vs_invest()</a> takes single values only and compares the rates exactly as given. It ignores taxes and risk, and only identical rates count as a wash.</li>
+<li><a href="../reference/order_avalanche.html#perfinpy.order_avalanche" class="gdls-link gdls-code">order_avalanche()</a> and <a href="../reference/order_snowball.html#perfinpy.order_snowball" class="gdls-link gdls-code">order_snowball()</a> sort the debts; they don’t simulate the payoff or total the interest under each method.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="putting-it-together" class="level1">
+<h1>Putting it together</h1>
+<p>Picture a first job paying $45,000 a year, with $45,000 in federal student loans, a car loan, and one credit card. The first question is whether the loans fit the 1x rule, and what repaying them costs on the standard plan versus IBR:</p>
+<div id="cell-together-loans" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>salary <span class="op">=</span> <span class="dv">45000</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>standard <span class="op">=</span> monthly_standard_payment(principal<span class="op">=</span><span class="dv">45000</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ratio"</span>: loan_income_ratio(loan_total<span class="op">=</span><span class="dv">45000</span>, expected_salary<span class="op">=</span>salary),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"standard"</span>: standard,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"ibr"</span>: idr_monthly_payment(agi<span class="op">=</span>salary),</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div id="together-loans" class="cell-output cell-output-display" data-execution_count="17">
+<pre><code>{'ratio': 1.0, 'standard': 510.9658974901199, 'ibr': 175.5}</code></pre>
+</div>
+</div>
+<p>The loans sit exactly at the 1x ceiling, so the standard plan is affordable. Next, we can add the car loan ($15,000 at 7%, $450 a month) and the card ($900 at 22%, $100 a month, $3,000 limit). Then we check the two ratios lenders use:</p>
+<div id="cell-together-ratios" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>first_job <span class="op">=</span> [</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Student loan"</span>, <span class="st">"balance"</span>: <span class="dv">45000</span>, <span class="st">"apr"</span>: <span class="fl">0.065</span>, <span class="st">"payment"</span>: standard},</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Car loan"</span>, <span class="st">"balance"</span>: <span class="dv">15000</span>, <span class="st">"apr"</span>: <span class="fl">0.07</span>, <span class="st">"payment"</span>: <span class="dv">450</span>},</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"name"</span>: <span class="st">"Credit card"</span>, <span class="st">"balance"</span>: <span class="dv">900</span>, <span class="st">"apr"</span>: <span class="fl">0.22</span>, <span class="st">"payment"</span>: <span class="dv">100</span>},</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>first_job_dti <span class="op">=</span> dti_ratio(</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    monthly_debt_payments<span class="op">=</span><span class="bu">sum</span>(d[<span class="st">"payment"</span>] <span class="cf">for</span> d <span class="kw">in</span> first_job),</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    gross_monthly_income<span class="op">=</span>salary <span class="op">/</span> <span class="dv">12</span>,</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>first_job_util <span class="op">=</span> credit_utilization(balance<span class="op">=</span><span class="dv">900</span>, credit_limit<span class="op">=</span><span class="dv">3000</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>{<span class="st">"dti"</span>: first_job_dti, <span class="st">"utilization"</span>: first_job_util}</span></code></pre></div>
+<div id="together-ratios" class="cell-output cell-output-display" data-execution_count="18">
+<pre><code>{'dti': 28.292423933069866, 'utilization': 30.0}</code></pre>
+</div>
+</div>
+<p>DTI is about 28%, in the manageable range, but the card sits at the 30% utilization threshold. Both ordering methods point at the same debt first:</p>
+<div id="cell-together-avalanche" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>pl.DataFrame(order_avalanche(first_job))</span></code></pre></div>
+<div id="together-avalanche" class="cell-output cell-output-display" data-execution_count="19">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 4)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>name</th><th>balance</th><th>apr</th><th>payment</th></tr><tr><td>str</td><td>i64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"Credit card"</td><td>900</td><td>0.22</td><td>100.0</td></tr><tr><td>"Car loan"</td><td>15000</td><td>0.07</td><td>450.0</td></tr><tr><td>"Student loan"</td><td>45000</td><td>0.065</td><td>510.965897</td></tr></tbody></table></div>
+</div>
+</div>
+<div id="cell-together-snowball" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>pl.DataFrame(order_snowball(first_job))</span></code></pre></div>
+<div id="together-snowball" class="cell-output cell-output-display" data-execution_count="20">
+<div><style>
+.dataframe > thead > tr,
+.dataframe > tbody > tr {
+  text-align: right;
+  white-space: pre-wrap;
+}
+</style>
+<small>shape: (3, 4)</small><table class="dataframe table table-sm table-striped small"><thead><tr><th>name</th><th>balance</th><th>apr</th><th>payment</th></tr><tr><td>str</td><td>i64</td><td>f64</td><td>f64</td></tr></thead><tbody><tr><td>"Credit card"</td><td>900</td><td>0.22</td><td>100.0</td></tr><tr><td>"Car loan"</td><td>15000</td><td>0.07</td><td>450.0</td></tr><tr><td>"Student loan"</td><td>45000</td><td>0.065</td><td>510.965897</td></tr></tbody></table></div>
+</div>
+</div>
+<p>The card has both the highest APR and the smallest balance, so avalanche and snowball agree. The last step checks how long the card takes at $100 a month. It also checks whether extra money should go to each debt or to investments expected to return 7%:</p>
+<div id="cell-together-decide" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>card_first_job <span class="op">=</span> months_to_payoff(balance<span class="op">=</span><span class="dv">900</span>, monthly_payment<span class="op">=</span><span class="dv">100</span>, apr<span class="op">=</span><span class="fl">0.22</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>    card_first_job,</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>    payoff_vs_invest(loan_rate<span class="op">=</span><span class="fl">0.22</span>, expected_return<span class="op">=</span><span class="fl">0.07</span>),</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>    payoff_vs_invest(loan_rate<span class="op">=</span><span class="fl">0.065</span>, expected_return<span class="op">=</span><span class="fl">0.07</span>),</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<div id="together-decide" class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>(9.92571900450847, 'Pay off the debt', 'Invest the difference')</code></pre>
+</div>
+</div>
+<p>The card is gone in 10 months. After that, its $100 can roll into the car loan. The student loan comparison is closer than the function’s answer suggests. The edge is only 0.5 percentage points, and the chapter treats loans above about 6% as worth paying down. The book’s <a href="https://mjfrigaard.github.io/fm-finance/budgeting.html#sec-foo-intro">Budgeting</a> chapter places these steps in the Financial Order of Operations. The <a href="../user-guide/emergency-fund.html">Emergency Fund</a> page covers the reserve that comes after high interest debt.</p>
+</section>
+<section id="how-monthly_standard_payment-works" class="level1">
+<h1>How <a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a> works</h1>
+<p><a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a> doesn’t repeat the amortization formula. It passes its arguments to <a href="../reference/mortgage_payment.html#perfinpy.mortgage_payment" class="gdls-link gdls-code">mortgage_payment()</a> (from the <a href="../user-guide/major-purchases.html">Major Purchases</a> page), which checks its inputs and calls an internal helper, <code>_annuity_factor()</code>:</p>
+<div id="call-stack" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich <span class="im">import</span> <span class="bu">print</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> rich.tree <span class="im">import</span> Tree</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>tree <span class="op">=</span> Tree(<span class="st">"monthly_standard_payment()"</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>mortgage <span class="op">=</span> tree.add(<span class="st">"mortgage_payment()"</span>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>mortgage.add(<span class="st">"_as_numeric()"</span>)</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>mortgage.add(<span class="st">"_as_numeric()"</span>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>mortgage.add(<span class="st">"_as_positive()"</span>).add(<span class="st">"_as_numeric()"</span>)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>mortgage.add(<span class="st">"_annuity_factor()"</span>)</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tree)</span></code></pre></div>
+</div>
+<pre><code>monthly_standard_payment()
+└── mortgage_payment()
+    ├── _as_numeric()
+    ├── _as_numeric()
+    ├── _as_positive()
+    │   └── _as_numeric()
+    └── _annuity_factor()</code></pre>
+<p><code>_annuity_factor()</code> is where the 0% case lives. Instead of dividing by zero, it returns the number of payments, so a 0% loan is just the principal split into equal pieces:</p>
+<div id="cell-zero-rate" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>monthly_standard_payment(principal<span class="op">=</span><span class="dv">12000</span>, annual_rate<span class="op">=</span><span class="dv">0</span>)</span></code></pre></div>
+<div id="zero-rate" class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>100.0</code></pre>
+</div>
+</div>
+</section>
+<section id="recap" class="level1">
+<h1>Recap</h1>
+<p>Debt is a math problem dressed up in emotional clothing, and these 11 functions cover the math the chapter relies on. <a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a>, <a href="../reference/months_to_payoff.html#perfinpy.months_to_payoff" class="gdls-link gdls-code">months_to_payoff()</a>, and <a href="../reference/total_interest.html#perfinpy.total_interest" class="gdls-link gdls-code">total_interest()</a> show what a balance really costs; <a href="../reference/loan_income_ratio.html#perfinpy.loan_income_ratio" class="gdls-link gdls-code">loan_income_ratio()</a>, <a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a>, and <a href="../reference/idr_monthly_payment.html#perfinpy.idr_monthly_payment" class="gdls-link gdls-code">idr_monthly_payment()</a> size student loans against a salary. <a href="../reference/dti_ratio.html#perfinpy.dti_ratio" class="gdls-link gdls-code">dti_ratio()</a> and <a href="../reference/credit_utilization.html#perfinpy.credit_utilization" class="gdls-link gdls-code">credit_utilization()</a> return the percents lenders check, and <a href="../reference/payoff_vs_invest.html#perfinpy.payoff_vs_invest" class="gdls-link gdls-code">payoff_vs_invest()</a>, <a href="../reference/order_avalanche.html#perfinpy.order_avalanche" class="gdls-link gdls-code">order_avalanche()</a>, and <a href="../reference/order_snowball.html#perfinpy.order_snowball" class="gdls-link gdls-code">order_snowball()</a> decide where the next dollar goes.</p>
+<ul>
+<li><a href="https://mjfrigaard.github.io/fm-finance/managing_debt.html">Managing Debt</a> in Personal Finance: a field manual</li>
+<li>Reference: <a href="../reference/apr_to_apy.html#perfinpy.apr_to_apy" class="gdls-link gdls-code">apr_to_apy()</a>, <a href="../reference/months_to_payoff.html#perfinpy.months_to_payoff" class="gdls-link gdls-code">months_to_payoff()</a>, <a href="../reference/total_interest.html#perfinpy.total_interest" class="gdls-link gdls-code">total_interest()</a>, <a href="../reference/loan_income_ratio.html#perfinpy.loan_income_ratio" class="gdls-link gdls-code">loan_income_ratio()</a>, <a href="../reference/monthly_standard_payment.html#perfinpy.monthly_standard_payment" class="gdls-link gdls-code">monthly_standard_payment()</a>, <a href="../reference/idr_monthly_payment.html#perfinpy.idr_monthly_payment" class="gdls-link gdls-code">idr_monthly_payment()</a>, <a href="../reference/dti_ratio.html#perfinpy.dti_ratio" class="gdls-link gdls-code">dti_ratio()</a>, <a href="../reference/payoff_vs_invest.html#perfinpy.payoff_vs_invest" class="gdls-link gdls-code">payoff_vs_invest()</a>, <a href="../reference/order_avalanche.html#perfinpy.order_avalanche" class="gdls-link gdls-code">order_avalanche()</a>, <a href="../reference/order_snowball.html#perfinpy.order_snowball" class="gdls-link gdls-code">order_snowball()</a>, <a href="../reference/credit_utilization.html#perfinpy.credit_utilization" class="gdls-link gdls-code">credit_utilization()</a></li>
+<li>Next: <a href="../user-guide/emergency-fund.html">Emergency Fund</a></li>
+</ul>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mjfrigaard\.github\.io\/perfinpy\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../user-guide/budgeting.html" class="pagination-link" aria-label="Budgeting">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Budgeting</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../user-guide/emergency-fund.html" class="pagination-link" aria-label="Emergency Fund">
+        <span class="nav-page-text">Emergency Fund</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+<div class="nav-footer-center">
+<p>Developed by <strong>Martin&nbsp;Frigaard</strong>.<br>Site created with <strong>Great&nbsp;Docs</strong>.</p>
+</div>
+</div>
+</footer>
+<script src="../github-widget.js"></script>
+<script src="../copy-page.js"></script>
+<script src="../sidebar-wrap.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'sidebar-float.js';document.body.appendChild(s);})();</script>
+<script src="../sidebar-filter.js"></script>
+<script src="../dark-mode-toggle.js"></script>
+<script src="../back-to-top.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'on-this-page.js';document.body.appendChild(s);})();</script>
+<script src="../keyboard-nav.js"></script>
+<script src="../copy-code.js"></script>
+<script src="../details.js"></script>
+<script src="../mermaid-renderer.js"></script>
+<script src="../tooltips.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'color-swatch.js';document.body.appendChild(s);})();</script>
+<script src="../responsive-tables.js"></script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'video-embed.js';document.body.appendChild(s);})();</script>
+<script>(function(){var s=document.createElement('script');var m=document.querySelector('meta[name="quarto:offset"]');s.src=(m?m.content:'')+'termshow.js';document.body.appendChild(s);})();</script>
+<script src="../navbar-widgets.js"></script>
+
+
+
+
+</body></html>
